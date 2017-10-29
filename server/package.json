@@ -1,0 +1,34 @@
+{
+  "name": "spotiquiz-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "DEBUG=true nodemon server.js --exec 'npm run lint && node'",
+    "lint": "eslint server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anton-g/spotiquiz.git"
+  },
+  "author": "anton-g",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/anton-g/spotiquiz/issues"
+  },
+  "homepage": "https://github.com/anton-g/spotiquiz#readme",
+  "devDependencies": {
+    "eslint": "^4.10.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "nanoid": "^1.0.0",
+    "socket.io": "^2.0.4"
+  }
+}
