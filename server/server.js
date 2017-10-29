@@ -8,7 +8,7 @@ io.on('connection', onConnection)
 const port = process.env.PORT || 8081
 http.listen(port, () => { console.log(`listening on *:${port}`) })
 
-let rooms = []
+let rooms = {}
 
 function onConnection (socket) {
   const name = socket.handshake.query.name || 'host'
@@ -17,48 +17,54 @@ function onConnection (socket) {
   socket.on('room_join', onRoomJoin)
   socket.on('room_create', onRoomCreate)
 
-  let currentRoom = {}
-
   function onRoomJoin (roomId) {
-    let room = rooms.find(r => r.id === roomId)
+    let room = rooms[roomId]
     if (room) {
-      debugging && console.log(`${name} joined room ${roomId}`)
       socket.join(room.id)
-      currentRoom = room
 
-      socket.to(room.ownerSocket).emit('user_join', name)
+      socket.to(room.owner).emit('user_join', name)
+      room.members.push(name)
+
+      socket.on('buzz', () => {
+        debugging && console.log(`${name} buzzed`)
+        io.sockets.in(roomId).emit('pause')
+        socket.to(room.owner).emit('user_buzz', name)
+      })
+
+      debugging && console.log(`${name} joined room ${roomId}`)
+    } else {
+      // could not find room
     }
 
     socket.on('disconnect', () => {
-      debugging && console.log(`Room participant ${name} disconnected`)
-      socket.to(room.ownerSocket).emit('user_leave', name)
-    })
+      socket.to(room.owner).emit('user_leave', name)
+      room.members.splice(room.members.findIndex(m => m === name), 1)
 
-    socket.on('buzz', () => {
-      debugging && console.log(`${name} buzzed`)
-      io.sockets.in(currentRoom.id).emit('pause')
-      socket.to(room.ownerSocket).emit('user_buzz', name)
+      debugging && console.log(`Room participant ${name} disconnected`)
     })
   }
 
   function onRoomCreate (ack) {
     const roomId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
-    debugging && console.log(`created room ${roomId}`)
     socket.join(roomId)
 
-    rooms.push({
+    rooms[roomId] = {
       id: roomId,
-      ownerSocket: socket.id
-    })
+      owner: socket.id,
+      members: []
+    }
     ack(roomId)
 
     socket.on('disconnect', () => {
-      debugging && console.log(`Room host disconnected`)
       io.sockets.in(roomId).emit('pause')
+
+      debugging && console.log(`Room host disconnected`)
     })
 
     socket.on('unpause', () => {
       io.sockets.in(roomId).emit('unpause')
     })
+
+    debugging && console.log(`created room ${roomId}`)
   }
 }
