@@ -2,12 +2,12 @@
   .landing
     .menu
       h1.title.has-text-centered SpotiQuiz
-      input.pin-input.is-medium(type="text" placeholder="Game PIN")
+      input.pin-input.is-medium(type="text" placeholder="Quiz PIN")
       a.button.is-black.is-fullwidth Join
       horizontal-line-heading OR
       a.button.is-white.is-outlined.is-fullwidth Create quiz
     .foot
-      p footer
+      a About
 </template>
 
 <script>
@@ -17,18 +17,11 @@ export default {
   name: 'LandingPage',
   components: {
     HorizontalLineHeading
-  },
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
   }
 }
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Pacifico');
-
 .landing {
   height: 100%;
   display: flex;
@@ -36,7 +29,6 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
 
   .menu {
     margin-top: auto;
@@ -47,6 +39,7 @@ export default {
       color: white;
       font-weight: normal;
       font-size: 3.5rem;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
 
       margin-bottom: 2.5rem;
     }
@@ -82,6 +75,15 @@ export default {
 
   .foot {
     margin-top: auto;
+    margin-bottom: 1rem;
+
+    a {
+      color: white;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 </style>
