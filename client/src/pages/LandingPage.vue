@@ -15,7 +15,7 @@
         @click="join"
       ) Enter
       horizontal-line-heading OR
-      a.button.is-white.is-outlined.is-fullwidth Create quiz
+      router-link.button.is-white.is-outlined.is-fullwidth(:to="{ name: 'create' }") Create quiz
     .foot
       a About
 </template>
