@@ -1,14 +1,14 @@
 <template lang="pug">
   .create-quiz
     h1.title.has-text-centered Create Quiz
-    step-bar
+    step-bar(:currentStep="1")
     a.button.is-dark.is-medium
-      span Log in with Spotify
+      span Login with Spotify
       span.icon
         i.fa.fa-spotify
     .why-spotify
       h2 Why do I have to log in?
-      p Det är ett välkänt faktum att läsare distraheras av läsbar text på en sida när man skall studera layouten. Poängen med Lorem Ipsum är att det ger ett normalt ordflöde, till skillnad från "Text här, Text här", och ger intryck av att vara läsbar text. Många publiseringprogram och webbutvecklare använder Lorem Ipsum som test-text.
+      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis sapien ut elit pretium porta nec sit amet eros. Donec ullamcorper imperdiet sapien, lacinia placerat orci finibus vitae. Pellentesque vestibulum nulla ac turpis suscipit faucibus. Suspendisse ultricies lacus quis enim auctor, sit amet consequat tellus porta. Phasellus a turpis mi.
     router-link.back-button(:to="{ name: 'landing' }") No thanks
 </template>
 
@@ -54,6 +54,7 @@ export default {
   }
 
   .why-spotify {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
     h2 {
       font-weight: bold;
     }

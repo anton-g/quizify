@@ -10,7 +10,7 @@
         @keydown.enter="join"
         @input="inputQuizPin"
       )
-      a.button.is-black.is-fullwidth(
+      a.button.is-dark.is-fullwidth(
         :class="{ 'is-loading': isJoining }"
         @click="join"
       ) Enter

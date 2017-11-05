@@ -1,14 +1,23 @@
 <template lang="pug">
   .step-bar-container
     ul.step-bar
-      li.completed Login
-      li.active Songs
-      li Players
+      li(:class="classesForStep(1)") Login
+      li(:class="classesForStep(2)") Songs
+      li(:class="classesForStep(3)") Players
 </template>
 
 <script>
 export default {
-  name: 'StepBar'
+  name: 'StepBar',
+  props: ['currentStep'],
+  methods: {
+    classesForStep (step) {
+      return {
+        'completed': this.currentStep > step,
+        'active': this.currentStep === step
+      }
+    }
+  }
 }
 </script>
 
