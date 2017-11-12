@@ -35,7 +35,7 @@ export default new Router({
         },
         {
           path: 'songs',
-          name: 'create-quiz-songs',
+          name: 'create-quiz-playlist',
           component: CreateQuizPlaylist,
           meta: { step: 2 }
         },

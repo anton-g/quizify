@@ -19,7 +19,7 @@ export default {
     let params = auth.getHashParams(this.$route.hash)
     if (params.access_token) {
       this.$store.dispatch('login', params)
-      this.$router.push({ name: 'create-quiz-songs' })
+      this.$router.push({ name: 'create-quiz-playlist' })
     }
   },
   computed: {

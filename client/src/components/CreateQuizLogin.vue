@@ -19,6 +19,11 @@ export default {
     login () {
       auth.login()
     }
+  },
+  created () {
+    if (this.$store.getters.isAuthorized) {
+      this.$router.replace({ name: 'create-quiz-playlist' })
+    }
   }
 }
 </script>

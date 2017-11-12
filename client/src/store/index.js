@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: { // TODO should be empty when not in dev
-    accessToken: 'BQAoWlJFoereTbtYSR0wtt7ilDuqV9m4TcwGnZPzixhv9cVjK9qrIWxnCsLIqQIPU6uFh6AgbZW2TGm9cOKPzGPfLTtrFT8eudXJ3S4cZOeyWuhQ3GGb8_C5xqadhfwv7GLVAIKV_-_CACSWQc46lGmHoFRYIFR2wDd2-kAYUbDxR06OGn-Kyg',
+    accessToken: '',
     expiresIn: ''
   },
   actions: {
@@ -17,7 +17,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
-
+    isAuthorized (state) {
+      return state.accessToken.length > 0 // TODO check expiration as well
+    }
   },
   mutations: {
     [types.ACCESS_TOKEN] (state, token) {
