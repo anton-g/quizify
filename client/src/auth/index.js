@@ -8,11 +8,6 @@ const AuthHandler = {
     window.location = `https://accounts.spotify.com/authorize?response_type=token&client_id=${this.clientId}&scope=${this.scope}&redirect_uri=${this.redirectUrl}`
   },
 
-  loginCallback (hash) {
-    const params = this.getHashParams(hash)
-    return params.access_token !== undefined && params.access_token.length > 0
-  },
-
   getHashParams (hash) {
     let hashParams = {}
 

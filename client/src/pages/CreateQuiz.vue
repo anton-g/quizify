@@ -16,7 +16,9 @@ export default {
     StepBar
   },
   created () {
-    if (auth.loginCallback(this.$route.hash)) {
+    let params = auth.getHashParams(this.$route.hash)
+    if (params.access_token) {
+      this.$store.dispatch('login', params)
       this.$router.push({ name: 'create-quiz-songs' })
     }
   },
