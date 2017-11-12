@@ -1,7 +1,7 @@
 <template lang="pug">
   .create-quiz--playlist
     h2 Select a playlist
-    playlist-list(:playlists="userPlaylists", @selectedPlaylist="selectPlaylist")
+    playlist-list(:playlists="userPlaylists")
     .columns.is-mobile.navigation
       .column
         router-link.home-button(:to="{ name: 'landing' }") Home
@@ -15,37 +15,29 @@
 <script>
 import PlaylistList from '@/components/PlaylistList'
 
-import spotify from '@/spotify'
-
 export default {
-  data () {
-    return {
-      userPlaylists: [],
-      selectedPlaylist: null
-    }
-  },
   components: {
     PlaylistList
   },
   created () {
-    spotify.getUserPlaylists(this.$store.state.accessToken)
-    .then(data => {
-      this.userPlaylists = data.items
-    })
+    this.$store.dispatch('fetchUserPlaylists')
   },
   methods: {
     nextStep () {
       if (this.hasSelectedPlaylist) {
         this.$router.push({ name: 'create-quiz-players' })
       }
-    },
-    selectPlaylist (playlist) {
-      this.selectedPlaylist = playlist
     }
   },
   computed: {
+    selectedPlaylist () {
+      return this.$store.state.selectedPlaylist
+    },
     hasSelectedPlaylist () {
       return !!(this.selectedPlaylist)
+    },
+    userPlaylists () {
+      return this.$store.state.userPlaylists
     }
   }
 }

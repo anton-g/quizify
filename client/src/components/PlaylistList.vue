@@ -21,11 +21,10 @@ export default {
   },
   methods: {
     selectPlaylist (playlist) {
-      this.selectedPlaylist = playlist
-      this.$emit('selectedPlaylist', playlist)
+      this.$store.dispatch('selectPlaylist', playlist)
     },
     isSelected (playlist) {
-      return this.selectedPlaylist.id === playlist.id
+      return !!(this.$store.state.selectedPlaylist) && this.$store.state.selectedPlaylist.id === playlist.id
     }
   }
 }

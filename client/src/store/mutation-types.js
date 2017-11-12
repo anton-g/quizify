@@ -1,2 +1,4 @@
 export const ACCESS_TOKEN = 'ACCESS_TOKEN'
 export const EXPIRES_IN = 'EXPIRES_IN'
+export const USER_PLAYLISTS = 'USER_PLAYLISTS'
+export const SELECT_PLAYLIST = 'SELECT_PLAYLIST'
