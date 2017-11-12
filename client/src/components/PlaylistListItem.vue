@@ -3,9 +3,12 @@
     .image-container
       img.image.is-32x32(v-show="hasImages", :src="imageUrl")
     span {{ playlist.name }}
+    .icon(v-show="selected")
+      i.fa.fa-check
 </template>
 
 <script>
+// TODO vad gör man med för långa spellistenamn?
 export default {
   props: ['playlist', 'selected'],
   computed: {
@@ -49,6 +52,10 @@ export default {
 
       span {
         font-weight: bold;
+      }
+
+      .icon {
+        margin-left: auto;
       }
     }
   }
