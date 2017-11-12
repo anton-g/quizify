@@ -1,15 +1,16 @@
 <template lang="pug">
   .landing
     .menu
-      h1.title.has-text-centered SpotiQuiz
-      input.pin-input.is-medium(
-        type="text"
-        placeholder="Quiz PIN"
-        :class="{ invalid: invalidPin }"
-        :value="quizPin.toUpperCase()"
-        @keydown.enter="join"
-        @input="inputQuizPin"
-      )
+      h1.title.has-text-centered Le Quiz
+      transition(:enter="test", type="animation")
+        input.pin-input.is-medium(
+          type="text"
+          placeholder="Quiz PIN"
+          :class="{ invalid: invalidPin }"
+          :value="quizPin.toUpperCase()"
+          @keydown.enter="join"
+          @input="inputQuizPin"
+        )
       a.button.is-dark.is-fullwidth(
         :class="{ 'is-loading': isJoining }"
         @click="join"
@@ -33,6 +34,10 @@ export default {
     }
   },
   methods: {
+    test (el, done) {
+      console.log('hej')
+      done()
+    },
     join () {
       if (this.quizPin.length < 1) {
         this.invalidPin = true

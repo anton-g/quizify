@@ -1,6 +1,6 @@
 <template lang="pug">
   .step-bar-container
-    ul.step-bar
+    ul.step-bar.step-bar-3
       li(:class="classesForStep(1)") Login
       li(:class="classesForStep(2)") Songs
       li(:class="classesForStep(3)") Players
@@ -31,9 +31,16 @@ export default {
   .step-bar {
     counter-reset: step;
 
+    @for $i from 1 through 8 {
+      &.step-bar-#{$i} {
+        li {
+          width: 100% / $i;
+        }
+      }
+    }
+
     li {
       list-style-type: none;
-      width: 33%;
       float: left;
       font-size: 12px;
       position: relative;
