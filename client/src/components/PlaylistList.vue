@@ -1,16 +1,44 @@
 <template lang="pug">
   .playlist-list
     ul
-      li(v-for="playlist in playlists") {{ playlist.name }}
+      li(v-for="playlist in playlists", @click="selectPlaylist(playlist)")
+        playlist-list-item(:playlist="playlist", :selected="isSelected(playlist)")
 </template>
 
 <script>
+import PlaylistListItem from '@/components/PlaylistListItem'
+
 export default {
   name: 'playlistlist',
-  props: ['playlists']
+  props: ['playlists'],
+  data () {
+    return {
+      selectedPlaylist: {}
+    }
+  },
+  components: {
+    PlaylistListItem
+  },
+  methods: {
+    selectPlaylist (playlist) {
+      this.selectedPlaylist = playlist
+    },
+    isSelected (playlist) {
+      return this.selectedPlaylist.id === playlist.id
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+  .playlist-list {
+    max-height: 350px;
+    overflow-y: scroll;
 
+    ul {
+      li {
+        margin-top: 0.2rem;
+      }
+    }
+  }
 </style>

@@ -1,7 +1,7 @@
 <template lang="pug">
   .create-quiz
     h1.title.has-text-centered Create Quiz
-    step-bar(:currentStep="currentStep")
+    step-bar.stepbar(:currentStep="currentStep")
     router-view
 </template>
 
@@ -46,9 +46,12 @@ export default {
     color: white;
     font-weight: normal;
     font-size: 3.5rem;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
 
     margin-bottom: 2.5rem;
+  }
+
+  .stepbar {
+    margin-bottom: 1rem;
   }
 }
 </style>

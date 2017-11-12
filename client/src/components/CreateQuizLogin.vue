@@ -28,13 +28,12 @@ export default {
   text-align: center;
 
   .button {
-    margin: 1rem 0;
+    margin-bottom: 1rem;
     font-weight: bold;
   }
 
   .why-spotify {
     text-align: left;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
     max-width: 500px;
     padding: 0 30px;
 

@@ -78,7 +78,6 @@ export default {
       color: white;
       font-weight: normal;
       font-size: 3.5rem;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
 
       margin-bottom: 2.5rem;
     }
