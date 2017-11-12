@@ -22,6 +22,7 @@ export default {
   methods: {
     selectPlaylist (playlist) {
       this.selectedPlaylist = playlist
+      this.$emit('selectedPlaylist', playlist)
     },
     isSelected (playlist) {
       return this.selectedPlaylist.id === playlist.id

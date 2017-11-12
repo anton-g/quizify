@@ -1,12 +1,12 @@
 <template lang="pug">
   .create-quiz--playlist
     h2 Select a playlist
-    playlist-list(:playlists="userPlaylists")
+    playlist-list(:playlists="userPlaylists", @selectedPlaylist="selectPlaylist")
     .columns.is-mobile.navigation
       .column
         router-link.home-button(:to="{ name: 'landing' }") Home
       .column
-        a.button.is-dark.is-pulled-right(@click="nextStep", :disabled="nextDisabled")
+        a.button.is-dark.is-pulled-right(@click="nextStep", :disabled="!hasSelectedPlaylist")
           span Lets go
           span.icon
             i.fa.fa-music
@@ -20,7 +20,8 @@ import spotify from '@/spotify'
 export default {
   data () {
     return {
-      userPlaylists: []
+      userPlaylists: [],
+      selectedPlaylist: null
     }
   },
   components: {
@@ -34,12 +35,17 @@ export default {
   },
   methods: {
     nextStep () {
-
+      if (this.hasSelectedPlaylist) {
+        this.$router.push({ name: 'create-quiz-players' })
+      }
+    },
+    selectPlaylist (playlist) {
+      this.selectedPlaylist = playlist
     }
   },
   computed: {
-    nextDisabled () {
-      return true
+    hasSelectedPlaylist () {
+      return !!(this.selectedPlaylist)
     }
   }
 }

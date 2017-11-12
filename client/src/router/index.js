@@ -5,6 +5,7 @@ import LandingPage from '@/pages/LandingPage'
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
 import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
+import CreateQuizPlayers from '@/components/CreateQuizPlayers'
 
 Vue.use(Router)
 
@@ -37,6 +38,12 @@ export default new Router({
           name: 'create-quiz-songs',
           component: CreateQuizPlaylist,
           meta: { step: 2 }
+        },
+        {
+          path: 'friends',
+          name: 'create-quiz-players',
+          component: CreateQuizPlayers,
+          meta: { step: 3 }
         }
       ]
     }
