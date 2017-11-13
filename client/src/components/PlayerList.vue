@@ -2,11 +2,8 @@
   .player-list
     h3 Players
     p(v-if="players.length < 1") When your friends join they'll show up here!
-    ul(v-if="players.length > 0")
-      li Anton
-      li Amanda
-      li Sofia
-      li Malin
+    ul
+      li(v-for="player in players") {{ player }}
 </template>
 
 <script>

@@ -2,7 +2,7 @@
   .create-quiz--players
     .pin
       span Give your friends this PIN:
-      horizontal-line-heading.pin ABC123
+      horizontal-line-heading.pin {{ quizPin }}
     .players
       player-list(:players="players")
     .settings
@@ -32,7 +32,10 @@ export default {
       return this.$store.state.selectedPlaylist
     },
     players () {
-      return ['Anton', 'Amanda', 'Sofia', 'Malin']
+      return this.$store.state.players
+    },
+    quizPin () {
+      return this.$store.state.quizPin
     }
   }
 }

@@ -14,7 +14,7 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
-html, body, #app {
+html, body {
   width: 100%;
   height: 100%;
 }
@@ -24,11 +24,13 @@ h1,h2,h3,h4,h5,p,span {
 }
 
 #app {
+  min-height: 100%;
   background: linear-gradient(to right, #ee0979, #ff6a00); //linear-gradient(to right, #f2994a, #f2c94c);
   display: flex;
 
   .container {
     max-width: 500px;
+    margin: 1rem auto;
   }
 }
 </style>

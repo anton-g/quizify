@@ -12,7 +12,9 @@ export default new Vuex.Store({
     accessToken: '',
     expiresIn: '',
     userPlaylists: [],
-    selectedPlaylist: null
+    selectedPlaylist: null,
+    quizPin: 'ABC123',
+    players: ['Anton', 'Amanda', 'Sofia', 'Nisse', 'Pisse', 'Peter', 'Anton', 'Amanda', 'Sofia', 'Nisse', 'Pisse', 'Peter']
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
