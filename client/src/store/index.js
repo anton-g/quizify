@@ -7,6 +7,9 @@ import spotify from '@/spotify'
 
 Vue.use(Vuex)
 
+// TODO well this is ugly af https://github.com/MetinSeylan/Vue-Socket.io/issues/47
+const socketBus = new Vue()
+
 export default new Vuex.Store({
   state: { // TODO should be empty when not in dev
     accessToken: '',
@@ -14,7 +17,7 @@ export default new Vuex.Store({
     userPlaylists: [],
     selectedPlaylist: null,
     quizPin: '',
-    players: ['Anton', 'Amanda', 'Malin'],
+    players: [],
     connected: false
   },
   actions: {
@@ -24,8 +27,7 @@ export default new Vuex.Store({
     },
     createQuiz ({ commit, state }) {
       if (!state.quizPin) {
-        // TODO well this is ugly af https://github.com/MetinSeylan/Vue-Socket.io/issues/47
-        (new Vue()).$socket.emit('room_create', (pin) => {
+        socketBus.$socket.emit('room_create', (pin) => {
           commit(types.SET_QUIZ_PIN, pin)
         })
       }
@@ -66,6 +68,9 @@ export default new Vuex.Store({
     },
     [types.SOCKET_DISCONNECT] (state) {
       state.connected = false
+    },
+    [types.SOCKET_USER_JOIN] (state, user) {
+      console.log(user)
     }
   },
   strict: process.env.NODE_ENV !== 'production'
