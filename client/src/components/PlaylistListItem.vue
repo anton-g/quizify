@@ -10,7 +10,14 @@
 <script>
 // TODO vad gör man med för långa spellistenamn?
 export default {
-  props: ['playlist', 'selected'],
+  props: {
+    playlist: {
+      type: Object
+    },
+    selected: {
+      type: Boolean
+    }
+  },
   computed: {
     hasImages () {
       return this.playlist.images.length > 0

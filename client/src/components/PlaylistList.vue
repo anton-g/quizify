@@ -10,7 +10,11 @@ import PlaylistListItem from '@/components/PlaylistListItem'
 
 export default {
   name: 'playlistlist',
-  props: ['playlists'],
+  props: {
+    playlists: {
+      type: Array
+    }
+  },
   data () {
     return {
       selectedPlaylist: {}

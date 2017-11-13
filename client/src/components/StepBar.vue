@@ -9,7 +9,11 @@
 <script>
 export default {
   name: 'StepBar',
-  props: ['currentStep'],
+  props: {
+    currentStep: {
+      type: Number
+    }
+  },
   methods: {
     classesForStep (step) {
       return {
