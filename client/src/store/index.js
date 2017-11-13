@@ -13,13 +13,22 @@ export default new Vuex.Store({
     expiresIn: '',
     userPlaylists: [],
     selectedPlaylist: null,
-    quizPin: 'ABC123',
-    players: ['Anton', 'Amanda', 'Sofia', 'Nisse', 'Pisse', 'Peter', 'Anton', 'Amanda', 'Sofia', 'Nisse', 'Pisse', 'Peter']
+    quizPin: '',
+    players: ['Anton', 'Amanda', 'Malin'],
+    connected: false
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
       commit(types.ACCESS_TOKEN, access_token)
       commit(types.EXPIRES_IN, expires_in)
+    },
+    createQuiz ({ commit, state }) {
+      if (!state.quizPin) {
+        // TODO well this is ugly af https://github.com/MetinSeylan/Vue-Socket.io/issues/47
+        (new Vue()).$socket.emit('room_create', (pin) => {
+          commit(types.SET_QUIZ_PIN, pin)
+        })
+      }
     },
     fetchUserPlaylists ({ commit, state }) {
       spotify.getUserPlaylists(state.accessToken)
@@ -48,6 +57,15 @@ export default new Vuex.Store({
     },
     [types.SELECT_PLAYLIST] (state, playlist) {
       state.selectedPlaylist = playlist
+    },
+    [types.SET_QUIZ_PIN] (state, pin) {
+      state.quizPin = pin
+    },
+    [types.SOCKET_CONNECT] (state) {
+      state.connected = true
+    },
+    [types.SOCKET_DISCONNECT] (state) {
+      state.connected = false
     }
   },
   strict: process.env.NODE_ENV !== 'production'

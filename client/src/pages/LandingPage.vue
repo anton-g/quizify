@@ -1,7 +1,7 @@
 <template lang="pug">
   .landing
     .menu
-      h1.title.has-text-centered Le Quiz
+      h1.title.has-text-centered Quizify
       transition(:enter="test", type="animation")
         input.pin-input.is-medium(
           type="text"

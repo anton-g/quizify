@@ -16,6 +16,8 @@ export default {
     StepBar
   },
   created () {
+    this.$store.dispatch('createQuiz')
+
     let params = auth.getHashParams(this.$route.hash)
     if (params.access_token) {
       this.$store.dispatch('login', params)
