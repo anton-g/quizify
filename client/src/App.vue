@@ -26,5 +26,9 @@ h1,h2,h3,h4,h5,p,span {
 #app {
   background: linear-gradient(to right, #ee0979, #ff6a00); //linear-gradient(to right, #f2994a, #f2c94c);
   display: flex;
+
+  .container {
+    max-width: 500px;
+  }
 }
 </style>

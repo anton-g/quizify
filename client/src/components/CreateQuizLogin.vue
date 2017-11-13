@@ -39,7 +39,6 @@ export default {
 
   .why-spotify {
     text-align: left;
-    max-width: 500px;
     padding: 0 30px;
 
     h2 {

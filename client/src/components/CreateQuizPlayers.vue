@@ -8,6 +8,10 @@
     .settings
       h3 Selected playlist
       playlist-list-item(:playlist="selectedPlaylist")
+    a.button.is-dark.is-fullwidth
+      span Let's get this party started
+      span.icon
+        i.fa.fa-music
 </template>
 
 <script>
@@ -31,6 +35,8 @@ export default {
 
 <style lang="scss" scoped>
 .create-quiz--players {
+  width: 100%;
+
   .pin {
     text-align: center;
 
@@ -47,6 +53,11 @@ export default {
       margin: 0.2rem 0;
       font-weight: bold;
     }
+  }
+
+  .button {
+    margin-top: 1rem;
+    width: 100%;
   }
 }
 </style>
