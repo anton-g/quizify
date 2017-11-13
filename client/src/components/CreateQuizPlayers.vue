@@ -4,7 +4,7 @@
       span Give your friends this PIN:
       horizontal-line-heading.pin ABC123
     .players
-      player-list
+      player-list(:players="players")
     .settings
       h3 Selected playlist
       playlist-list-item(:playlist="selectedPlaylist")
@@ -12,6 +12,8 @@
       span Let's get this party started
       span.icon
         i.fa.fa-music
+    .change-playlist-button
+      router-link(:to="{ name: 'create-quiz-playlist' }") Change playlist
 </template>
 
 <script>
@@ -28,6 +30,9 @@ export default {
   computed: {
     selectedPlaylist () {
       return this.$store.state.selectedPlaylist
+    },
+    players () {
+      return ['Anton', 'Amanda', 'Sofia', 'Malin']
     }
   }
 }
@@ -58,6 +63,20 @@ export default {
   .button {
     margin-top: 1rem;
     width: 100%;
+  }
+
+  .change-playlist-button {
+    margin-top: 1rem;
+    text-align: center;
+
+    a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: underline;
+
+      &:hover {
+        color: white;
+      }
+    }
   }
 }
 </style>
