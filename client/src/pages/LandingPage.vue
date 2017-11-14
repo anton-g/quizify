@@ -2,7 +2,7 @@
   .landing
     .menu
       h1.title.has-text-centered Quizify
-      transition(:enter="test", type="animation")
+      transition(type="animation")
         input.key-input.is-medium(
           type="text"
           placeholder="Quiz key"
@@ -34,10 +34,6 @@ export default {
     }
   },
   methods: {
-    test (el, done) {
-      console.log('hej')
-      done()
-    },
     join () {
       if (this.quizKey.length < 1) {
         this.invalidKey = true
@@ -46,12 +42,13 @@ export default {
 
       this.isJoining = true
 
-      this.$store.dispatch('joinQuiz', this.quizKey)
-      .then(result => {
-        // redirect to next step
+      this.$store.dispatch('verifyRoomKey', this.quizKey)
+      .then(() => {
+        this.$router.push({ name: 'join', params: { id: this.quizKey } })
       })
       .catch(error => {
         console.log(error)
+        this.invalidKey = true
         this.isJoining = false
       })
     },

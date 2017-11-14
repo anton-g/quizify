@@ -16,9 +16,10 @@ export default new Vuex.Store({
     expiresIn: '',
     userPlaylists: [],
     selectedPlaylist: null,
-    quizKey: '',
+    createdQuizKey: '',
     players: [],
-    connected: false
+    connected: false,
+    joinedQuizKey: ''
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
@@ -26,9 +27,9 @@ export default new Vuex.Store({
       commit(types.EXPIRES_IN, expires_in)
     },
     createQuiz ({ commit, state }) {
-      if (!state.quizKey) {
+      if (!state.createdQuizKey) {
         socketBus.$socket.emit('room_create', (key) => {
-          commit(types.SET_QUIZ_KEY, key)
+          commit(types.SET_CREATED_QUIZ_KEY, key)
         })
       }
     },
@@ -41,11 +42,11 @@ export default new Vuex.Store({
     selectPlaylist ({ commit }, playlist) {
       commit(types.SELECT_PLAYLIST, playlist)
     },
-    joinQuiz ({ commit, state }, roomKey) {
+    verifyRoomKey ({ commit, state }, roomKey) {
       return new Promise((resolve, reject) => {
         socketBus.$socket.emit('room_verify_key', roomKey, verified => {
           if (verified) {
-            // save key
+            commit(types.SET_JOINED_QUIZ_KEY, roomKey)
             resolve(verified)
           } else {
             reject(verified)
@@ -72,8 +73,11 @@ export default new Vuex.Store({
     [types.SELECT_PLAYLIST] (state, playlist) {
       state.selectedPlaylist = playlist
     },
-    [types.SET_QUIZ_KEY] (state, key) {
-      state.quizKey = key
+    [types.SET_CREATED_QUIZ_KEY] (state, key) {
+      state.createdQuizKey = key
+    },
+    [types.SET_JOINED_QUIZ_KEY] (state, key) {
+      state.joinedQuizKey = key
     },
     [types.SOCKET_CONNECT] (state) {
       state.connected = true

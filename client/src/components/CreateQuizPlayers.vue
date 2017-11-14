@@ -2,7 +2,7 @@
   .create-quiz--players
     .key
       span Give your friends this key:
-      horizontal-line-heading.key {{ quizKey }}
+      horizontal-line-heading.key {{ createdQuizKey }}
     .players
       player-list(:players="players")
     .settings
@@ -34,8 +34,8 @@ export default {
     players () {
       return this.$store.state.players
     },
-    quizKey () {
-      return this.$store.state.quizKey
+    createdQuizKey () {
+      return this.$store.state.createdQuizKey
     }
   }
 }

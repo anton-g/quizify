@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import store from '@/store'
 
 import LandingPage from '@/pages/LandingPage'
+
+import JoinQuiz from '@/pages/JoinQuiz'
+
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
 import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
@@ -25,6 +28,11 @@ export default new Router({
       path: '/',
       name: 'landing',
       component: LandingPage
+    },
+    {
+      path: '/join/:id',
+      name: 'join',
+      component: JoinQuiz
     },
     {
       path: '/create',
@@ -57,6 +65,10 @@ export default new Router({
           meta: { step: 3 }
         }
       ]
+    },
+    {
+      path: '*',
+      component: LandingPage // TODO replace with 404 page
     }
   ]
 })
