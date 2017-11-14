@@ -45,9 +45,15 @@ export default {
       }
 
       this.isJoining = true
-      setTimeout(() => {
+
+      this.$store.dispatch('joinQuiz', this.quizPin)
+      .then(result => {
+        // redirect to next step
+      })
+      .catch(error => {
+        console.log(error)
         this.isJoining = false
-      }, 1000)
+      })
     },
     inputQuizPin (event) {
       this.invalidPin = false

@@ -40,6 +40,18 @@ export default new Vuex.Store({
     },
     selectPlaylist ({ commit }, playlist) {
       commit(types.SELECT_PLAYLIST, playlist)
+    },
+    joinQuiz ({ commit, state }, roomKey) {
+      return new Promise((resolve, reject) => {
+        socketBus.$socket.emit('room_verify_key', roomKey, verified => {
+          if (verified) {
+            // save pin
+            resolve(verified)
+          } else {
+            reject(verified)
+          }
+        })
+      })
     }
   },
   getters: {
