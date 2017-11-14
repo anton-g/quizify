@@ -5,7 +5,7 @@ describe('LandingPage.vue', () => {
   it('should render correct contents', () => {
     const Constructor = Vue.extend(LandingPage)
     const vm = new Constructor().$mount()
-    expect(vm.$el.querySelectorAll('.pin-input').length)
+    expect(vm.$el.querySelectorAll('.key-input').length)
       .to.equal(1)
   })
 })

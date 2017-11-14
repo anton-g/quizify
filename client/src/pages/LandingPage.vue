@@ -3,13 +3,13 @@
     .menu
       h1.title.has-text-centered Quizify
       transition(:enter="test", type="animation")
-        input.pin-input.is-medium(
+        input.key-input.is-medium(
           type="text"
-          placeholder="Quiz PIN"
-          :class="{ invalid: invalidPin }"
-          :value="quizPin.toUpperCase()"
+          placeholder="Quiz key"
+          :class="{ invalid: invalidKey }"
+          :value="quizKey.toUpperCase()"
           @keydown.enter="join"
-          @input="inputQuizPin"
+          @input="inputQuizKey"
         )
       a.button.is-dark.is-fullwidth(
         :class="{ 'is-loading': isJoining }"
@@ -28,9 +28,9 @@ export default {
   name: 'LandingPage',
   data () {
     return {
-      quizPin: '',
+      quizKey: '',
       isJoining: false,
-      invalidPin: false
+      invalidKey: false
     }
   },
   methods: {
@@ -39,14 +39,14 @@ export default {
       done()
     },
     join () {
-      if (this.quizPin.length < 1) {
-        this.invalidPin = true
+      if (this.quizKey.length < 1) {
+        this.invalidKey = true
         return
       }
 
       this.isJoining = true
 
-      this.$store.dispatch('joinQuiz', this.quizPin)
+      this.$store.dispatch('joinQuiz', this.quizKey)
       .then(result => {
         // redirect to next step
       })
@@ -55,9 +55,9 @@ export default {
         this.isJoining = false
       })
     },
-    inputQuizPin (event) {
-      this.invalidPin = false
-      this.quizPin = event.target.value.toUpperCase()
+    inputQuizKey (event) {
+      this.invalidKey = false
+      this.quizKey = event.target.value.toUpperCase()
     }
   },
   components: {
@@ -92,7 +92,7 @@ export default {
       margin: 1rem 0;
     }
 
-    .pin-input {
+    .key-input {
       width: 100%;
       text-align: center;
       font-size: 1.5rem;

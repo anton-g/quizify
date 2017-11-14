@@ -1,8 +1,8 @@
 <template lang="pug">
   .create-quiz--players
-    .pin
-      span Give your friends this PIN:
-      horizontal-line-heading.pin {{ quizPin }}
+    .key
+      span Give your friends this key:
+      horizontal-line-heading.key {{ quizKey }}
     .players
       player-list(:players="players")
     .settings
@@ -34,8 +34,8 @@ export default {
     players () {
       return this.$store.state.players
     },
-    quizPin () {
-      return this.$store.state.quizPin
+    quizKey () {
+      return this.$store.state.quizKey
     }
   }
 }
@@ -45,7 +45,7 @@ export default {
 .create-quiz--players {
   width: 100%;
 
-  .pin {
+  .key {
     text-align: center;
 
     h2 {
