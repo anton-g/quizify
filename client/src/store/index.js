@@ -99,7 +99,7 @@ export default new Vuex.Store({
       state.connected = false
     },
     [types.SOCKET_USER_JOIN] (state, user) {
-      console.log(user)
+      state.players.push(user)
     },
     [types.SET_USERNAME] (state, username) {
       state.username = username
