@@ -1,5 +1,5 @@
 {
-  "name": "spotiquiz-server",
+  "name": "quizify-server",
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anton-g/spotiquiz.git"
+    "url": "git+https://github.com/anton-g/quizify.git"
   },
   "author": "anton-g",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/anton-g/spotiquiz/issues"
+    "url": "https://github.com/anton-g/quizify/issues"
   },
-  "homepage": "https://github.com/anton-g/spotiquiz#readme",
+  "homepage": "https://github.com/anton-g/quizify#readme",
   "devDependencies": {
     "eslint": "^4.10.0",
     "eslint-config-standard": "^10.2.1",

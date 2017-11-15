@@ -1,6 +1,6 @@
-# SpotiQuiz [alpha]
+# Quizify [alpha]
 
-SpotiQuiz is made up of two parts; a client consisting of the actual website and a server handling socket connections etc.
+Quizify is made up of two parts; a client consisting of the actual website and a server handling socket connections etc.
 
 ## Server
 
