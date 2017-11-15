@@ -64,6 +64,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/css/mixins.scss';
+
 .landing {
   height: 100%;
   display: flex;
@@ -90,23 +92,7 @@ export default {
     }
 
     .key-input {
-      width: 100%;
-      text-align: center;
-      font-size: 1.5rem;
-      line-height: 1.5;
-      padding: .3em 1em;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-      background-color: rgba(255, 255, 255, 0.20);
-      border: 1px solid transparent;
-      border-radius: .3rem;
-      color: white;
-
-      &:focus {
-        box-sizing: border-box;
-        outline: none;
-        background-color: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.35);
-      }
+      @include transparent-input();
 
       &.invalid {
         animation: shake .4s linear;
@@ -129,10 +115,6 @@ export default {
           -webkit-transform: translateX(0);
         }
       }
-    }
-
-    ::-webkit-input-placeholder { /* Chrome */
-      color: white;
     }
   }
 

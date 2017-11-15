@@ -11,36 +11,42 @@ http.listen(port, () => { console.log(`listening on *:${port}`) })
 let rooms = {}
 
 function onConnection (socket) {
-  const name = socket.handshake.query.name || 'host'
-  debugging && console.log(`${name} connected`)
-
+  socket.on('room_verify_key', onRoomVerifyKey)
   socket.on('room_join', onRoomJoin)
   socket.on('room_create', onRoomCreate)
 
-  function onRoomJoin (roomId) {
+  function onRoomVerifyKey (roomId, ack) {
+    let room = rooms[roomId]
+    ack(!!(room))
+  }
+
+  function onRoomJoin (roomId, userName, ack) {
     let room = rooms[roomId]
     if (room) {
       socket.join(room.id)
 
-      socket.to(room.owner).emit('user_join', name)
-      room.members.push(name)
+      socket.to(room.owner).emit('user_join', userName)
+      room.members.push(userName)
 
       socket.on('buzz', () => {
-        debugging && console.log(`${name} buzzed`)
+        debugging && console.log(`${userName} buzzed`)
         io.sockets.in(roomId).emit('pause')
-        socket.to(room.owner).emit('user_buzz', name)
+        socket.to(room.owner).emit('user_buzz', userName)
       })
+      ack(true)
 
-      debugging && console.log(`${name} joined room ${roomId}`)
+      debugging && console.log(`${userName} joined room ${roomId}`)
     } else {
-      // could not find room
+      ack(false)
+
+      debugging && console.log(`${userName} tried to join room ${roomId}`)
     }
 
     socket.on('disconnect', () => {
-      socket.to(room.owner).emit('user_leave', name)
-      room.members.splice(room.members.findIndex(m => m === name), 1)
+      socket.to(room.owner).emit('user_leave', userName)
+      room.members.splice(room.members.findIndex(m => m === userName), 1)
 
-      debugging && console.log(`Room participant ${name} disconnected`)
+      debugging && console.log(`Room participant ${userName} disconnected`)
     })
   }
 
@@ -67,4 +73,6 @@ function onConnection (socket) {
 
     debugging && console.log(`created room ${roomId}`)
   }
+
+  debugging && console.log(`user connected`)
 }

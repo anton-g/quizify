@@ -34,12 +34,12 @@ export default {
 
 <style lang="scss">
 .create-quiz {
+  color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
 
   margin-top: auto;
 
