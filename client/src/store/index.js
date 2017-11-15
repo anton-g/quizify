@@ -19,7 +19,8 @@ export default new Vuex.Store({
     createdQuizKey: '',
     players: [],
     connected: false,
-    joinedQuizKey: ''
+    selectedRoomKey: '',
+    username: ''
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
@@ -45,11 +46,23 @@ export default new Vuex.Store({
     verifyRoomKey ({ commit, state }, roomKey) {
       return new Promise((resolve, reject) => {
         socketBus.$socket.emit('room_verify_key', roomKey, verified => {
-          if (verified) {
-            commit(types.SET_JOINED_QUIZ_KEY, roomKey)
+          if (verified === true) {
+            commit(types.QUIZ_SELECT_KEY, roomKey)
             resolve(verified)
           } else {
-            reject(verified)
+            reject(new Error('could not find quiz'))
+          }
+        })
+      })
+    },
+    joinSelectedRoom ({ commit, state }, username) {
+      return new Promise((resolve, reject) => {
+        socketBus.$socket.emit('room_join', state.selectedRoomKey, username, result => {
+          if (result === true) {
+            commit(types.SET_USERNAME, username)
+            resolve(true)
+          } else {
+            reject(new Error('could not join quiz'))
           }
         })
       })
@@ -76,8 +89,8 @@ export default new Vuex.Store({
     [types.SET_CREATED_QUIZ_KEY] (state, key) {
       state.createdQuizKey = key
     },
-    [types.SET_JOINED_QUIZ_KEY] (state, key) {
-      state.joinedQuizKey = key
+    [types.QUIZ_SELECT_KEY] (state, key) {
+      state.selectedRoomKey = key
     },
     [types.SOCKET_CONNECT] (state) {
       state.connected = true
@@ -87,6 +100,9 @@ export default new Vuex.Store({
     },
     [types.SOCKET_USER_JOIN] (state, user) {
       console.log(user)
+    },
+    [types.SET_USERNAME] (state, username) {
+      state.username = username
     }
   },
   strict: process.env.NODE_ENV !== 'production'

@@ -2,12 +2,17 @@
   .join-quiz
     h1.title.has-text-centered Join Quiz
     p What should we call you?
-    input.name-input(placeholder="Name")
-    a.button.is-dark.is-fullwidth Join lobby
+    input.name-input(placeholder="Name", v-model="username")
+    a.button.is-dark.is-fullwidth(@click="join") Join lobby
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      username: ''
+    }
+  },
   created () {
     const key = this.$route.params.id
     if (!this.$store.state.quizKey) {
@@ -17,8 +22,17 @@ export default {
         this.$router.push({ name: 'landing' })
       })
     }
-
-    console.log(key)
+  },
+  methods: {
+    join () {
+      this.$store.dispatch('joinSelectedRoom', this.username)
+      .then(() => {
+        this.$router.push({ name: 'lobby' })
+      })
+      .catch(() => {
+        console.log('error')
+      })
+    }
   }
 }
 </script>
