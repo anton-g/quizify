@@ -22,3 +22,10 @@
     text-shadow: none;
   }
 }
+
+@mixin branded-heading() {
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-weight: normal;
+  font-size: 3.5rem;
+}

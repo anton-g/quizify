@@ -33,6 +33,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/css/mixins.scss';
+
 .create-quiz {
   color: white;
   height: 100%;
@@ -44,10 +46,7 @@ export default {
   margin-top: auto;
 
   h1 {
-    font-family: 'Pacifico', cursive;
-    color: white;
-    font-weight: normal;
-    font-size: 3.5rem;
+    @include branded-heading();
 
     margin-bottom: 2.5rem;
   }

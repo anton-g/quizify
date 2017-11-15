@@ -79,10 +79,7 @@ export default {
     font-weight: bold;
 
     h1 {
-      font-family: 'Pacifico', cursive;
-      color: white;
-      font-weight: normal;
-      font-size: 3.5rem;
+      @include branded-heading();
 
       margin-bottom: 2.5rem;
     }
