@@ -25,8 +25,16 @@ function onConnection (socket) {
     if (room) {
       socket.join(room.id)
 
+      let user = {
+        name: userName,
+        id: socket.id,
+        connected: true
+      }
+
+      room.members.push(user)
+
+      io.sockets.in(roomId).emit('users_update', room.members)
       socket.to(room.owner).emit('user_join', userName)
-      room.members.push(userName)
 
       socket.on('buzz', () => {
         debugging && console.log(`${userName} buzzed`)
@@ -36,18 +44,19 @@ function onConnection (socket) {
       ack(true)
 
       debugging && console.log(`${userName} joined room ${roomId}`)
+
+      socket.on('disconnect', () => {
+        const idx = room.members.findIndex(m => m.id === user.id)
+        room.members[idx].connected = false
+        io.sockets.in(roomId).emit('users_update', room.members)
+
+        debugging && console.log(`Room participant ${userName} disconnected`)
+      })
     } else {
       ack(false)
 
       debugging && console.log(`${userName} tried to join room ${roomId}`)
     }
-
-    socket.on('disconnect', () => {
-      socket.to(room.owner).emit('user_leave', userName)
-      room.members.splice(room.members.findIndex(m => m === userName), 1)
-
-      debugging && console.log(`Room participant ${userName} disconnected`)
-    })
   }
 
   function onRoomCreate (ack) {

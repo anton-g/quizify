@@ -101,9 +101,8 @@ export default new Vuex.Store({
     [types.SOCKET_USER_JOIN] (state, user) {
       state.players.push(user)
     },
-    [types.SOCKET_USER_LEAVE] (state, user) {
-      const idx = state.players.findIndex(p => p === user)
-      state.players.splice(idx, 1)
+    [types.SOCKET_USERS_UPDATE] (state, users) {
+      state.players = users
     },
     [types.SET_USERNAME] (state, username) {
       state.username = username
