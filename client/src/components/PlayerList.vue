@@ -3,10 +3,12 @@
     h3 Players
     p(v-if="players.length < 1") When your friends join they'll show up here!
     ul
-      li(v-for="player in players", :class="{ disconnected: !player.connected }")
-        span {{ player.name }}
+      li(v-for="player in players")
+        span(:class="{ disconnected: !player.connected }") {{ player.name }}
         span.icon(v-if="currentUserId === player.id")
           i.fa.fa-star
+        span.icon(v-if="!player.connected")
+          i.fa.fa-user-times
 </template>
 
 <script>
@@ -31,9 +33,9 @@ export default {
     font-weight: bold;
   }
 
-  ul li.disconnected {
+  .disconnected {
     text-decoration: line-through;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.8);
   }
 }
 </style>
