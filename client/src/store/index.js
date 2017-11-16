@@ -20,7 +20,7 @@ export default new Vuex.Store({
     players: [],
     connected: false,
     selectedRoomKey: '',
-    username: ''
+    user: {}
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
@@ -57,9 +57,9 @@ export default new Vuex.Store({
     },
     joinSelectedRoom ({ commit, state }, username) {
       return new Promise((resolve, reject) => {
-        socketBus.$socket.emit('room_join', state.selectedRoomKey, username, result => {
-          if (result === true) {
-            commit(types.SET_USERNAME, username)
+        socketBus.$socket.emit('room_join', state.selectedRoomKey, username, (success, user) => {
+          if (success === true) {
+            commit(types.SET_USER, user)
             resolve(true)
           } else {
             reject(new Error('could not join quiz'))
@@ -98,14 +98,11 @@ export default new Vuex.Store({
     [types.SOCKET_DISCONNECT] (state) {
       state.connected = false
     },
-    [types.SOCKET_USER_JOIN] (state, user) {
-      state.players.push(user)
-    },
     [types.SOCKET_USERS_UPDATE] (state, users) {
       state.players = users
     },
-    [types.SET_USERNAME] (state, username) {
-      state.username = username
+    [types.SET_USER] (state, user) {
+      state.user = user
     }
   },
   strict: process.env.NODE_ENV !== 'production'

@@ -3,7 +3,10 @@
     h3 Players
     p(v-if="players.length < 1") When your friends join they'll show up here!
     ul
-      li(v-for="player in players", :class="{ disconnected: !player.connected }") {{ player.name }}
+      li(v-for="player in players", :class="{ disconnected: !player.connected }")
+        span {{ player.name }}
+        span.icon(v-if="currentUserId === player.id")
+          i.fa.fa-star
 </template>
 
 <script>
@@ -14,6 +17,9 @@ export default {
       default: () => {
         return []
       }
+    },
+    currentUserId: {
+      type: String
     }
   }
 }

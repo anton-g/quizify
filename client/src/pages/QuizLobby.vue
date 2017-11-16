@@ -2,7 +2,7 @@
 .quiz-lobby
   h1 Lobby
   p Waiting for quiz to start..
-  player-list.players(:players="players")
+  player-list.players(:players="players", :current-user-id="currentPlayerId")
   a.button.is-dark.is-fullwidth Leave quiz
 </template>
 
@@ -16,6 +16,9 @@ export default {
   computed: {
     players () {
       return this.$store.state.players
+    },
+    currentPlayerId () {
+      return this.$store.state.user.id
     }
   }
 }

@@ -34,14 +34,13 @@ function onConnection (socket) {
       room.members.push(user)
 
       io.sockets.in(roomId).emit('users_update', room.members)
-      socket.to(room.owner).emit('user_join', userName)
 
       socket.on('buzz', () => {
         debugging && console.log(`${userName} buzzed`)
         io.sockets.in(roomId).emit('pause')
         socket.to(room.owner).emit('user_buzz', userName)
       })
-      ack(true)
+      ack(true, user)
 
       debugging && console.log(`${userName} joined room ${roomId}`)
 
