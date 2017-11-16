@@ -6,6 +6,8 @@ import LandingPage from '@/pages/LandingPage'
 
 import JoinQuiz from '@/pages/JoinQuiz'
 
+import QuizLobby from '@/pages/QuizLobby'
+
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
 import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
@@ -33,6 +35,11 @@ export default new Router({
       path: '/join/:id',
       name: 'join',
       component: JoinQuiz
+    },
+    {
+      path: '/lobby',
+      name: 'lobby',
+      component: QuizLobby
     },
     {
       path: '/create',
