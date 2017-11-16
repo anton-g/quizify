@@ -2,6 +2,7 @@
   .landing
     .menu
       h1.title.has-text-centered Quizify
+        span.tag.is-dark BETA
       transition(type="animation")
         input.key-input.is-medium(
           type="text"
@@ -81,7 +82,18 @@ export default {
     h1 {
       @include branded-heading();
 
+      position: relative;
       margin-bottom: 2.5rem;
+
+      span {
+        font-family: Arial, Helvetica, sans-serif;
+        text-shadow: none;
+
+        position: absolute;
+        top: 0.5rem;
+        right: 1.5rem;
+        transform: rotateZ(20deg);
+      }
     }
 
     .button {
