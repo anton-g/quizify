@@ -13,6 +13,11 @@ export default {
   components: {
     PlayerList
   },
+  created () {
+    if (!this.$store.state.user.id) {
+      this.$router.replace({ name: 'landing' })
+    }
+  },
   computed: {
     players () {
       return this.$store.state.players
