@@ -61,8 +61,8 @@ export default {
   computed: {
     createButtonInfo () {
       return {
-        pathName: this.$store.state.createdQuizKey ? 'create-quiz-players' : 'create',
-        text: this.$store.state.createdQuizKey ? 'Back to your quiz' : 'Create quiz'
+        pathName: this.$store.getters.hasCreatedQuiz ? 'create-quiz-players' : 'create',
+        text: this.$store.getters.hasCreatedQuiz ? 'Back to your quiz' : 'Create quiz'
       }
     }
   },

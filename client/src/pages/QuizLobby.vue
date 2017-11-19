@@ -3,7 +3,7 @@
   h1 Lobby
   p Waiting for quiz to start..
   player-list.players(:players="players", :current-user-id="currentPlayerId")
-  a.button.is-dark.is-fullwidth(@click="leaveQuiz") Leave quiz
+  a.button.is-dark.is-outlined.is-fullwidth(@click="leaveQuiz") Leave quiz
 </template>
 
 <script>
@@ -56,6 +56,7 @@ export default {
 
   .players {
     align-self: left;
+    margin-bottom: 2rem;
   }
 }
 </style>

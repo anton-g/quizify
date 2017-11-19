@@ -76,6 +76,9 @@ export default new Vuex.Store({
   getters: {
     isAuthorized (state) {
       return state.accessToken.length > 0 // TODO check expiration as well
+    },
+    hasCreatedQuiz (state) {
+      return state.createdQuizKey && state.selectedPlaylist
     }
   },
   mutations: {

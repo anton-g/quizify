@@ -7,6 +7,8 @@
 <script>
 export default {
   name: 'app'
+  // TODO when refreshing page, restore state from session storage and rejoin quiz
+  // For quiz host: Send back secret token from server to know which quiz to join
 }
 </script>
 
