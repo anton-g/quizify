@@ -17,7 +17,7 @@
         @click="join"
       ) Enter
       horizontal-line-heading OR
-      router-link.button.is-white.is-outlined.is-fullwidth(:to="{ name: 'create' }") Create quiz
+      router-link.button.is-white.is-outlined.is-fullwidth(:to="{ name: createButtonInfo.pathName }") {{ createButtonInfo.text }}
     .foot
       a About
 </template>
@@ -56,6 +56,14 @@ export default {
     inputQuizKey (event) {
       this.invalidKey = false
       this.quizKey = event.target.value.toUpperCase()
+    }
+  },
+  computed: {
+    createButtonInfo () {
+      return {
+        pathName: this.$store.state.createdQuizKey ? 'create-quiz-players' : 'create',
+        text: this.$store.state.createdQuizKey ? 'Back to your quiz' : 'Create quiz'
+      }
     }
   },
   components: {

@@ -2,7 +2,7 @@
   .join-quiz
     h1.title.has-text-centered Join Quiz
     p What should we call you?
-    input.name-input(placeholder="Name", v-model="username")
+    input.name-input(placeholder="Name", v-model="username", @keydown.enter="join")
     a.button.is-dark.is-fullwidth(@click="join") Join lobby
 </template>
 
