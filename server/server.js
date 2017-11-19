@@ -9,6 +9,7 @@ const port = process.env.PORT || 8081
 http.listen(port, () => { console.log(`listening on *:${port}`) })
 
 let rooms = {}
+let socketRooms = {}
 
 function onConnection (socket) {
   socket.on('room_verify_key', onRoomVerifyKey)
@@ -21,29 +22,37 @@ function onConnection (socket) {
   }
 
   function onRoomJoin (roomId, userName, ack) {
+    let user = {
+      name: userName,
+      id: socket.id,
+      connected: true
+    }
+
     let room = rooms[roomId]
     if (room) {
-      socket.join(room.id)
+      const connectedRoom = socketRooms[socket.id]
+      if (connectedRoom) {
+        const idx = room.members.findIndex(m => m.id === user.id)
+        room.members.splice(idx, 1)
 
-      let user = {
-        name: userName,
-        id: socket.id,
-        connected: true
+        debugging && console.log(`remove replaced user ${userName} (${user.id}) from room ${roomId}`)
       }
+
+      socket.join(room.id)
+      socketRooms[socket.id] = room.id
 
       room.members.push(user)
 
-      io.sockets.in(roomId).emit('users_update', room.members)
+      io.sockets.in(room.id).emit('users_update', room.members)
+      ack(true, user)
+
+      debugging && console.log(`${userName} (${user.id}) joined room ${roomId}`)
 
       socket.on('buzz', () => {
         debugging && console.log(`${userName} buzzed`)
         io.sockets.in(roomId).emit('pause')
         socket.to(room.owner).emit('user_buzz', userName)
       })
-      ack(true, user)
-
-      debugging && console.log(`${userName} joined room ${roomId}`)
-
       socket.on('disconnect', () => {
         const idx = room.members.findIndex(m => m.id === user.id)
         room.members[idx].connected = false
@@ -54,7 +63,7 @@ function onConnection (socket) {
     } else {
       ack(false)
 
-      debugging && console.log(`${userName} tried to join room ${roomId}`)
+      debugging && console.log(`${userName} tried to join non existing room ${roomId}`)
     }
   }
 
