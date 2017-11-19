@@ -8,95 +8,95 @@ io.on('connection', onConnection)
 const port = process.env.PORT || 8081
 http.listen(port, () => { console.log(`listening on *:${port}`) })
 
-let rooms = {}
-let socketRooms = {}
+let quizes = {}
+let socketQuizes = {}
 
 function onConnection (socket) {
-  socket.on('room_verify_key', onRoomVerifyKey)
-  socket.on('room_join', onRoomJoin)
-  socket.on('room_create', onRoomCreate)
+  socket.on('quiz_verify_key', onQuizVerifyKey)
+  socket.on('quiz_join', onQuizJoin)
+  socket.on('quiz_create', onQuizCreate)
 
-  function onRoomVerifyKey (roomId, ack) {
-    let room = rooms[roomId]
-    ack(!!(room))
+  function onQuizVerifyKey (quizId, ack) {
+    let quiz = quizes[quizId]
+    ack(!!(quiz))
   }
 
-  function onRoomJoin (roomId, userName, ack) {
+  function onQuizJoin (quizId, userName, ack) {
     let user = {
       name: userName,
       id: socket.id,
       connected: true
     }
 
-    let room = rooms[roomId]
-    if (room) {
-      const connectedRoom = socketRooms[socket.id]
-      if (connectedRoom) {
-        const idx = room.members.findIndex(m => m.id === user.id)
-        room.members.splice(idx, 1)
+    let quiz = quizes[quizId]
+    if (quiz) {
+      const connectedQuiz = socketQuizes[socket.id]
+      if (connectedQuiz) {
+        const idx = quiz.players.findIndex(m => m.id === user.id)
+        quiz.players.splice(idx, 1)
 
-        debugging && console.log(`remove replaced user ${userName} (${user.id}) from room ${roomId}`)
+        debugging && console.log(`remove replaced user ${userName} (${user.id}) from quiz ${quizId}`)
       }
 
-      socket.join(room.id)
-      socketRooms[socket.id] = room.id
+      socket.join(quiz.id)
+      socketQuizes[socket.id] = quiz.id
 
-      room.members.push(user)
+      quiz.players.push(user)
 
-      io.sockets.in(room.id).emit('users_update', room.members)
+      io.sockets.in(quiz.id).emit('users_update', quiz.players)
       ack(true, user)
 
-      debugging && console.log(`${userName} (${user.id}) joined room ${roomId}`)
+      debugging && console.log(`${userName} (${user.id}) joined quiz ${quizId}`)
 
       socket.on('buzz', () => {
-        io.sockets.in(roomId).emit('pause')
-        socket.to(room.owner).emit('user_buzz', userName)
+        io.sockets.in(quizId).emit('pause')
+        socket.to(quiz.owner).emit('user_buzz', userName)
 
         debugging && console.log(`${userName} buzzed`)
       })
-      socket.on('room_leave', () => {
-        const idx = room.members.findIndex(m => m.id === user.id)
-        room.members.splice(idx, 1)
-        io.sockets.in(room.id).emit('users_update', room.members)
+      socket.on('quiz_leave', () => {
+        const idx = quiz.players.findIndex(m => m.id === user.id)
+        quiz.players.splice(idx, 1)
+        io.sockets.in(quiz.id).emit('users_update', quiz.players)
 
-        debugging && console.log(`${userName} left room ${room.id}`)
+        debugging && console.log(`${userName} left quiz ${quiz.id}`)
       })
       socket.on('disconnect', () => {
-        const idx = room.members.findIndex(m => m.id === user.id)
-        room.members[idx].connected = false
-        io.sockets.in(roomId).emit('users_update', room.members)
+        const idx = quiz.players.findIndex(m => m.id === user.id)
+        quiz.players[idx].connected = false
+        io.sockets.in(quizId).emit('users_update', quiz.players)
 
-        debugging && console.log(`Room participant ${userName} disconnected`)
+        debugging && console.log(`Quiz participant ${userName} disconnected`)
       })
     } else {
       ack(false)
 
-      debugging && console.log(`${userName} tried to join non existing room ${roomId}`)
+      debugging && console.log(`${userName} tried to join non existing quiz ${quizId}`)
     }
   }
 
-  function onRoomCreate (ack) {
-    const roomId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
-    socket.join(roomId)
+  function onQuizCreate (ack) {
+    const quizId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
+    socket.join(quizId)
 
-    rooms[roomId] = {
-      id: roomId,
+    quizes[quizId] = {
+      id: quizId,
       owner: socket.id,
-      members: []
+      players: []
     }
-    ack(roomId)
+    ack(quizId)
 
     socket.on('disconnect', () => {
-      io.sockets.in(roomId).emit('pause')
+      io.sockets.in(quizId).emit('pause')
 
-      debugging && console.log(`Room host disconnected`)
+      debugging && console.log(`Quiz host disconnected`)
     })
 
     socket.on('unpause', () => {
-      io.sockets.in(roomId).emit('unpause')
+      io.sockets.in(quizId).emit('unpause')
     })
 
-    debugging && console.log(`created room ${roomId}`)
+    debugging && console.log(`created quiz ${quizId}`)
   }
 
   debugging && console.log(`user connected`)

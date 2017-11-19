@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     leaveQuiz () {
-      this.$store.dispatch('leaveRoom')
+      this.$store.dispatch('leaveQuiz')
       this.$router.push({ name: 'landing' })
     }
   },

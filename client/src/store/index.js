@@ -19,7 +19,7 @@ export default new Vuex.Store({
     createdQuizKey: '',
     players: [],
     connected: false,
-    selectedRoomKey: '',
+    selectedQuizKey: '',
     user: {}
   },
   actions: {
@@ -29,7 +29,7 @@ export default new Vuex.Store({
     },
     createQuiz ({ commit, state }) {
       if (!state.createdQuizKey) {
-        socketBus.$socket.emit('room_create', (key) => {
+        socketBus.$socket.emit('quiz_create', (key) => {
           commit(types.SET_CREATED_QUIZ_KEY, key)
         })
       }
@@ -43,11 +43,11 @@ export default new Vuex.Store({
     selectPlaylist ({ commit }, playlist) {
       commit(types.SELECT_PLAYLIST, playlist)
     },
-    verifyRoomKey ({ commit, state }, roomKey) {
+    verifyQuizKey ({ commit, state }, quizKey) {
       return new Promise((resolve, reject) => {
-        socketBus.$socket.emit('room_verify_key', roomKey, verified => {
+        socketBus.$socket.emit('quiz_verify_key', quizKey, verified => {
           if (verified === true) {
-            commit(types.QUIZ_SELECT_KEY, roomKey)
+            commit(types.QUIZ_SELECT_KEY, quizKey)
             resolve(verified)
           } else {
             reject(new Error('could not find quiz'))
@@ -55,9 +55,9 @@ export default new Vuex.Store({
         })
       })
     },
-    joinSelectedRoom ({ commit, state }, username) {
+    joinSelectedQuiz ({ commit, state }, username) {
       return new Promise((resolve, reject) => {
-        socketBus.$socket.emit('room_join', state.selectedRoomKey, username, (success, user) => {
+        socketBus.$socket.emit('quiz_join', state.selectedQuizKey, username, (success, user) => {
           if (success === true) {
             commit(types.SET_USER, user)
             resolve(true)
@@ -67,8 +67,8 @@ export default new Vuex.Store({
         })
       })
     },
-    leaveRoom ({ commit, state }) {
-      socketBus.$socket.emit('room_leave')
+    leaveQuiz ({ commit, state }) {
+      socketBus.$socket.emit('quiz_leave')
       commit(types.QUIZ_SELECT_KEY, '')
       commit(types.SET_USER, {})
     }
@@ -81,7 +81,7 @@ export default new Vuex.Store({
       return state.createdQuizKey && state.selectedPlaylist
     },
     isConnectedToQuiz (state) {
-      return state.connected && state.selectedRoomKey
+      return state.connected && state.selectedQuizKey
     }
   },
   mutations: {
@@ -101,7 +101,7 @@ export default new Vuex.Store({
       state.createdQuizKey = key
     },
     [types.QUIZ_SELECT_KEY] (state, key) {
-      state.selectedRoomKey = key
+      state.selectedQuizKey = key
     },
     [types.SOCKET_CONNECT] (state) {
       state.connected = true

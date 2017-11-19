@@ -43,7 +43,7 @@ export default {
 
       this.isJoining = true
 
-      this.$store.dispatch('verifyRoomKey', this.quizKey)
+      this.$store.dispatch('verifyQuizKey', this.quizKey)
       .then(() => {
         this.$router.push({ name: 'join', params: { id: this.quizKey } })
       })
