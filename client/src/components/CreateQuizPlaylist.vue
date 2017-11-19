@@ -25,7 +25,7 @@ export default {
   methods: {
     nextStep () {
       if (this.hasSelectedPlaylist) {
-        this.$router.push({ name: 'create-quiz-players' })
+        this.$router.push({ name: 'create-quiz-lobby' })
       }
     }
   },

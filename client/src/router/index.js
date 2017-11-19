@@ -6,12 +6,13 @@ import LandingPage from '@/pages/LandingPage'
 
 import JoinQuiz from '@/pages/JoinQuiz'
 
-import QuizLobby from '@/pages/QuizLobby'
+import PlayerLobby from '@/pages/PlayerLobby'
+import PlayerQuiz from '@/pages/PlayerQuiz'
 
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
 import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
-import CreateQuizPlayers from '@/components/CreateQuizPlayers'
+import CreateQuizLobby from '@/components/CreateQuizLobby'
 
 Vue.use(Router)
 
@@ -39,7 +40,7 @@ export default new Router({
     {
       path: '/lobby',
       name: 'lobby',
-      component: QuizLobby
+      component: PlayerLobby
     },
     {
       path: '/create',
@@ -65,13 +66,18 @@ export default new Router({
           meta: { step: 2 }
         },
         {
-          path: 'friends',
-          name: 'create-quiz-players',
-          component: CreateQuizPlayers,
+          path: 'lobby',
+          name: 'create-quiz-lobby',
+          component: CreateQuizLobby,
           beforeEnter: checkAuthorization,
           meta: { step: 3 }
         }
       ]
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: PlayerQuiz
     },
     {
       path: '*',

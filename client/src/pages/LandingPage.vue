@@ -61,7 +61,7 @@ export default {
   computed: {
     createButtonInfo () {
       return {
-        pathName: this.$store.getters.hasCreatedQuiz ? 'create-quiz-players' : 'create',
+        pathName: this.$store.getters.hasCreatedQuiz ? 'create-quiz-lobby' : 'create',
         text: this.$store.getters.hasCreatedQuiz ? 'Back to your quiz' : 'Create quiz'
       }
     }
