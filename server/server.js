@@ -49,9 +49,17 @@ function onConnection (socket) {
       debugging && console.log(`${userName} (${user.id}) joined room ${roomId}`)
 
       socket.on('buzz', () => {
-        debugging && console.log(`${userName} buzzed`)
         io.sockets.in(roomId).emit('pause')
         socket.to(room.owner).emit('user_buzz', userName)
+
+        debugging && console.log(`${userName} buzzed`)
+      })
+      socket.on('room_leave', () => {
+        const idx = room.members.findIndex(m => m.id === user.id)
+        room.members.splice(idx, 1)
+        io.sockets.in(room.id).emit('users_update', room.members)
+
+        debugging && console.log(`${userName} left room ${room.id}`)
       })
       socket.on('disconnect', () => {
         const idx = room.members.findIndex(m => m.id === user.id)

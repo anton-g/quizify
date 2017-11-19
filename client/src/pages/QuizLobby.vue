@@ -3,7 +3,7 @@
   h1 Lobby
   p Waiting for quiz to start..
   player-list.players(:players="players", :current-user-id="currentPlayerId")
-  a.button.is-dark.is-fullwidth Leave quiz
+  a.button.is-dark.is-fullwidth(@click="leaveQuiz") Leave quiz
 </template>
 
 <script>
@@ -16,6 +16,12 @@ export default {
   created () {
     if (!this.$store.state.user.id) {
       this.$router.replace({ name: 'landing' })
+    }
+  },
+  methods: {
+    leaveQuiz () {
+      this.$store.dispatch('leaveRoom')
+      this.$router.push({ name: 'landing' })
     }
   },
   computed: {

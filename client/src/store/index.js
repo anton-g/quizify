@@ -66,6 +66,11 @@ export default new Vuex.Store({
           }
         })
       })
+    },
+    leaveRoom ({ commit, state }) {
+      socketBus.$socket.emit('room_leave')
+      commit(types.QUIZ_SELECT_KEY, '')
+      commit(types.SET_USER, {})
     }
   },
   getters: {
