@@ -24,6 +24,14 @@ const checkAuthorization = (to, from, next) => {
   }
 }
 
+const checkIsConnectedToQuiz = (to, from, next) => {
+  if (store.getters.isConnectedToQuiz) {
+    next()
+  } else {
+    next({ name: 'landing' })
+  }
+}
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -77,6 +85,7 @@ export default new Router({
     {
       path: '/game',
       name: 'game',
+      beforeEnter: checkIsConnectedToQuiz,
       component: PlayerQuiz
     },
     {

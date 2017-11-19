@@ -79,6 +79,9 @@ export default new Vuex.Store({
     },
     hasCreatedQuiz (state) {
       return state.createdQuizKey && state.selectedPlaylist
+    },
+    isConnectedToQuiz (state) {
+      return state.connected && state.selectedRoomKey
     }
   },
   mutations: {

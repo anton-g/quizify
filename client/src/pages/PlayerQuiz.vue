@@ -24,6 +24,7 @@ export default {
     border-radius: 4rem;
 
     font-size: 5rem;
+    font-family: 'Pacifico', cursive;
   }
 }
 </style>
