@@ -8,7 +8,7 @@
     .settings
       h3 Selected playlist
       playlist-list-item(:playlist="selectedPlaylist")
-    a.button.is-dark.is-fullwidth
+    a.button.is-dark.is-fullwidth(@click="startQuiz")
       span Let's get this party started
       span.icon
         i.fa.fa-music
@@ -26,6 +26,13 @@ export default {
     PlaylistListItem,
     HorizontalLineHeading,
     PlayerList
+  },
+  methods: {
+    startQuiz () {
+      // TODO validate selected playlist etc
+      this.$store.dispatch('startQuiz')
+      this.$router.push({ name: 'host-game' })
+    }
   },
   computed: {
     selectedPlaylist () {

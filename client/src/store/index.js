@@ -20,7 +20,8 @@ export default new Vuex.Store({
     players: [],
     connected: false,
     selectedQuizKey: '',
-    user: {}
+    user: {},
+    quizStarted: false
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     selectPlaylist ({ commit }, playlist) {
       commit(types.SELECT_PLAYLIST, playlist)
+    },
+    startQuiz () {
+      socketBus.$socket.emit('quiz_start')
     },
     verifyQuizKey ({ commit, state }, quizKey) {
       return new Promise((resolve, reject) => {
@@ -82,6 +86,9 @@ export default new Vuex.Store({
     },
     isConnectedToQuiz (state) {
       return state.connected && state.selectedQuizKey
+    },
+    isQuizStarted (state) {
+      return state.quizStarted
     }
   },
   mutations: {
@@ -103,6 +110,9 @@ export default new Vuex.Store({
     [types.QUIZ_SELECT_KEY] (state, key) {
       state.selectedQuizKey = key
     },
+    [types.SET_USER] (state, user) {
+      state.user = user
+    },
     [types.SOCKET_CONNECT] (state) {
       state.connected = true
     },
@@ -112,8 +122,8 @@ export default new Vuex.Store({
     [types.SOCKET_USERS_UPDATE] (state, users) {
       state.players = users
     },
-    [types.SET_USER] (state, user) {
-      state.user = user
+    [types.SOCKET_START_QUIZ] (state) {
+      state.quizStarted = true
     }
   },
   strict: process.env.NODE_ENV !== 'production'

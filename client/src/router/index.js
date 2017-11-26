@@ -7,12 +7,16 @@ import LandingPage from '@/pages/LandingPage'
 import PlayQuiz from '@/pages/PlayQuiz'
 import PlayQuizJoin from '@/components/PlayQuizJoin'
 import PlayQuizLobby from '@/components/PlayQuizLobby'
-import PlayQuizBuzzer from '@/components/PlayQuizBuzzer'
+import PlayQuizGame from '@/components/PlayQuizGame'
+
+import HostQuiz from '@/pages/HostQuiz'
 
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
 import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
 import CreateQuizLobby from '@/components/CreateQuizLobby'
+
+import HostQuizGame from '@/components/HostQuizGame'
 
 Vue.use(Router)
 
@@ -41,7 +45,6 @@ export default new Router({
     },
     {
       path: '/play',
-      name: 'play',
       component: PlayQuiz,
       children: [
         {
@@ -59,39 +62,49 @@ export default new Router({
           path: '/game',
           name: 'game',
           beforeEnter: checkIsConnectedToQuiz,
-          component: PlayQuizBuzzer
+          component: PlayQuizGame
         }
       ]
     },
     {
-      path: '/create',
-      component: CreateQuiz,
+      path: '/host',
+      component: HostQuiz,
       children: [
         {
-          path: '/',
-          name: 'create',
-          component: CreateQuizLogin,
-          meta: { step: 1 }
+          path: 'create',
+          component: CreateQuiz,
+          children: [
+            {
+              path: '/',
+              name: 'create',
+              component: CreateQuizLogin,
+              meta: { step: 1 }
+            },
+            {
+              path: 'login',
+              name: 'create-quiz-login',
+              component: CreateQuizLogin,
+              meta: { step: 1 }
+            },
+            {
+              path: 'songs',
+              name: 'create-quiz-playlist',
+              component: CreateQuizPlaylist,
+              beforeEnter: checkAuthorization,
+              meta: { step: 2 }
+            },
+            {
+              path: 'lobby',
+              name: 'create-quiz-lobby',
+              component: CreateQuizLobby,
+              beforeEnter: checkAuthorization,
+              meta: { step: 3 }
+            }
+          ]
         },
         {
-          path: 'login',
-          name: 'create-quiz-login',
-          component: CreateQuizLogin,
-          meta: { step: 1 }
-        },
-        {
-          path: 'songs',
-          name: 'create-quiz-playlist',
-          component: CreateQuizPlaylist,
-          beforeEnter: checkAuthorization,
-          meta: { step: 2 }
-        },
-        {
-          path: 'lobby',
-          name: 'create-quiz-lobby',
-          component: CreateQuizLobby,
-          beforeEnter: checkAuthorization,
-          meta: { step: 3 }
+          path: 'host-game',
+          component: HostQuizGame
         }
       ]
     },

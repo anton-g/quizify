@@ -86,6 +86,13 @@ function onConnection (socket) {
     }
     ack(quizId)
 
+    socket.on('quiz_start', () => {
+      console.log('tests')
+      io.sockets.in(quizId).emit('start_quiz')
+
+      debugging && console.log(`Quiz host started quiz ${quizId}`)
+    })
+
     socket.on('disconnect', () => {
       io.sockets.in(quizId).emit('pause')
 

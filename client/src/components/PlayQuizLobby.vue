@@ -30,6 +30,16 @@ export default {
     },
     currentPlayerId () {
       return this.$store.state.user.id
+    },
+    quizStarted () {
+      return this.$store.getters.isQuizStarted
+    }
+  },
+  watch: {
+    quizStarted (val) {
+      if (val) {
+        this.$router.push({ name: 'game' })
+      }
     }
   }
 }
