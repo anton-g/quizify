@@ -39,13 +39,6 @@ export default {
 @import '../assets/css/mixins.scss';
 
 .quiz-lobby {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-
   > * {
     margin-bottom: 0.5rem;
   }

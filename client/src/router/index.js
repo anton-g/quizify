@@ -4,10 +4,10 @@ import store from '@/store'
 
 import LandingPage from '@/pages/LandingPage'
 
-import JoinQuiz from '@/pages/JoinQuiz'
-
-import PlayerLobby from '@/pages/PlayerLobby'
-import PlayerQuiz from '@/pages/PlayerQuiz'
+import PlayQuiz from '@/pages/PlayQuiz'
+import PlayQuizJoin from '@/components/PlayQuizJoin'
+import PlayQuizLobby from '@/components/PlayQuizLobby'
+import PlayQuizBuzzer from '@/components/PlayQuizBuzzer'
 
 import CreateQuiz from '@/pages/CreateQuiz'
 import CreateQuizLogin from '@/components/CreateQuizLogin'
@@ -23,7 +23,6 @@ const checkAuthorization = (to, from, next) => {
     next({ name: 'create-quiz-login' })
   }
 }
-
 const checkIsConnectedToQuiz = (to, from, next) => {
   if (store.getters.isConnectedToQuiz) {
     next()
@@ -41,14 +40,28 @@ export default new Router({
       component: LandingPage
     },
     {
-      path: '/join/:id',
-      name: 'join',
-      component: JoinQuiz
-    },
-    {
-      path: '/lobby',
-      name: 'lobby',
-      component: PlayerLobby
+      path: '/play',
+      name: 'play',
+      component: PlayQuiz,
+      children: [
+        {
+          path: ':id',
+          name: 'play',
+          component: PlayQuizJoin
+        },
+        {
+          path: 'lobby',
+          name: 'lobby',
+          beforeEnter: checkIsConnectedToQuiz,
+          component: PlayQuizLobby
+        },
+        {
+          path: '/game',
+          name: 'game',
+          beforeEnter: checkIsConnectedToQuiz,
+          component: PlayQuizBuzzer
+        }
+      ]
     },
     {
       path: '/create',
@@ -81,12 +94,6 @@ export default new Router({
           meta: { step: 3 }
         }
       ]
-    },
-    {
-      path: '/game',
-      name: 'game',
-      beforeEnter: checkIsConnectedToQuiz,
-      component: PlayerQuiz
     },
     {
       path: '*',

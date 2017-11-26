@@ -41,15 +41,6 @@ export default {
 @import '../assets/css/mixins.scss';
 
 .join-quiz {
-  color: white;
-
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: auto;
-
   h1 {
     @include branded-heading();
 

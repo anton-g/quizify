@@ -45,7 +45,7 @@ export default {
 
       this.$store.dispatch('verifyQuizKey', this.quizKey)
       .then(() => {
-        this.$router.push({ name: 'join', params: { id: this.quizKey } })
+        this.$router.push({ name: 'play', params: { id: this.quizKey } })
       })
       .catch(error => {
         console.log(error)
