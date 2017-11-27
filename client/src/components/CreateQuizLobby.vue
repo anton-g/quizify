@@ -30,8 +30,9 @@ export default {
   methods: {
     startQuiz () {
       // TODO validate selected playlist etc
-      this.$store.dispatch('startQuiz')
-      this.$router.push({ name: 'host-game' })
+      this.$store.dispatch('startQuiz').then(() => {
+        this.$router.push({ name: 'host-game' })
+      })
     }
   },
   computed: {

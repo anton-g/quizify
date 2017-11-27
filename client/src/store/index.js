@@ -15,12 +15,17 @@ export default new Vuex.Store({
     accessToken: '',
     expiresIn: '',
     userPlaylists: [],
-    selectedPlaylist: null,
+
     createdQuizKey: '',
+    selectedPlaylist: null,
+    tracks: [],
+
     players: [],
     connected: false,
-    selectedQuizKey: '',
+
     user: {},
+    selectedQuizKey: '',
+
     quizStarted: false,
     isPaused: false
   },
@@ -45,8 +50,17 @@ export default new Vuex.Store({
     selectPlaylist ({ commit }, playlist) {
       commit(types.SELECT_PLAYLIST, playlist)
     },
-    startQuiz () {
-      socketBus.$socket.emit('quiz_start')
+    startQuiz ({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        spotify.getPlaylistTracks(state.selectedPlaylist, state.accessToken)
+        .then(data => {
+          commit(types.QUIZ_TRACKS, data.items)
+          socketBus.$socket.emit('quiz_start')
+          resolve()
+
+          // reject()
+        })
+      })
     },
     verifyQuizKey ({ commit, state }, quizKey) {
       return new Promise((resolve, reject) => {
@@ -110,6 +124,9 @@ export default new Vuex.Store({
     },
     [types.QUIZ_SELECT_KEY] (state, key) {
       state.selectedQuizKey = key
+    },
+    [types.QUIZ_TRACKS] (state, tracks) {
+      state.tracks = tracks
     },
     [types.SET_USER] (state, user) {
       state.user = user
