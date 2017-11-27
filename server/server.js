@@ -49,11 +49,13 @@ function onConnection (socket) {
       debugging && console.log(`${userName} (${user.id}) joined quiz ${quizId}`)
 
       socket.on('buzz', () => {
-        io.sockets.in(quizId).emit('pause')
+        quiz.paused = true
+        io.sockets.in(quizId).emit('quiz_pause')
         socket.to(quiz.owner).emit('user_buzz', userName)
 
         debugging && console.log(`${userName} buzzed`)
       })
+
       socket.on('quiz_leave', () => {
         const idx = quiz.players.findIndex(m => m.id === user.id)
         quiz.players.splice(idx, 1)
@@ -79,15 +81,19 @@ function onConnection (socket) {
     const quizId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
     socket.join(quizId)
 
-    quizes[quizId] = {
+    let quiz = {
       id: quizId,
       owner: socket.id,
-      players: []
+      players: [],
+      started: false,
+      paused: false
     }
+    quizes[quizId] = quiz
+
     ack(quizId)
 
     socket.on('quiz_start', () => {
-      console.log('tests')
+      quiz.started = true
       io.sockets.in(quizId).emit('start_quiz')
 
       debugging && console.log(`Quiz host started quiz ${quizId}`)
@@ -99,8 +105,9 @@ function onConnection (socket) {
       debugging && console.log(`Quiz host disconnected`)
     })
 
-    socket.on('unpause', () => {
-      io.sockets.in(quizId).emit('unpause')
+    socket.on('resume', () => {
+      quiz.paused = false
+      io.sockets.in(quizId).emit('resume')
     })
 
     debugging && console.log(`created quiz ${quizId}`)

@@ -1,11 +1,20 @@
 <template lang="pug">
   .player-quiz
-    a.buzzer.button.is-dark Buzz
+    a.buzzer.button.is-dark(@click="buzz", :disabled="isPaused") Buzz
 </template>
 
 <script>
 export default {
-
+  methods: {
+    buzz () {
+      this.$socket.emit('buzz')
+    }
+  },
+  computed: {
+    isPaused () {
+      return this.$store.state.isPaused
+    }
+  }
 }
 </script>
 

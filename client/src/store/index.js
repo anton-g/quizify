@@ -21,7 +21,8 @@ export default new Vuex.Store({
     connected: false,
     selectedQuizKey: '',
     user: {},
-    quizStarted: false
+    quizStarted: false,
+    isPaused: false
   },
   actions: {
     login ({ commit, state }, { access_token, expires_in }) {
@@ -124,6 +125,12 @@ export default new Vuex.Store({
     },
     [types.SOCKET_START_QUIZ] (state) {
       state.quizStarted = true
+    },
+    [types.SOCKET_QUIZ_PAUSE] (state) {
+      state.isPaused = true
+    },
+    [types.SOCKET_QUIZ_RESUME] (state) {
+      state.isPaused = false
     }
   },
   strict: process.env.NODE_ENV !== 'production'
