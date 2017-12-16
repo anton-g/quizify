@@ -54,7 +54,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         spotify.getPlaylistTracks(state.selectedPlaylist, state.accessToken)
         .then(data => {
-          commit(types.QUIZ_TRACKS, data.items)
+          commit(types.QUIZ_TRACKS, data.items.map(i => i.track))
           socketBus.$socket.emit('quiz_start')
           resolve()
 
@@ -90,6 +90,15 @@ export default new Vuex.Store({
       socketBus.$socket.emit('quiz_leave')
       commit(types.QUIZ_SELECT_KEY, '')
       commit(types.SET_USER, {})
+    },
+    playNextTrack ({ commit, state }) {
+      spotify.playTrack(state.tracks[0], state.accessToken)
+    },
+    pause ({ state }) {
+      spotify.pause(state.accessToken)
+    },
+    resume ({ state }) {
+      spotify.resume(state.accessToken)
     }
   },
   getters: {
