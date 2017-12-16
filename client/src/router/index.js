@@ -103,8 +103,10 @@ export default new Router({
           ]
         },
         {
-          path: 'host-game',
-          component: HostQuizGame
+          path: 'game',
+          name: 'host-game',
+          component: HostQuizGame,
+          beforeEnter: checkAuthorization
         }
       ]
     },
