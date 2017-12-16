@@ -1,8 +1,9 @@
 <template lang="pug">
   .landing
     .menu
-      h1.title.has-text-centered Quizify
-        span.tag.is-dark BETA
+      h1.title.has-text-centered
+        | Quizify
+        span.tag.is-dark ALPHA
       transition(type="animation")
         input.key-input.is-medium(
           type="text"
@@ -99,8 +100,8 @@ export default {
 
         position: absolute;
         top: 0.5rem;
-        right: 1.5rem;
-        transform: rotateZ(20deg);
+        margin-left: -1rem;
+        transform: rotateZ(25deg);
       }
     }
 
