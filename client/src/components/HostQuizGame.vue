@@ -1,22 +1,31 @@
 <template lang="pug">
   .host-game
     h1.title {{ artist + ' - ' + title }}
-    img(:src="image")
+    image-play-button(:url="image", :playing="playing", @toggle="togglePlayState")
     h1.title Vad heter artisten?
 </template>
 
 <script>
+import ImagePlayButton from '@/components/ImagePlayButton'
+
 export default {
+  components: {
+    ImagePlayButton
+  },
+  data () {
+    return {
+      playing: true
+    }
+  },
   created () {
     this.$store.dispatch('playNextTrack')
+  },
+  methods: {
+    togglePlayState () {
+      this.playing = !this.playing
 
-    setTimeout(() => {
-      this.$store.dispatch('pause')
-    }, 2500)
-
-    setTimeout(() => {
-      this.$store.dispatch('resume')
-    }, 6000)
+      this.$store.dispatch(this.playing ? 'resume' : 'pause')
+    }
   },
   computed: {
     track () {
