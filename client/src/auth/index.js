@@ -1,7 +1,7 @@
 const AuthHandler = {
   clientId: 'bd25fd9aac2a43fc8a219178ccec06c0',
   redirectUrl: 'http://localhost:8080/host/create',
-  scope: 'user-read-email',
+  scope: 'user-read-email user-read-playback-state',
   // TODO add ?state
 
   login () {

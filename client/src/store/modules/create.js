@@ -9,10 +9,11 @@ const state = {
   accessToken: '',
   expiresIn: '',
   userPlaylists: [],
+  tracks: [],
+  devices: [],
 
   createdQuizKey: '',
-  selectedPlaylist: null,
-  tracks: []
+  selectedPlaylist: null
 }
 
 const getters = {
@@ -21,6 +22,9 @@ const getters = {
   },
   hasCreatedQuiz (state) {
     return !!(state.createdQuizKey && state.selectedPlaylist)
+  },
+  hasActiveDevice (state) {
+    return !!state.devices.find(d => d.is_active)
   }
 }
 
@@ -33,6 +37,9 @@ const mutations = {
   },
   [types.USER_PLAYLISTS] (state, playlists) {
     state.userPlaylists = playlists
+  },
+  [types.USER_DEVICES] (state, devices) {
+    state.devices = devices
   },
   [types.SELECT_PLAYLIST] (state, playlist) {
     state.selectedPlaylist = playlist
@@ -61,6 +68,16 @@ const actions = {
     spotify.getUserPlaylists(state.accessToken)
     .then(data => {
       commit(types.USER_PLAYLISTS, data.items)
+    })
+  },
+  fetchDevices ({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      spotify.getUserDevices()
+      .then(data => {
+        commit(types.USER_DEVICES, data.devices)
+
+        resolve()
+      })
     })
   },
   selectPlaylist ({ commit }, playlist) {

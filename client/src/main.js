@@ -8,6 +8,7 @@ import VueSocketio from 'vue-socket.io'
 import socketio from 'socket.io-client'
 
 import 'font-awesome/scss/font-awesome.scss'
+import 'izitoast/dist/css/iziToast.min.css'
 
 Vue.use(VueSocketio, socketio('http://localhost:8081', { reconnection: false }), store)
 Vue.config.productionTip = false

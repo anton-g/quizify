@@ -6,28 +6,24 @@ const SpotifyHandler = {
     s.setAccessToken(token)
     return s.getUserPlaylists()
   },
-  getPlaylistTracks (playlist, token) {
-    s.setAccessToken(token)
+  getPlaylistTracks (playlist) {
     // TODO currently only gets the top 100 tracks
     return s.getPlaylistTracks(playlist.owner.id, playlist.id)
   },
-  playTrack (track, token) {
-    s.setAccessToken(token)
-
+  getUserDevices () {
+    return s.getMyDevices()
+  },
+  playTrack (track) {
     s.play({
       uris: [
         track.uri
       ]
     })
   },
-  pause (token) {
-    s.setAccessToken(token)
-
+  pause () {
     s.pause({})
   },
-  resume (token) {
-    s.setAccessToken(token)
-
+  resume () {
     s.play({})
   }
 }

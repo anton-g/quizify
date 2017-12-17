@@ -5,9 +5,7 @@ const state = {
   connected: false
 }
 
-const getters = {
-
-}
+const getters = {}
 
 const mutations = {
   [types.SOCKET_USERS_UPDATE] (state, users) {

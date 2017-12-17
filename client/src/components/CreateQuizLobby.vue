@@ -8,7 +8,7 @@
     .settings
       h3 Selected playlist
       playlist-list-item(:playlist="selectedPlaylist")
-    a.button.is-dark.is-fullwidth(@click="startQuiz")
+    a.button.is-dark.is-fullwidth(@click="startQuiz", :disabled="!canStart")
       span Let's get this party started
       span.icon
         i.fa.fa-music
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import izitoast from 'izitoast'
+
 import HorizontalLineHeading from '@/components/HorizontalLineHeading'
 import PlaylistListItem from '@/components/PlaylistListItem'
 import PlayerList from '@/components/PlayerList'
@@ -27,11 +29,44 @@ export default {
     HorizontalLineHeading,
     PlayerList
   },
+  created () {
+    this.verifyDevice()
+  },
   methods: {
     startQuiz () {
       // TODO validate selected playlist etc
-      this.$store.dispatch('startQuiz').then(() => {
-        this.$router.push({ name: 'host-game' })
+      if (this.canStart) {
+        this.$store.dispatch('startQuiz').then(() => {
+          this.$router.push({ name: 'host-game' })
+        })
+      }
+    },
+    verifyDevice () {
+      this.$store.dispatch('fetchDevices')
+        .then(() => {
+          if (!this.$store.getters.hasActiveDevice) {
+            this.notification()
+          }
+        })
+    },
+    notification () {
+      izitoast.show({
+        title: 'Error',
+        message: 'Could not connect to a running Spotify client. Please open Spotify on any device and then retry.',
+        icon: 'fa fa-exclamation-circle',
+        timeout: false,
+        close: false,
+        drag: false,
+        buttons: [
+          ['<button>Retry</button>', (instance, toast) => {
+            instance.hide(toast, {
+              transitionOut: 'fadeOutDown',
+              transitionOutMobile: 'fadeOutDown'
+            }, 'close')
+
+            this.verifyDevice()
+          }]
+        ]
       })
     }
   },
@@ -44,6 +79,9 @@ export default {
     },
     createdQuizKey () {
       return this.$store.state.create.createdQuizKey
+    },
+    canStart () {
+      return this.$store.getters.hasActiveDevice
     }
   }
 }
