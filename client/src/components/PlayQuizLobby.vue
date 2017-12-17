@@ -14,7 +14,8 @@ export default {
     PlayerList
   },
   created () {
-    if (!this.$store.state.user.id) {
+    console.log('joined')
+    if (!this.$store.state.join.user.id) {
       this.$router.replace({ name: 'landing' })
     }
   },
@@ -26,10 +27,10 @@ export default {
   },
   computed: {
     players () {
-      return this.$store.state.players
+      return this.$store.state.common.players
     },
     currentPlayerId () {
-      return this.$store.state.user.id
+      return this.$store.state.join.user.id
     },
     quizStarted () {
       return this.$store.getters.isQuizStarted

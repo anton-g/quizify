@@ -37,13 +37,13 @@ export default {
   },
   computed: {
     selectedPlaylist () {
-      return this.$store.state.selectedPlaylist
+      return this.$store.state.create.selectedPlaylist
     },
     players () {
-      return this.$store.state.players
+      return this.$store.state.common.players
     },
     createdQuizKey () {
-      return this.$store.state.createdQuizKey
+      return this.$store.state.create.createdQuizKey
     }
   }
 }

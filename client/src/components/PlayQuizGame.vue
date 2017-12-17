@@ -12,7 +12,7 @@ export default {
   },
   computed: {
     isPaused () {
-      return this.$store.state.isPaused
+      return this.$store.state.join.isPaused
     }
   }
 }

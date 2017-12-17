@@ -28,6 +28,7 @@ const checkAuthorization = (to, from, next) => {
   }
 }
 const checkIsConnectedToQuiz = (to, from, next) => {
+  console.log(store.getters)
   if (store.getters.isConnectedToQuiz) {
     next()
   } else {

@@ -31,13 +31,13 @@ export default {
   },
   computed: {
     selectedPlaylist () {
-      return this.$store.state.selectedPlaylist
+      return this.$store.state.create.selectedPlaylist
     },
     hasSelectedPlaylist () {
       return !!(this.selectedPlaylist)
     },
     userPlaylists () {
-      return this.$store.state.userPlaylists
+      return this.$store.state.create.userPlaylists
     }
   }
 }

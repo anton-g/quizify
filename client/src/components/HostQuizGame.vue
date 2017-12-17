@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     track () {
-      return this.$store.state.tracks[0]
+      return this.$store.state.create.tracks[0]
     },
     image () {
       return this.track.album.images[0].url

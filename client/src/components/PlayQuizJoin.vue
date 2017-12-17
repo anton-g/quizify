@@ -15,7 +15,7 @@ export default {
   },
   created () {
     const key = this.$route.params.id
-    if (!this.$store.state.quizKey) {
+    if (!this.$store.state.join.selectedQuizKey) {
       this.$store.dispatch('verifyQuizKey', key)
       .catch(error => {
         console.log(error)
@@ -27,6 +27,7 @@ export default {
     join () {
       this.$store.dispatch('joinSelectedQuiz', this.username)
       .then(() => {
+        console.log('joining')
         this.$router.push({ name: 'lobby' })
       })
       .catch(() => {
