@@ -7,7 +7,9 @@
 export default {
   methods: {
     buzz () {
-      this.$socket.emit('buzz')
+      if (!this.isPaused) {
+        this.$socket.emit('buzz')
+      }
     }
   },
   computed: {
