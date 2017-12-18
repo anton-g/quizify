@@ -45,14 +45,14 @@ export default {
       this.$store.dispatch('fetchDevices')
         .then(() => {
           if (!this.$store.getters.hasActiveDevice) {
-            this.notification()
+            setTimeout(() => this.notification(), 1000)
           }
         })
     },
     notification () {
       izitoast.show({
         title: 'Error',
-        message: 'Could not connect to a running Spotify client. Please open Spotify on any device and then retry.',
+        message: 'Could not connect to a running Spotify client. Please open Spotify on any device and then retry. If it still doesn\'t work, try playing a few seconds of any song and retrying again.',
         icon: 'fa fa-exclamation-circle',
         timeout: false,
         close: false,
