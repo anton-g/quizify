@@ -2,7 +2,7 @@
   .create-quiz--players
     .key
       span Give your friends this key:
-      horizontal-line-heading.key {{ createdQuizKey }}
+      horizontal-line-heading {{ createdQuizKey }}
     .players
       player-list(:players="players")
     .settings

@@ -38,6 +38,9 @@ export default {
   .playlist-list {
     max-height: 350px;
     overflow-y: scroll;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 
     ul {
       li {

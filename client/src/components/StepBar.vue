@@ -31,6 +31,7 @@ export default {
   width: 100%;
   position: relative;
   z-index: 1;
+  padding-bottom: 60px;
 
   .step-bar {
     counter-reset: step;

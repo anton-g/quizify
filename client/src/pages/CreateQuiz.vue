@@ -1,7 +1,8 @@
 <template lang="pug">
   .create-quiz
     h1.title.has-text-centered Create Quiz
-    step-bar.stepbar(:currentStep="currentStep")
+    .step-bar
+      step-bar(:currentStep="currentStep")
     router-view
 </template>
 
@@ -36,14 +37,14 @@ export default {
 @import '../assets/css/mixins.scss';
 
 .create-quiz {
+  .step-bar {
+    margin-bottom: 1rem;
+  }
+
   h1 {
     @include branded-heading();
 
     margin-bottom: 2.5rem;
-  }
-
-  .stepbar {
-    margin-bottom: 1rem;
   }
 }
 </style>
