@@ -29,9 +29,12 @@ export default {
 <style lang="scss">
 .img-play-button {
   cursor: pointer;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto 0;
 
   .play-button {
-    font-size: 10rem;
+    font-size: 8em;
     line-height: 0;
     z-index: 1;
     opacity: 0.8;
@@ -43,6 +46,7 @@ export default {
 
   img {
     filter: brightness(85%);
+    border-radius: 0.4rem;
   }
 }
 </style>

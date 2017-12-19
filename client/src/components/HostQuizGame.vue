@@ -1,8 +1,14 @@
 <template lang="pug">
   .host-game
-    h1.title {{ artist + ' - ' + title }}
-    image-play-button(:url="image", :playing="playing", @toggle="togglePlayState")
-    h1.title Vad heter artisten?
+    .question
+      h1.title.is-3 What is the name of the
+        strong  artist
+        | ?
+    .song
+      image-play-button(:url="image", :playing="playing", @toggle="togglePlayState")
+      h1.title.is-5
+        strong {{ artist }}
+        |  - {{ title }}
 </template>
 
 <script>
@@ -14,17 +20,20 @@ export default {
   },
   data () {
     return {
-      playing: true
+      playing: false,
+      songStarted: false
     }
-  },
-  created () {
-    this.$store.dispatch('playNextTrack')
   },
   methods: {
     togglePlayState () {
       this.playing = !this.playing
 
-      this.$store.dispatch(this.playing ? 'resume' : 'pause')
+      if (this.songStarted) {
+        this.$store.dispatch(this.playing ? 'resume' : 'pause')
+      } else {
+        this.$store.dispatch('playNextTrack')
+        this.songStarted = true
+      }
     }
   },
   computed: {
@@ -45,8 +54,24 @@ export default {
 </script>
 
 <style lang="scss">
-.host-game h1 {
-  color: white !important;
-  text-align: center;
+.host-game {
+  max-width: 600px;
+  width: 100%;
+
+  .title {
+    color: white;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .question {
+    margin-bottom: 1rem;
+  }
+
+  .song {
+    .title {
+      margin-top: 1rem;
+    }
+  }
 }
 </style>
