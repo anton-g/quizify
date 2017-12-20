@@ -13,7 +13,10 @@ const state = {
   devices: [],
 
   createdQuizKey: '',
-  selectedPlaylist: null
+  selectedPlaylist: null,
+
+  questions: [],
+  currentQuestion: 0
 }
 
 const getters = {
@@ -47,8 +50,8 @@ const mutations = {
   [types.SET_CREATED_QUIZ_KEY] (state, key) {
     state.createdQuizKey = key
   },
-  [types.QUIZ_TRACKS] (state, tracks) {
-    state.tracks = tracks
+  [types.QUIZ_QUESTIONS] (state, questions) {
+    state.questions = questions
   }
 }
 
@@ -83,20 +86,32 @@ const actions = {
   selectPlaylist ({ commit }, playlist) {
     commit(types.SELECT_PLAYLIST, playlist)
   },
-  startQuiz ({ commit, state }) {
+  generateQuestions ({ commit, state }) {
     return new Promise((resolve, reject) => {
       spotify.getPlaylistTracks(state.selectedPlaylist, state.accessToken)
       .then(data => {
-        commit(types.QUIZ_TRACKS, data.items.map(i => i.track))
-        socketBus.$socket.emit('quiz_start')
+        const questions = data.items.map(i => {
+          return {
+            question: Math.random() < 0.5 ? 'What is the name of the song?' : 'What is the name of the artist?',
+            track: i.track
+          }
+        })
+
+        commit(types.QUIZ_QUESTIONS, questions)
         resolve()
 
         // reject()
       })
     })
   },
+  startQuiz ({ dispatch }) {
+    return dispatch('generateQuestions')
+    .then(() => {
+      socketBus.$socket.emit('quiz_start')
+    })
+  },
   playNextTrack ({ commit, state }) {
-    spotify.playTrack(state.tracks[0], state.accessToken)
+    spotify.playTrack(state.questions[state.currentQuestion].track, state.accessToken)
   },
   pause ({ state }) {
     spotify.pause(state.accessToken)

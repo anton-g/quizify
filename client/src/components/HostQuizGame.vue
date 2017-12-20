@@ -1,19 +1,18 @@
 <template lang="pug">
   .host-game
     .question
-      h1.title.is-3 What is the name of the
-        strong  song
-        | ?
-    .song
-      .columns.is-mobile.is-vcentered
-        .column.is-narrow
-          p.image.is-96x96
-            img(:src="image")
-        .column
-          p {{ artist }}
-          p.is-highlighted {{ title }}
-        .column.is-3
-          play-pause-button(@press="togglePlayState", :playing="playing")
+      h1.title.is-3 {{ question.question }}
+    .song.columns.is-mobile.is-vcentered
+      .column.is-narrow
+        p.image.is-96x96
+          img(:src="image")
+      .column
+        p {{ artist }}
+        p.is-highlighted {{ title }}
+      .column.is-3
+        play-pause-button(@press="togglePlayState", :playing="playing")
+    .controls
+      a.button.is-light.is-outlined(@click="skipQuestion") Skip question
 </template>
 
 <script>
@@ -39,20 +38,22 @@ export default {
         this.$store.dispatch('playNextTrack')
         this.songStarted = true
       }
-    }
+    },
+    skipQuestion () {}
   },
   computed: {
-    track () {
-      return this.$store.state.create.tracks[0]
+    question () {
+      // Refactor to getter
+      return this.$store.state.create.questions[this.$store.state.create.currentQuestion]
     },
     image () {
-      return this.track.album.images[0].url
+      return this.question.track.album.images[0].url
     },
     artist () {
-      return this.track.artists[0].name
+      return this.question.track.artists[0].name
     },
     title () {
-      return this.track.name
+      return this.question.track.name
     }
   }
 }
