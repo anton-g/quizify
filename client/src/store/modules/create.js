@@ -52,6 +52,9 @@ const mutations = {
   },
   [types.QUIZ_QUESTIONS] (state, questions) {
     state.questions = questions
+  },
+  [types.QUIZ_NEXT_TRACK] (state) {
+    state.currentQuestion += 1
   }
 }
 
@@ -110,8 +113,12 @@ const actions = {
       socketBus.$socket.emit('quiz_start')
     })
   },
-  playNextTrack ({ commit, state }) {
+  playTrack ({ commit, state }) {
     spotify.playTrack(state.questions[state.currentQuestion].track, state.accessToken)
+  },
+  nextTrack ({ commit, dispatch }) {
+    commit(types.QUIZ_NEXT_TRACK)
+    dispatch('pause')
   },
   pause ({ state }) {
     spotify.pause(state.accessToken)

@@ -35,11 +35,15 @@ export default {
       if (this.songStarted) {
         this.$store.dispatch(this.playing ? 'resume' : 'pause')
       } else {
-        this.$store.dispatch('playNextTrack')
+        this.$store.dispatch('playTrack')
         this.songStarted = true
       }
     },
-    skipQuestion () {}
+    skipQuestion () {
+      this.$store.dispatch('nextTrack')
+      this.songStarted = false
+      this.playing = false
+    }
   },
   computed: {
     question () {
