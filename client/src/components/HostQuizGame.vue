@@ -2,21 +2,26 @@
   .host-game
     .question
       h1.title.is-3 What is the name of the
-        strong  artist
+        strong  song
         | ?
     .song
-      image-play-button(:url="image", :playing="playing", @toggle="togglePlayState")
-      h1.title.is-5
-        strong {{ artist }}
-        |  - {{ title }}
+      .columns.is-mobile.is-vcentered
+        .column.is-narrow
+          p.image.is-96x96
+            img(:src="image")
+        .column
+          p {{ artist }}
+          p.is-highlighted {{ title }}
+        .column.is-3
+          play-pause-button(@press="togglePlayState", :playing="playing")
 </template>
 
 <script>
-import ImagePlayButton from '@/components/ImagePlayButton'
+import PlayPauseButton from '@/components/PlayPauseButton'
 
 export default {
   components: {
-    ImagePlayButton
+    PlayPauseButton
   },
   data () {
     return {
@@ -62,6 +67,10 @@ export default {
     color: white;
     text-align: center;
     font-weight: 500;
+
+    strong {
+      font-weight: 700;
+    }
   }
 
   .question {
@@ -69,8 +78,19 @@ export default {
   }
 
   .song {
-    .title {
-      margin-top: 1rem;
+    img {
+      border-radius: 0.3rem;
+    }
+
+    p {
+      padding: 0;
+      margin: 0;
+
+      font-size: 1.3rem;
+
+      &.is-highlighted {
+        font-weight: 700;
+      }
     }
   }
 }
