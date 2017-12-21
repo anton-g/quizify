@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     selectedPlaylist () {
-      return this.$store.state.create.selectedPlaylist
+      return this.$store.state.game.selectedPlaylist
     },
     hasSelectedPlaylist () {
       return !!(this.selectedPlaylist)

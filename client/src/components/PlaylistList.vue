@@ -28,7 +28,7 @@ export default {
       this.$store.dispatch('selectPlaylist', playlist)
     },
     isSelected (playlist) {
-      return !!(this.$store.state.create.selectedPlaylist) && this.$store.state.create.selectedPlaylist.id === playlist.id
+      return !!(this.$store.state.game.selectedPlaylist) && this.$store.state.game.selectedPlaylist.id === playlist.id
     }
   }
 }

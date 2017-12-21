@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     isPaused () {
-      return this.$store.state.join.isPaused
+      return this.$store.state.player.isPaused
     }
   }
 }

@@ -15,7 +15,7 @@ export default {
   },
   created () {
     const key = this.$route.params.id
-    if (!this.$store.state.join.selectedQuizKey) {
+    if (!this.$store.state.player.selectedQuizKey) {
       this.$store.dispatch('verifyQuizKey', key)
       .catch(error => {
         console.log(error)

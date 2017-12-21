@@ -73,7 +73,7 @@ const actions = {
     })
   },
   playTrack ({ rootState }) {
-    const track = rootState.create.questions[rootState.create.currentQuestion].track
+    const track = rootState.game.questions[rootState.game.currentQuestion].track
     spotify.play({
       uris: [
         track.uri

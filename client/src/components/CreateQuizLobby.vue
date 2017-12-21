@@ -72,13 +72,13 @@ export default {
   },
   computed: {
     selectedPlaylist () {
-      return this.$store.state.create.selectedPlaylist
+      return this.$store.state.game.selectedPlaylist
     },
     players () {
       return this.$store.state.common.players
     },
     createdQuizKey () {
-      return this.$store.state.create.createdQuizKey
+      return this.$store.state.game.createdQuizKey
     },
     canStart () {
       return this.$store.getters.hasActiveDevice
