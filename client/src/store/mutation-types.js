@@ -15,3 +15,5 @@ export const QUIZ_SELECT_KEY = 'SET_JOINED_QUIZ_KEY'
 export const SET_USER = 'SET_USER'
 export const QUIZ_QUESTIONS = 'QUIZ_QUESTIONS'
 export const QUIZ_NEXT_TRACK = 'QUIZ_NEXT_TRACK'
+
+export const SPOTIFY_TRACKS = 'SPOTIFY_TRACKS'

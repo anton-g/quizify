@@ -37,7 +37,7 @@ export default {
       return !!(this.selectedPlaylist)
     },
     userPlaylists () {
-      return this.$store.state.create.userPlaylists
+      return this.$store.state.spotify.userPlaylists
     }
   }
 }
