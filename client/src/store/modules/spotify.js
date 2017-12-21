@@ -5,7 +5,7 @@ const spotify = new SpotifyApi()
 
 const state = {
   accessToken: '',
-  expiresIn: '',
+  expires: '',
   userPlaylists: [],
   devices: [],
   tracks: []
@@ -13,10 +13,10 @@ const state = {
 
 const getters = {
   isAuthorized (state) {
-    return state.accessToken.length > 0 // TODO check expiration as well
+    return state.accessToken.length > 0 && state.expires > Date.now()
   },
   hasActiveDevice (state) {
-    return !!state.devices.find(d => d.is_active)
+    return state.devices.findIndex(d => d.is_active) > -1
   }
 }
 
@@ -25,7 +25,7 @@ const mutations = {
     state.accessToken = token
   },
   [types.EXPIRES_IN] (state, expiration) {
-    state.expiresIn = expiration // TODO this is completely useless unless checking current time
+    state.expires = Date.now() + (expiration * 1000)
   },
   [types.USER_PLAYLISTS] (state, playlists) {
     state.userPlaylists = playlists
@@ -36,6 +36,19 @@ const mutations = {
   [types.SPOTIFY_TRACKS] (state, tracks) {
     state.tracks = tracks
   }
+}
+
+const errorHandler = (error) => {
+  const response = JSON.parse(error.response)
+  switch (response.error.status) {
+    case 403:
+      if (response.error.message === 'Command failed: Already paused' ||
+          response.error.message === 'Command failed: Not paused') {
+        return
+      }
+  }
+
+  throw error
 }
 
 const actions = {
@@ -50,6 +63,7 @@ const actions = {
     .then(data => {
       commit(types.USER_PLAYLISTS, data.items)
     })
+    .catch(errorHandler)
   },
   fetchDevices ({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -59,6 +73,7 @@ const actions = {
 
         resolve()
       })
+      .catch(errorHandler)
     })
   },
   getPlaylistTracks ({ commit }, playlist) {
@@ -69,7 +84,7 @@ const actions = {
         commit(types.SPOTIFY_TRACKS, data.items.map(i => i.track))
         resolve()
       })
-      .catch(error => console.log(error))
+      .catch(errorHandler)
     })
   },
   playTrack ({ rootState }) {
@@ -79,15 +94,15 @@ const actions = {
         track.uri
       ]
     })
-    .catch(err => console.log(err))
+    .catch(errorHandler)
   },
   pause () {
     spotify.pause({})
-    .catch(err => console.log(err))
+    .catch(errorHandler)
   },
   resume () {
     spotify.play({})
-    .catch(err => console.log(err))
+    .catch(errorHandler)
   }
 }
 
