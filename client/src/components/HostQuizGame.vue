@@ -48,7 +48,7 @@ export default {
   computed: {
     question () {
       // Refactor to getter
-      return this.$store.state.game.questions[this.$store.state.game.currentQuestion]
+      return this.$store.getters.currentQuestion
     },
     image () {
       return this.question.track.album.images[0].url

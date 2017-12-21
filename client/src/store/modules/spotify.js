@@ -87,8 +87,8 @@ const actions = {
       .catch(errorHandler)
     })
   },
-  playTrack ({ rootState }) {
-    const track = rootState.game.questions[rootState.game.currentQuestion].track
+  playTrack ({ getters }) {
+    const track = getters.currentQuestion.track
     spotify.play({
       uris: [
         track.uri

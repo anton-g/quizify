@@ -9,12 +9,15 @@ const state = {
   selectedPlaylist: null,
 
   questions: [],
-  currentQuestion: 0
+  currentQuestionIdx: 0
 }
 
 const getters = {
   hasCreatedQuiz (state) {
     return !!(state.createdQuizKey && state.selectedPlaylist)
+  },
+  currentQuestion (state) {
+    return state.questions[state.currentQuestionIdx]
   }
 }
 
@@ -29,7 +32,7 @@ const mutations = {
     state.questions = questions
   },
   [types.QUIZ_NEXT_TRACK] (state) {
-    state.currentQuestion += 1
+    state.currentQuestionIdx += 1
   }
 }
 
