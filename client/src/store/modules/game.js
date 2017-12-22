@@ -40,13 +40,20 @@ const mutations = {
   [types.QUIZ_NEXT_TRACK] (state) {
     state.currentQuestionIdx += 1
   },
-  [types.SOCKET_QUIZ_BUZZ] (state, userId) {
+  [types.QUIZ_BUZZ] (state, userId) {
     state.buzzed = true
     state.buzzerId = userId
+  },
+  [types.QUIZ_REMOVE_BUZZ] (state) {
+    state.buzzed = false
   }
 }
 
 const actions = {
+  socket_quizBuzz ({ commit, state, dispatch }, userId) {
+    commit(types.QUIZ_BUZZ, userId)
+    dispatch('pausePlayback')
+  },
   createQuiz ({ commit, state }) {
     if (!state.createdQuizKey) {
       socketBus.$socket.emit('quiz_create', (key) => {
@@ -83,7 +90,11 @@ const actions = {
   },
   nextTrack ({ commit, dispatch }) {
     commit(types.QUIZ_NEXT_TRACK)
-    dispatch('pause')
+    dispatch('pausePlayback')
+  },
+  resumeQuiz ({ commit }) {
+    commit(types.QUIZ_REMOVE_BUZZ)
+    socketBus.$socket.emit('quiz_resume')
   }
 }
 

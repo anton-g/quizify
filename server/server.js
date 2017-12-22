@@ -105,9 +105,9 @@ function onConnection (socket) {
       debugging && console.log(`Quiz host disconnected`)
     })
 
-    socket.on('resume', () => {
+    socket.on('quiz_resume', () => {
       quiz.paused = false
-      io.sockets.in(quizId).emit('resume')
+      io.sockets.in(quizId).emit('quiz_resume')
     })
 
     debugging && console.log(`created quiz ${quizId}`)

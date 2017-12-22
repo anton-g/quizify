@@ -12,15 +12,23 @@
       .column.is-3
         play-pause-button(@press="togglePlayState", :playing="playing")
     .controls
-      a.button.is-light.is-outlined(@click="skipQuestion") Skip question
+      a.button.is-light.is-outlined(@click="nextQuestion") Skip question
+    modal-buzzed(
+      :user="buzzedUser",
+      :active="isBuzzed",
+      @correct="correct",
+      @incorrect="incorrect",
+      @resume="resume")
 </template>
 
 <script>
 import PlayPauseButton from '@/components/PlayPauseButton'
+import ModalBuzzed from '@/components/ModalBuzzed'
 
 export default {
   components: {
-    PlayPauseButton
+    PlayPauseButton,
+    ModalBuzzed
   },
   data () {
     return {
@@ -33,21 +41,31 @@ export default {
       this.playing = !this.playing
 
       if (this.songStarted) {
-        this.$store.dispatch(this.playing ? 'resume' : 'pause')
+        this.$store.dispatch(this.playing ? 'resumePlayback' : 'pausePlayback')
       } else {
         this.$store.dispatch('playTrack')
         this.songStarted = true
       }
     },
-    skipQuestion () {
+    nextQuestion () {
       this.$store.dispatch('nextTrack')
       this.songStarted = false
       this.playing = false
+    },
+    correct () {
+      this.nextQuestion()
+    },
+    incorrect () {
+      this.resume()
+    },
+    resume () {
+      this.playing = true
+      this.$store.dispatch('resumeQuiz')
+      this.$store.dispatch('resumePlayback')
     }
   },
   computed: {
     question () {
-      // Refactor to getter
       return this.$store.getters.currentQuestion
     },
     image () {
@@ -58,6 +76,12 @@ export default {
     },
     title () {
       return this.question.track.name
+    },
+    buzzedUser () {
+      return this.$store.getters.buzzedUser
+    },
+    isBuzzed () {
+      return this.$store.state.game.buzzed
     }
   }
 }

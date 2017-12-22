@@ -96,11 +96,11 @@ const actions = {
     })
     .catch(errorHandler)
   },
-  pause () {
+  pausePlayback () {
     spotify.pause({})
     .catch(errorHandler)
   },
-  resume () {
+  resumePlayback () {
     spotify.play({})
     .catch(errorHandler)
   }
