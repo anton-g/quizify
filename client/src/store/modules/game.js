@@ -9,7 +9,10 @@ const state = {
   selectedPlaylist: null,
 
   questions: [],
-  currentQuestionIdx: 0
+  currentQuestionIdx: 0,
+
+  buzzed: false,
+  buzzerId: null
 }
 
 const getters = {
@@ -18,6 +21,9 @@ const getters = {
   },
   currentQuestion (state) {
     return state.questions[state.currentQuestionIdx]
+  },
+  buzzedUser (state, getters, rootState) {
+    return rootState.common.players.find(p => p.id = state.buzzerId)
   }
 }
 
@@ -33,6 +39,10 @@ const mutations = {
   },
   [types.QUIZ_NEXT_TRACK] (state) {
     state.currentQuestionIdx += 1
+  },
+  [types.SOCKET_QUIZ_BUZZ] (state, userId) {
+    state.buzzed = true
+    state.buzzerId = userId
   }
 }
 

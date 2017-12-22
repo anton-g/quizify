@@ -35,7 +35,7 @@ function onConnection (socket) {
         const idx = quiz.players.findIndex(m => m.id === user.id)
         quiz.players.splice(idx, 1)
 
-        debugging && console.log(`remove replaced user ${userName} (${user.id}) from quiz ${quizId}`)
+        debugging && console.log(`remove replaced user ${user.name} (${user.id}) from quiz ${quizId}`)
       }
 
       socket.join(quiz.id)
@@ -46,14 +46,14 @@ function onConnection (socket) {
       io.sockets.in(quiz.id).emit('users_update', quiz.players)
       ack(true, user)
 
-      debugging && console.log(`${userName} (${user.id}) joined quiz ${quizId}`)
+      debugging && console.log(`${user.name} (${user.id}) joined quiz ${quizId}`)
 
       socket.on('buzz', () => {
         quiz.paused = true
         io.sockets.in(quizId).emit('quiz_pause')
-        socket.to(quiz.owner).emit('user_buzz', userName)
+        socket.to(quiz.owner).emit('quiz_buzz', user.id)
 
-        debugging && console.log(`${userName} buzzed`)
+        debugging && console.log(`${user.name} buzzed`)
       })
 
       socket.on('quiz_leave', () => {
@@ -61,19 +61,19 @@ function onConnection (socket) {
         quiz.players.splice(idx, 1)
         io.sockets.in(quiz.id).emit('users_update', quiz.players)
 
-        debugging && console.log(`${userName} left quiz ${quiz.id}`)
+        debugging && console.log(`${user.name} left quiz ${quiz.id}`)
       })
       socket.on('disconnect', () => {
         const idx = quiz.players.findIndex(m => m.id === user.id)
         quiz.players[idx].connected = false
         io.sockets.in(quizId).emit('users_update', quiz.players)
 
-        debugging && console.log(`Quiz participant ${userName} disconnected`)
+        debugging && console.log(`Quiz participant ${user.name} disconnected`)
       })
     } else {
       ack(false)
 
-      debugging && console.log(`${userName} tried to join non existing quiz ${quizId}`)
+      debugging && console.log(`${user.name} tried to join non existing quiz ${quizId}`)
     }
   }
 
