@@ -23,7 +23,7 @@ const getters = {
     return state.questions[state.currentQuestionIdx]
   },
   buzzedUser (state, getters, rootState) {
-    return rootState.common.players.find(p => p.id = state.buzzerId)
+    return rootState.common.players.find(p => p.id === state.buzzerId)
   }
 }
 
