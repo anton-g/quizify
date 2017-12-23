@@ -24,6 +24,9 @@ const getters = {
   },
   buzzedUser (state, getters, rootState) {
     return rootState.common.players.find(p => p.id === state.buzzerId)
+  },
+  isLastQuestion (state) {
+    return state.currentQuestionIdx + 1 >= state.questions.length
   }
 }
 

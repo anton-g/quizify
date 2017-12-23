@@ -10,13 +10,12 @@ import PlayerLobby from '@/components/player/PlayerLobby'
 import PlayerGame from '@/components/player/PlayerGame'
 
 import HostPage from '@/pages/HostPage'
-
 import HostNewQuiz from '@/components/host/HostNewQuiz'
 import HostLogin from '@/components/host/HostLogin'
 import HostSelectPlaylist from '@/components/host/HostSelectPlaylist'
 import HostLobby from '@/components/host/HostLobby'
-
 import HostGame from '@/components/host/HostGame'
+import HostResult from '@/components/host/HostResult'
 
 Vue.use(Router)
 
@@ -107,6 +106,12 @@ export default new Router({
           path: 'game',
           name: 'host-game',
           component: HostGame,
+          beforeEnter: checkAuthorization
+        },
+        {
+          path: 'result',
+          name: 'game-result',
+          component: HostResult,
           beforeEnter: checkAuthorization
         }
       ]

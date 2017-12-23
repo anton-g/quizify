@@ -12,7 +12,8 @@
       .column.is-3
         play-pause-button(@press="togglePlayState", :playing="playing")
     .controls
-      a.button.is-light.is-outlined(@click="nextQuestion") Skip question
+      a.button.is-light.is-outlined(@click="nextQuestion", v-if="!isLastQuestion") Skip question
+      a.button.is-dark(@click="endQuiz", v-if="isLastQuestion") End quiz
     modal-buzzed(
       :user="buzzedUser",
       :active="isBuzzed",
@@ -52,10 +53,19 @@ export default {
       this.songStarted = false
       this.playing = false
     },
+    endQuiz () {
+      // this.$store.dispatch('endQuiz')
+      this.$router.push({ name: 'game-result' })
+    },
     correct () {
       this.$store.dispatch('addScore', this.buzzedUser)
       this.$store.dispatch('resumeQuiz')
-      this.nextQuestion()
+
+      if (!this.isLastQuestion) {
+        this.nextQuestion()
+      } else {
+        this.endQuiz()
+      }
     },
     incorrect () {
       this.resume()
@@ -84,6 +94,9 @@ export default {
     },
     isBuzzed () {
       return this.$store.state.game.buzzed
+    },
+    isLastQuestion () {
+      return this.$store.getters.isLastQuestion
     }
   }
 }
