@@ -12,7 +12,7 @@ import auth from '@/auth'
 import StepBar from '@/components/common/StepBar'
 
 export default {
-  name: 'NewQuizPage',
+  name: 'hostnewquiz',
   components: {
     StepBar
   },
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/css/mixins.scss';
+@import '../../assets/css/mixins.scss';
 
 .create-quiz {
   .step-bar {
