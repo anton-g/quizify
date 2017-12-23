@@ -32,7 +32,6 @@ h1,h2,h3,h4,h5,p,span {
 
   .container {
     max-width: 500px;
-    min-width: 350px;
     margin: 1rem auto;
   }
 }
