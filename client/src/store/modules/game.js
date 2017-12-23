@@ -51,8 +51,10 @@ const mutations = {
 
 const actions = {
   socket_quizBuzz ({ commit, state, dispatch }, userId) {
-    commit(types.QUIZ_BUZZ, userId)
-    dispatch('pausePlayback')
+    if (!state.buzzed) {
+      commit(types.QUIZ_BUZZ, userId)
+      dispatch('pausePlayback')
+    }
   },
   createQuiz ({ commit, state }) {
     if (!state.createdQuizKey) {
