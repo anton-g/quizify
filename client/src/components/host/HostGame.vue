@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import PlayPauseButton from '@/components/PlayPauseButton'
-import ModalBuzzed from '@/components/ModalBuzzed'
+import PlayPauseButton from '@/components/host/PlayPauseButton'
+import ModalBuzzed from '@/components/host/ModalBuzzed'
 
 export default {
   components: {

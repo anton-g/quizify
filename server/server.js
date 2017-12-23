@@ -64,12 +64,13 @@ function onConnection (socket) {
 
         debugging && console.log(`${user.name} left quiz ${quiz.id}`)
       })
-      socket.on('disconnect', () => {
+
+      socket.on('disconnect', (reason) => {
         const idx = quiz.players.findIndex(m => m.id === user.id)
         quiz.players[idx].connected = false
         io.sockets.in(quizId).emit('users_update', quiz.players)
 
-        debugging && console.log(`Quiz participant ${user.name} disconnected`)
+        debugging && console.log(`Quiz participant ${user.name} disconnected: ${reason}`)
       })
     } else {
       ack(false)

@@ -4,19 +4,19 @@ import store from '@/store'
 
 import LandingPage from '@/pages/LandingPage'
 
-import PlayQuiz from '@/pages/PlayQuiz'
-import PlayQuizJoin from '@/components/PlayQuizJoin'
-import PlayQuizLobby from '@/components/PlayQuizLobby'
-import PlayQuizGame from '@/components/PlayQuizGame'
+import PlayerPage from '@/pages/PlayerPage'
+import PlayerJoin from '@/components/player/PlayerJoin'
+import PlayerLobby from '@/components/player/PlayerLobby'
+import PlayerGame from '@/components/player/PlayerGame'
 
-import HostQuiz from '@/pages/HostQuiz'
+import HostPage from '@/pages/HostPage'
 
-import CreateQuiz from '@/pages/CreateQuiz'
-import CreateQuizLogin from '@/components/CreateQuizLogin'
-import CreateQuizPlaylist from '@/components/CreateQuizPlaylist'
-import CreateQuizLobby from '@/components/CreateQuizLobby'
+import NewQuizPage from '@/pages/NewQuizPage'
+import HostLogin from '@/components/host/HostLogin'
+import HostSelectPlaylist from '@/components/host/HostSelectPlaylist'
+import HostLobby from '@/components/host/HostLobby'
 
-import HostQuizGame from '@/components/HostQuizGame'
+import HostPageGame from '@/components/host/HostPageGame'
 
 Vue.use(Router)
 
@@ -46,58 +46,58 @@ export default new Router({
     },
     {
       path: '/play',
-      component: PlayQuiz,
+      component: PlayerPage,
       children: [
         {
           path: ':id',
           name: 'play',
-          component: PlayQuizJoin
+          component: PlayerJoin
         },
         {
           path: 'lobby',
           name: 'lobby',
           beforeEnter: checkIsConnectedToQuiz,
-          component: PlayQuizLobby
+          component: PlayerLobby
         },
         {
           path: '/game',
           name: 'game',
           beforeEnter: checkIsConnectedToQuiz,
-          component: PlayQuizGame
+          component: PlayerGame
         }
       ]
     },
     {
       path: '/host',
-      component: HostQuiz,
+      component: HostPage,
       children: [
         {
           path: 'create',
-          component: CreateQuiz,
+          component: NewQuizPage,
           children: [
             {
               path: '/',
               name: 'create',
-              component: CreateQuizLogin,
+              component: HostLogin,
               meta: { step: 1 }
             },
             {
               path: 'login',
               name: 'create-quiz-login',
-              component: CreateQuizLogin,
+              component: HostLogin,
               meta: { step: 1 }
             },
             {
               path: 'songs',
               name: 'create-quiz-playlist',
-              component: CreateQuizPlaylist,
+              component: HostSelectPlaylist,
               beforeEnter: checkAuthorization,
               meta: { step: 2 }
             },
             {
               path: 'lobby',
               name: 'create-quiz-lobby',
-              component: CreateQuizLobby,
+              component: HostLobby,
               beforeEnter: checkAuthorization,
               meta: { step: 3 }
             }
@@ -106,7 +106,7 @@ export default new Router({
         {
           path: 'game',
           name: 'host-game',
-          component: HostQuizGame,
+          component: HostPageGame,
           beforeEnter: checkAuthorization
         }
       ]

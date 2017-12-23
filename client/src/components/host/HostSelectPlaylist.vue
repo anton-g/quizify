@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import PlaylistList from '@/components/PlaylistList'
+import PlaylistList from '@/components/host/PlaylistList'
 
 export default {
   components: {

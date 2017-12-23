@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/css/mixins.scss';
+@import '../../assets/css/mixins.scss';
 
 .join-quiz {
   h1 {

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import HorizontalLineHeading from '@/components/HorizontalLineHeading'
+import HorizontalLineHeading from '@/components/common/HorizontalLineHeading'
 
 export default {
   name: 'LandingPage',

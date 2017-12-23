@@ -19,9 +19,9 @@
 <script>
 import izitoast from 'izitoast'
 
-import HorizontalLineHeading from '@/components/HorizontalLineHeading'
-import PlaylistListItem from '@/components/PlaylistListItem'
-import PlayerList from '@/components/PlayerList'
+import HorizontalLineHeading from '@/components/common/HorizontalLineHeading'
+import PlaylistListItem from '@/components/host/PlaylistListItem'
+import PlayerList from '@/components/common/PlayerList'
 
 export default {
   components: {

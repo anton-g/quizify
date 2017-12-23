@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ModalBase from '@/components/ModalBase'
+import ModalBase from '@/components/common/ModalBase'
 
 export default {
   name: 'modalbuzzed',

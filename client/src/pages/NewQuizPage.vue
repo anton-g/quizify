@@ -9,10 +9,10 @@
 <script>
 import auth from '@/auth'
 
-import StepBar from '@/components/StepBar'
+import StepBar from '@/components/common/StepBar'
 
 export default {
-  name: 'CreateQuiz',
+  name: 'NewQuizPage',
   components: {
     StepBar
   },

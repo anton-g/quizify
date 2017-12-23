@@ -14,7 +14,7 @@
 import auth from '@/auth'
 
 export default {
-  name: 'createquizlogin',
+  name: 'HostLogin',
   methods: {
     login () {
       auth.login()

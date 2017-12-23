@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import PlaylistListItem from '@/components/PlaylistListItem'
+import PlaylistListItem from '@/components/host/PlaylistListItem'
 
 export default {
   name: 'playlistlist',

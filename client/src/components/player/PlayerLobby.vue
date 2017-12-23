@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import PlayerList from '@/components/PlayerList'
+import PlayerList from '@/components/common/PlayerList'
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/css/mixins.scss';
+@import '../../assets/css/mixins.scss';
 
 .quiz-lobby {
   > * {
