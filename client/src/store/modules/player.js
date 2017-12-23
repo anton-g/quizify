@@ -1,5 +1,8 @@
 import Vue from 'vue'
+import izitoast from 'izitoast'
+
 import * as types from '../mutation-types'
+
 const socketBus = new Vue()
 
 const state = {
@@ -65,6 +68,15 @@ const actions = {
     socketBus.$socket.emit('quiz_leave')
     commit(types.QUIZ_SELECT_KEY, '')
     commit(types.SET_USER, {})
+  },
+  socket_quizScored (_, score) {
+    izitoast.show({
+      title: 'Correct!',
+      message: `Woho! You answered correctly! ${score > 1 ? `You scored ${score} points!` : ''}`,
+      icon: 'fa fa-star',
+      close: false,
+      drag: false
+    })
   }
 }
 

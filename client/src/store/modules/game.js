@@ -97,6 +97,9 @@ const actions = {
   resumeQuiz ({ commit }) {
     commit(types.QUIZ_REMOVE_BUZZ)
     socketBus.$socket.emit('quiz_resume')
+  },
+  addScore (_, player) {
+    socketBus.$socket.emit('quiz_score', player.id, 1)
   }
 }
 

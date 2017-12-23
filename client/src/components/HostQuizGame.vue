@@ -53,6 +53,7 @@ export default {
       this.playing = false
     },
     correct () {
+      this.$store.dispatch('addScore', this.buzzedUser)
       this.$store.dispatch('resumeQuiz')
       this.nextQuestion()
     },

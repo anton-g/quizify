@@ -25,7 +25,8 @@ function onConnection (socket) {
     let user = {
       name: userName,
       id: socket.id,
-      connected: true
+      connected: true,
+      score: 0
     }
 
     let quiz = quizes[quizId]
@@ -108,6 +109,14 @@ function onConnection (socket) {
     socket.on('quiz_resume', () => {
       quiz.paused = false
       io.sockets.in(quizId).emit('quiz_resume')
+    })
+
+    socket.on('quiz_score', (userId, score) => {
+      let user = quiz.players.find(p => p.id === userId)
+      user.score += score
+      socket.to(user.id).emit('quiz_scored', score)
+
+      debugging && console.log(`user ${user.name} scored ${score}`)
     })
 
     debugging && console.log(`created quiz ${quizId}`)
