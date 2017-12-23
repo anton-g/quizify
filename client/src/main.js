@@ -10,7 +10,7 @@ import socketio from 'socket.io-client'
 import 'font-awesome/scss/font-awesome.scss'
 import 'izitoast/dist/css/iziToast.min.css'
 
-Vue.use(VueSocketio, socketio('http://localhost:8081', { reconnection: false }), store)
+Vue.use(VueSocketio, socketio(`//${window.location.hostname}:8081`, { reconnection: false }), store)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
