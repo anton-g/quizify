@@ -5,8 +5,7 @@
     ul
       li(v-for="player in players")
         span(:class="{ disconnected: !player.connected }") {{ player.name }}
-        span.icon(v-if="currentUserId === player.id")
-          i.fa.fa-star
+        span(v-if="currentUserId === player.id")  (you)
         span.icon(v-if="!player.connected")
           i.fa.fa-user-times
 </template>
