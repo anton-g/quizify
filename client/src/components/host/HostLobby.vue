@@ -8,7 +8,7 @@
     .settings
       h3 Selected playlist
       playlist-list-item(:playlist="selectedPlaylist")
-    a.button.is-dark.is-fullwidth(@click="startQuiz", :disabled="!canStart")
+    a.button.is-dark.is-fullwidth(@click="startQuiz", :disabled="!hasActiveDevice")
       span Let's get this party started
       span.icon
         i.fa.fa-music
@@ -35,21 +35,28 @@ export default {
   methods: {
     startQuiz () {
       // TODO validate selected playlist etc
-      if (this.canStart) {
-        this.$store.dispatch('startQuiz').then(() => {
-          this.$router.push({ name: 'host-game' })
-        })
+      if (!this.hasActiveDevice) {
+        return
       }
+
+      if (this.players.length < 1) {
+        this.playerCountNotification()
+        return
+      }
+
+      this.$store.dispatch('startQuiz').then(() => {
+        this.$router.push({ name: 'host-game' })
+      })
     },
     verifyDevice () {
       this.$store.dispatch('fetchDevices')
         .then(() => {
           if (!this.$store.getters.hasActiveDevice) {
-            setTimeout(() => this.notification(), 1000)
+            setTimeout(() => this.activeDeviceNotification(), 1000)
           }
         })
     },
-    notification () {
+    activeDeviceNotification () {
       izitoast.show({
         title: 'Error',
         message: 'Could not connect to a running Spotify client. Please open Spotify on any device and then retry. If it still doesn\'t work, try playing a few seconds of any song and retrying again.',
@@ -68,6 +75,13 @@ export default {
           }]
         ]
       })
+    },
+    playerCountNotification () {
+      izitoast.show({
+        title: 'No players connected',
+        message: 'You need at least 1 player to start the game!',
+        icon: 'fa fa-exclamation-circle'
+      })
     }
   },
   computed: {
@@ -80,7 +94,7 @@ export default {
     createdQuizKey () {
       return this.$store.state.game.createdQuizKey
     },
-    canStart () {
+    hasActiveDevice () {
       return this.$store.getters.hasActiveDevice
     }
   }
