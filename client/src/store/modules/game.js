@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import i18n from '@/i18n'
 
 import * as types from '../mutation-types'
 
@@ -74,8 +75,9 @@ const actions = {
       dispatch('getPlaylistTracks', state.selectedPlaylist)
       .then(() => {
         const questions = rootState.spotify.tracks.map(t => {
+          const question = Math.random() < 0.5 ? i18n.t('questions.song') : i18n.t('questions.artist')
           return {
-            question: Math.random() < 0.5 ? 'What is the name of the song?' : 'What is the name of the artist?',
+            question: question,
             track: t
           }
         })
