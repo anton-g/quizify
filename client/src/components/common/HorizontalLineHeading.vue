@@ -13,6 +13,7 @@ export default {
 h2 {
   overflow: hidden;
   text-align: center;
+  text-transform: uppercase;
 
   &:before,&:after {
     background-color: white;

@@ -39,7 +39,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: {
+          ...vueLoaderConfig,
+          loaders: {
+            ...vueLoaderConfig.loaders,
+            i18n: '@kazupon/vue-i18n-loader'
+          }
+        }
       },
       {
         test: /\.js$/,

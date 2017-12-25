@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 
 import VueSocketio from 'vue-socket.io'
+import VueI18n from 'vue-i18n'
 import socketio from 'socket.io-client'
 import izitoast from 'izitoast'
 
@@ -20,12 +21,23 @@ izitoast.settings({
   progressBar: false
 })
 
+Vue.use(VueI18n)
 Vue.use(VueSocketio, socketio(`//${window.location.hostname}:8081`, { reconnection: false }), store)
 Vue.config.productionTip = false
+
+let lang = ((navigator.languages && navigator.languages.length
+  ? navigator.languages[0]
+  : navigator.userLanguage) || navigator.language).split('-')[0]
+
+const i18n = new VueI18n({
+  locale: lang,
+  fallbackLocale: 'en'
+})
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  i18n,
   store,
   router,
   render: h => h(App)

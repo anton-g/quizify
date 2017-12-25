@@ -7,7 +7,7 @@
       transition(type="animation")
         input.key-input.is-medium(
           type="text"
-          placeholder="Quiz key"
+          :placeholder="$t('key-placeholder')"
           :class="{ invalid: invalidKey }"
           :value="quizKey.toUpperCase()"
           @keydown.enter="join"
@@ -16,11 +16,11 @@
       a.button.is-dark.is-fullwidth(
         :class="{ 'is-loading': isJoining }"
         @click="join"
-      ) Enter
-      horizontal-line-heading OR
+      ) {{ $t('join-button') }}
+      horizontal-line-heading {{ $t('or-heading') }}
       router-link.button.is-white.is-outlined.is-fullwidth(:to="{ name: createButtonInfo.pathName }") {{ createButtonInfo.text }}
     .foot
-      a About
+      a {{ $t('about-button') }}
 </template>
 
 <script>
@@ -53,6 +53,8 @@ export default {
         this.invalidKey = true
         this.isJoining = false
       })
+
+      this.$i18n.locale = 'se'
     },
     inputQuizKey (event) {
       this.invalidKey = false
@@ -63,7 +65,7 @@ export default {
     createButtonInfo () {
       return {
         pathName: this.$store.getters.hasCreatedQuiz ? 'create-quiz-lobby' : 'create',
-        text: this.$store.getters.hasCreatedQuiz ? 'Back to your quiz' : 'Create quiz'
+        text: this.$store.getters.hasCreatedQuiz ? this.$t('rejoin-button') : this.$t('create-button')
       }
     }
   },
@@ -150,3 +152,24 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "about-button": "About",
+    "or-heading": "or",
+    "create-button": "Create quiz",
+    "rejoin-button": "Back to your quiz",
+    "join-button": "Enter",
+    "key-placeholder": "Enter quiz key.."
+  },
+  "sv": {
+    "about-button": "Om Quizify",
+    "or-heading": "eller",
+    "create-button": "Skapa quiz",
+    "rejoin-button": "Tillbaka till ditt quiz",
+    "join-button": "Gå med",
+    "key-placeholder": "Fyll i nyckel.."
+  }
+}
+</i18n>
