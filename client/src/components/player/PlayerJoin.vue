@@ -1,9 +1,9 @@
 <template lang="pug">
   .join-quiz
-    h1.title.has-text-centered Join Quiz
-    p What should we call you?
-    input.name-input(placeholder="Name", v-model="username", @keydown.enter="join")
-    a.button.is-dark.is-fullwidth(@click="join") Join lobby
+    h1.title.has-text-centered {{ $t('heading') }}
+    p {{ $t('name-question') }}
+    input.name-input(:placeholder="$t('name-placeholder')", v-model="username", @keydown.enter="join")
+    a.button.is-dark.is-fullwidth(@click="join") {{ $t('join-button') }}
 </template>
 
 <script>
@@ -55,3 +55,20 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "heading": "Join Quiz",
+    "name-question": "What should we call you?",
+    "name-placeholder": "Your namn..",
+    "join-button": "Join lobby"
+  },
+  "sv": {
+    "heading": "Välj namn",
+    "name-question": "Vad ska vi kalla dig?",
+    "name-placeholder": "Skriv namn..",
+    "join-button": "Anslut"
+  }
+}
+</i18n>

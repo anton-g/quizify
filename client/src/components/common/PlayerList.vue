@@ -1,11 +1,11 @@
 <template lang="pug">
   .player-list
     h3 Players
-    p(v-if="players.length < 1") When your friends join they'll show up here!
+    p(v-if="players.length < 1") {{ $t('no-players') }}
     ul
       li(v-for="player in players")
         span(:class="{ disconnected: !player.connected }") {{ player.name }}
-        span(v-if="currentUserId === player.id")  (you)
+        span(v-if="currentUserId === player.id")  ({{ $t('you-indicator') }})
         span.icon(v-if="!player.connected")
           i.fa.fa-user-times
 </template>
@@ -38,3 +38,16 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "no-players": "When your friends join they'll show up here!",
+    "you-indicator": "you"
+  },
+  "sv": {
+    "no-players": "Här syns dina vänner när de ansluter!",
+    "you-indicator": "du"
+  }
+}
+</i18n>

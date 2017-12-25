@@ -1,6 +1,6 @@
 <template lang="pug">
   .create-quiz
-    h1.title.has-text-centered Create Quiz
+    h1.title.has-text-centered {{ $t('heading') }}
     .step-bar
       step-bar(:currentStep="currentStep")
     router-view
@@ -48,3 +48,14 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "heading": "Create Quiz"
+  },
+  "sv": {
+    "heading": "Skapa Quiz"
+  }
+}
+</i18n>

@@ -1,9 +1,9 @@
 <template lang="pug">
   .step-bar-container
     ul.step-bar.step-bar-3
-      li(:class="classesForStep(1)") Login
-      li(:class="classesForStep(2)") Songs
-      li(:class="classesForStep(3)") Players
+      li(:class="classesForStep(1)") {{ $t('step1') }}
+      li(:class="classesForStep(2)") {{ $t('step2') }}
+      li(:class="classesForStep(3)") {{ $t('step3') }}
 </template>
 
 <script>
@@ -111,3 +111,18 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "step1": "Login",
+    "step2": "Playlist",
+    "step3": "Players"
+  },
+  "sv": {
+    "step1": "Logga in",
+    "step2": "Spellista",
+    "step3": "Spelare"
+  }
+}
+</i18n>

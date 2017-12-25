@@ -1,13 +1,13 @@
 <template lang="pug">
   .create-quiz--playlist
-    h2 Select a playlist
+    h2 {{ $t('heading') }}
     playlist-list.selector(:playlists="userPlaylists")
     .columns.is-mobile.navigation
       .column.is-narrow
-        router-link.home-button(:to="{ name: 'landing' }") Home
+        router-link.home-button(:to="{ name: 'landing' }") {{ $t('home-button') }}
       .column
         a.button.is-dark.is-pulled-right(@click="nextStep", :disabled="!hasSelectedPlaylist")
-          span Lets go
+          span {{ $t('select-button') }}
           span.icon
             i.fa.fa-music
 </template>
@@ -82,3 +82,18 @@ export default {
     }
   }
 </style>
+
+<i18n>
+{
+  "en": {
+    "heading": "Select a playlist",
+    "home-button": "Home",
+    "select-button": "Select playlist"
+  },
+  "sv": {
+    "heading": "Välj en spellista",
+    "home-button": "Hem",
+    "select-button": "Välj"
+  }
+}
+</i18n>

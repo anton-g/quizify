@@ -15,8 +15,8 @@
       .column.is-narrow
         play-pause-button(@press="togglePlayState", :playing="playing")
     .controls
-      a.button.is-light.is-outlined(@click="nextQuestion", v-if="!isLastQuestion") Skip question
-      a.button.is-dark(@click="endQuiz", v-if="isLastQuestion") End quiz
+      a.button.is-light.is-outlined(@click="nextQuestion", v-if="!isLastQuestion") {{ $t('skip-button') }}
+      a.button.is-dark(@click="endQuiz", v-if="isLastQuestion") {{ $t('end-button') }}
     modal-buzzed(
       :user="buzzedUser",
       :active="isBuzzed",
@@ -143,3 +143,16 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "skip-button": "Skip question",
+    "end-button": "End quiz"
+  },
+  "sv": {
+    "skip-button": "Hoppa över fråga",
+    "end-button": "Avsluta quiz"
+  }
+}
+</i18n>

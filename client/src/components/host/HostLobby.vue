@@ -1,19 +1,19 @@
 <template lang="pug">
   .create-quiz--players
     .key
-      span Give your friends this key:
+      span {{ $t('key-help') }}
       horizontal-line-heading {{ createdQuizKey }}
     .players
       player-list(:players="players")
     .settings
-      h3 Selected playlist
+      h3 {{ $t('playlist-heading') }}
       playlist-list-item(:playlist="selectedPlaylist")
     a.button.is-dark.is-fullwidth(@click="startQuiz", :disabled="!hasActiveDevice")
-      span Let's get this party started
+      span {{ $t('start-button') }}
       span.icon
         i.fa.fa-music
     .change-playlist-button
-      router-link(:to="{ name: 'create-quiz-playlist' }") Change playlist
+      router-link(:to="{ name: 'create-quiz-playlist' }") {{ $t('playlist-button') }}
 </template>
 
 <script>
@@ -143,3 +143,20 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "key-help": "Give your friends this key:",
+    "playlist-heading": "Selected playlist",
+    "start-button": "Let's get this party started",
+    "playlist-button": "Change playlist"
+  },
+  "sv": {
+    "key-help": "Ge dina vänner denna nyckel:",
+    "playlist-heading": "Vald spellista",
+    "start-button": "Nu kör vi!",
+    "playlist-button": "Byt spellista"
+  }
+}
+</i18n>

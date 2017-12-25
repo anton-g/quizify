@@ -1,6 +1,6 @@
 <template lang="pug">
   .host-result
-    h1.has-text-centered Result
+    h1.has-text-centered {{ $t('heading') }}
     .players
       .winner
         .columns.is-mobile.is-vcentered.is-gapless
@@ -17,7 +17,7 @@
           span.name {{ player.name }} ({{ player.score }})
     .questions
       .has-text-centered
-        a(@click="toggleQuestions") {{ showQuestions ? 'Hide questions' : 'Show questions' }}
+        a(@click="toggleQuestions") {{ showQuestions ? $t('hide-questions') : $t('show-questions') }}
           span.icon
             i.fa(:class="{ 'fa-caret-up': showQuestions, 'fa-caret-down': !showQuestions }")
       li.question(v-for="question in questions", v-show="showQuestions")
@@ -125,3 +125,18 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "heading": "Result",
+    "show-questions": "Show questions",
+    "hide-questions": "Hide questions"
+  },
+  "sv": {
+    "heading": "Resultat",
+    "show-questions": "Visa frågor",
+    "hide-questions": "Göm frågor"
+  }
+}
+</i18n>

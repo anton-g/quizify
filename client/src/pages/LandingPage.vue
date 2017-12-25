@@ -43,7 +43,6 @@ export default {
       }
 
       this.isJoining = true
-
       this.$store.dispatch('verifyQuizKey', this.quizKey)
       .then(() => {
         this.$router.push({ name: 'play', params: { id: this.quizKey } })
@@ -53,8 +52,6 @@ export default {
         this.invalidKey = true
         this.isJoining = false
       })
-
-      this.$i18n.locale = 'se'
     },
     inputQuizKey (event) {
       this.invalidKey = false
