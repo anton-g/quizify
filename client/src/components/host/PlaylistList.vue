@@ -37,7 +37,9 @@ export default {
 <style lang="scss">
   .playlist-list {
     max-height: 350px;
+    min-width: 200px;
     overflow-y: scroll;
+    overflow-x: hidden;
     background-color: rgba(255, 255, 255, 0.15);
     padding: 0.5rem;
     border-radius: 0.5rem;

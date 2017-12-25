@@ -2,14 +2,17 @@
   .host-game
     .question
       h1.title.is-3 {{ question.question }}
-    .song.columns.is-mobile.is-vcentered
-      .column.is-narrow
-        p.image.is-96x96
+    .song.columns.is-mobile.is-vcentered.is-gapless
+      .column.is-narrow.is-hidden-mobile
+        .image.is-96x96
+          img(:src="image")
+      .column.is-narrow.is-hidden-tablet
+        .image.is-64x64
           img(:src="image")
       .column
         p {{ artist }}
         p.is-highlighted {{ title }}
-      .column.is-3
+      .column.is-narrow
         play-pause-button(@press="togglePlayState", :playing="playing")
     .controls
       a.button.is-light.is-outlined(@click="nextQuestion", v-if="!isLastQuestion") Skip question
@@ -105,7 +108,8 @@ export default {
 <style lang="scss">
 .host-game {
   max-width: 600px;
-  width: 100%;
+  width: 95%;
+  margin: 0 auto 0;
 
   .title {
     color: white;
@@ -127,7 +131,7 @@ export default {
     }
 
     p {
-      padding: 0;
+      padding: 0 0 0 0.4rem;
       margin: 0;
 
       font-size: 1.3rem;

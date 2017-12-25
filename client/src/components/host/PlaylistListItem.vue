@@ -1,10 +1,13 @@
 <template lang="pug">
   .playlist-list--item(:class="{ selected: selected }")
-    .image-container
-      img.image.is-32x32(v-show="hasImages", :src="imageUrl")
-    span {{ playlist.name }}
-    .icon(v-show="selected")
-      i.fa.fa-check
+    .columns.is-mobile.is-vcentered.is-gapless
+      .column.is-narrow
+        img.image.is-32x32(v-show="hasImages", :src="imageUrl")
+      .column.playlist-name
+        span(:title="playlist.name") {{ playlist.name }}
+      .column.is-narrow
+        .icon
+          i.fa.fa-check(v-show="selected")
 </template>
 
 <script>
@@ -31,23 +34,16 @@ export default {
 
 <style lang="scss" scoped>
   .playlist-list--item {
-    display: flex;
-    justify-content: left;
-    align-items: center;
     cursor: pointer;
+    width: 100%;
 
-    .image-container {
-      width: 36px;
-      height: 36px;
-
-      img {
-        margin: 1px;
-        border-radius: 0.3rem;
-      }
+    img {
+      margin: 1px;
+      border-radius: 0.3rem;
     }
 
-    span {
-      padding-left: 0.3rem;
+    .playlist-name {
+      margin-left: 0.5rem;
     }
 
     &.selected {
@@ -57,12 +53,14 @@ export default {
         height: 36px;
       }
 
-      span {
+      span::after {
+        display: block;
+        content: attr(title);
         font-weight: bold;
-      }
-
-      .icon {
-        margin-left: auto;
+        height: 1px;
+        color: transparent;
+        overflow: hidden;
+        visibility: hidden;
       }
     }
   }

@@ -23,11 +23,10 @@
       li.question(v-for="question in questions", v-show="showQuestions")
         span {{ question.question }}
         .track
-          .columns.is-mobile.is-vcentered.is-gapless
-            .column.is-narrow
-              img.image.is-32x32(:src="question.track.album.images[2].url")
-            .column
-              | {{ question.track.artists[0].name }} - {{ question.track.name }}
+          .track-image
+            img.image.is-32x32(:src="question.track.album.images[2].url")
+          .track-text
+            | {{ question.track.artists[0].name }} - {{ question.track.name }}
 </template>
 
 <script>
@@ -66,6 +65,10 @@ export default {
 @import '../../assets/css/mixins.scss';
 
 .host-result {
+  max-width: 600px;
+  width: 95%;
+  margin: 0 auto 0;
+
   h1 {
     @include branded-heading();
   }
@@ -88,7 +91,7 @@ export default {
   .questions {
     list-style: none;
     margin: 2.5rem auto 0;
-    max-width: 90%;
+    max-width: 350px;
 
     a {
       color: white;
@@ -96,6 +99,7 @@ export default {
 
     .question {
       margin-top: 0.7rem;
+      width: 100%;
 
       span {
         font-weight: 700;
@@ -104,6 +108,18 @@ export default {
       .image {
         border-radius: 15%;
         margin-right: 0.5rem;
+      }
+
+      .track {
+        display: flex;
+
+        .track-image {
+          flex: none;
+        }
+
+        .track-text {
+          flex-grow: auto;
+        }
       }
     }
   }

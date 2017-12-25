@@ -1,9 +1,9 @@
 <template lang="pug">
   .create-quiz--playlist
     h2 Select a playlist
-    playlist-list(:playlists="userPlaylists")
+    playlist-list.selector(:playlists="userPlaylists")
     .columns.is-mobile.navigation
-      .column
+      .column.is-narrow
         router-link.home-button(:to="{ name: 'landing' }") Home
       .column
         a.button.is-dark.is-pulled-right(@click="nextStep", :disabled="!hasSelectedPlaylist")
@@ -46,12 +46,25 @@ export default {
 <style lang="scss">
   .create-quiz--playlist {
     max-width: 600px;
-    width: 100%;
+    width: 95%;
+    margin: 0 auto 0;
 
     h2 {
       font-weight: bold;
       font-size: 1.3rem;
       margin-bottom: 0.3rem;
+    }
+
+    .selector {
+      max-width: 360px;
+    }
+
+    .columns {
+      margin: 0;
+
+      .column {
+        padding: 0.5rem 0;
+      }
     }
 
     .navigation {
