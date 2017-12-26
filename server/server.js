@@ -120,6 +120,14 @@ function onConnection (socket) {
       debugging && console.log(`user ${user.name} scored ${score}`)
     })
 
+    socket.on('quiz_end', winnerId => {
+      let losers = quiz.players.filter(p => p.id !== winnerId)
+      losers.forEach(p => socket.to(p.id))
+      socket.emit('quiz_ended', false)
+
+      socket.to(winnerId).emit('quiz_ended', true)
+    })
+
     debugging && console.log(`created quiz ${quizId}`)
   }
 

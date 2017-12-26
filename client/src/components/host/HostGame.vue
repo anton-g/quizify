@@ -57,7 +57,7 @@ export default {
       this.playing = false
     },
     endQuiz () {
-      // this.$store.dispatch('endQuiz')
+      this.$store.dispatch('endQuiz')
       this.$router.push({ name: 'game-result' })
     },
     correct () {

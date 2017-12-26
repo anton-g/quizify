@@ -17,5 +17,6 @@ export const QUIZ_QUESTIONS = 'QUIZ_QUESTIONS'
 export const QUIZ_NEXT_TRACK = 'QUIZ_NEXT_TRACK'
 export const QUIZ_BUZZ = 'QUIZ_BUZZ'
 export const QUIZ_REMOVE_BUZZ = 'QUIZ_REMOVE_BUZZ'
+export const QUIZ_ENDED = 'QUIZ_ENDED'
 
 export const SPOTIFY_TRACKS = 'SPOTIFY_TRACKS'

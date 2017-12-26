@@ -8,6 +8,7 @@ import PlayerPage from '@/pages/PlayerPage'
 import PlayerJoin from '@/components/player/PlayerJoin'
 import PlayerLobby from '@/components/player/PlayerLobby'
 import PlayerGame from '@/components/player/PlayerGame'
+import PlayerResult from '@/components/player/PlayerResult'
 
 import HostPage from '@/pages/HostPage'
 import HostNewQuiz from '@/components/host/HostNewQuiz'
@@ -63,6 +64,11 @@ export default new Router({
           name: 'game',
           beforeEnter: checkIsConnectedToQuiz,
           component: PlayerGame
+        },
+        {
+          path: '/result',
+          name: 'player-result',
+          component: PlayerResult
         }
       ]
     },

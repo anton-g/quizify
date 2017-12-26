@@ -105,6 +105,15 @@ const actions = {
   },
   addScore (_, player) {
     socketBus.$socket.emit('quiz_score', player.id, 1)
+  },
+  endQuiz ({ rootState }) {
+    const winnerId = rootState.common.players
+                      .slice()
+                      .sort((p1, p2) => p1.score - p2.score)
+                      .slice(0, 1)
+                      .map(p => p.id)[0]
+
+    socketBus.$socket.emit('quiz_end', winnerId)
   }
 }
 

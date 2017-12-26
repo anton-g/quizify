@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import izitoast from 'izitoast'
+import router from '@/router'
 
 import * as types from '../mutation-types'
 
@@ -9,7 +10,8 @@ const state = {
   user: {},
   selectedQuizKey: '',
   quizStarted: false,
-  isPaused: false
+  isPaused: false,
+  won: false
 }
 
 const getters = {
@@ -27,6 +29,9 @@ const mutations = {
   },
   [types.SET_USER] (state, user) {
     state.user = user
+  },
+  [types.QUIZ_ENDED] (state, won) {
+    state.won = won
   },
   [types.SOCKET_START_QUIZ] (state) {
     state.quizStarted = true
@@ -77,6 +82,10 @@ const actions = {
       close: false,
       drag: false
     })
+  },
+  socket_quizEnded ({ commit }, won) {
+    commit(types.QUIZ_ENDED, won)
+    router.push({ name: 'player-result' })
   }
 }
 
