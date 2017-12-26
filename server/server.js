@@ -1,5 +1,6 @@
 const http = require('http').createServer()
 const io = require('socket.io')(http)
+const nanoid = require('nanoid')
 const generate = require('nanoid/generate')
 
 const debugging = process.env.DEBUG
@@ -24,7 +25,8 @@ function onConnection (socket) {
   function onQuizJoin (quizId, userName, ack) {
     let user = {
       name: userName,
-      id: socket.id,
+      id: nanoid(),
+      sid: socket.id,
       connected: true,
       score: 0
     }
@@ -47,7 +49,7 @@ function onConnection (socket) {
       io.sockets.in(quiz.id).emit('users_update', quiz.players)
       ack(true, user)
 
-      debugging && console.log(`${user.name} (${user.id}) joined quiz ${quizId}`)
+      debugging && console.log(`${user.name} (${user.guid}) joined quiz ${quizId}`)
 
       socket.on('buzz', () => {
         quiz.paused = true
@@ -115,17 +117,18 @@ function onConnection (socket) {
     socket.on('quiz_score', (userId, score) => {
       let user = quiz.players.find(p => p.id === userId)
       user.score += score
-      socket.to(user.id).emit('quiz_scored', score)
+      socket.to(user.sid).emit('quiz_scored', score)
 
       debugging && console.log(`user ${user.name} scored ${score}`)
     })
 
     socket.on('quiz_end', winnerId => {
-      let losers = quiz.players.filter(p => p.id !== winnerId)
-      losers.forEach(p => socket.to(p.id))
+      let losers = quiz.players.filter(p => p.id !== winnerId && p.id !== quiz.owner)
+      losers.forEach(p => socket.to(p.sid))
       socket.emit('quiz_ended', false)
 
-      socket.to(winnerId).emit('quiz_ended', true)
+      const winner = quiz.players.find(p => p.id === winnerId)
+      socket.to(winner.sid).emit('quiz_ended', true)
     })
 
     debugging && console.log(`created quiz ${quizId}`)

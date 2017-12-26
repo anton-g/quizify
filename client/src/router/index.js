@@ -68,6 +68,7 @@ export default new Router({
         {
           path: '/result',
           name: 'player-result',
+          beforeEnter: checkIsConnectedToQuiz,
           component: PlayerResult
         }
       ]
