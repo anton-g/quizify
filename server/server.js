@@ -18,8 +18,7 @@ function onConnection (socket) {
   socket.on('quiz_create', onQuizCreate)
 
   function onQuizVerifyKey (quizId, ack) {
-    let quiz = quizes[quizId]
-    ack(!!(quiz))
+    ack(quizes.hasOwnProperty(quizId))
   }
 
   function onQuizJoin (quizId, userName, ack) {
@@ -32,56 +31,66 @@ function onConnection (socket) {
     }
 
     let quiz = quizes[quizId]
-    if (quiz) {
-      const connectedQuiz = socketQuizes[socket.id]
-      if (connectedQuiz) {
-        const idx = quiz.players.findIndex(m => m.id === user.id)
-        quiz.players.splice(idx, 1)
-
-        debugging && console.log(`remove replaced user ${user.name} (${user.id}) from quiz ${quizId}`)
-      }
-
-      socket.join(quiz.id)
-      socketQuizes[socket.id] = quiz.id
-
-      quiz.players.push(user)
-
-      io.sockets.in(quiz.id).emit('users_update', quiz.players)
-      ack(true, user)
-
-      debugging && console.log(`${user.name} (${user.guid}) joined quiz ${quizId}`)
-
-      socket.on('buzz', () => {
-        quiz.paused = true
-        io.sockets.in(quizId).emit('quiz_pause')
-        socket.to(quiz.owner).emit('quiz_buzz', user.id)
-
-        debugging && console.log(`${user.name} buzzed`)
-      })
-
-      socket.on('quiz_leave', () => {
-        const idx = quiz.players.findIndex(m => m.id === user.id)
-        quiz.players.splice(idx, 1)
-        io.sockets.in(quiz.id).emit('users_update', quiz.players)
-
-        debugging && console.log(`${user.name} left quiz ${quiz.id}`)
-      })
-
-      socket.on('disconnect', (reason) => {
-        const idx = quiz.players.findIndex(m => m.id === user.id)
-        quiz.players[idx].connected = false
-        io.sockets.in(quizId).emit('users_update', quiz.players)
-
-        debugging && console.log(`Quiz participant ${user.name} disconnected: ${reason}`)
-      })
-    } else {
+    if (!quiz) {
       ack(false)
-
       debugging && console.log(`${user.name} tried to join non existing quiz ${quizId}`)
+      return
+    }
+
+    socket.on('buzz', onBuzz)
+    socket.on('quiz_leave', onQuizLeave)
+    socket.on('disconnect', onDisconnect)
+
+    const previousQuiz = socketQuizes[socket.id]
+    if (previousQuiz) {
+      const idx = quiz.players.findIndex(m => m.id === user.id)
+      quiz.players.splice(idx, 1)
+
+      debugging && console.log(`remove user ${user.name} (${user.id}) from quiz ${quizId}`)
+    }
+
+    socket.join(quiz.id)
+    socketQuizes[socket.id] = quiz.id
+
+    quiz.players.push(user)
+
+    io.sockets.in(quiz.id).emit('users_update', quiz.players)
+    ack(true, user)
+
+    debugging && console.log(`${user.name} (${user.id}) joined quiz ${quizId}`)
+
+    function onBuzz () {
+      quiz.paused = true
+      io.sockets.in(quizId).emit('quiz_pause')
+      socket.to(quiz.owner).emit('quiz_buzz', user.id)
+
+      debugging && console.log(`${user.name} buzzed`)
+    }
+
+    function onQuizLeave () {
+      const idx = quiz.players.findIndex(m => m.id === user.id)
+      quiz.players.splice(idx, 1)
+      io.sockets.in(quiz.id).emit('users_update', quiz.players)
+
+      debugging && console.log(`${user.name} left quiz ${quiz.id}`)
+    }
+
+    function onDisconnect (reason) {
+      const idx = quiz.players.findIndex(m => m.id === user.id)
+      quiz.players[idx].connected = false
+      io.sockets.in(quizId).emit('users_update', quiz.players)
+
+      debugging && console.log(`Quiz participant ${user.name} disconnected: ${reason}`)
     }
   }
 
   function onQuizCreate (ack) {
+    socket.on('quiz_start', onQuizStart)
+    socket.on('disconnect', onDisconnect)
+    socket.on('quiz_resume', onQuizResume)
+    socket.on('quiz_score', onQuizScore)
+    socket.on('quiz_end', onQuizEnd)
+
     const quizId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
     socket.join(quizId)
 
@@ -95,43 +104,42 @@ function onConnection (socket) {
     quizes[quizId] = quiz
 
     ack(quizId)
+    debugging && console.log(`created quiz ${quizId}`)
 
-    socket.on('quiz_start', () => {
+    function onQuizStart () {
       quiz.started = true
       io.sockets.in(quizId).emit('start_quiz')
 
       debugging && console.log(`Quiz host started quiz ${quizId}`)
-    })
+    }
 
-    socket.on('disconnect', () => {
+    function onDisconnect () {
       io.sockets.in(quizId).emit('pause')
 
       debugging && console.log(`Quiz host disconnected`)
-    })
+    }
 
-    socket.on('quiz_resume', () => {
+    function onQuizResume () {
       quiz.paused = false
       io.sockets.in(quizId).emit('quiz_resume')
-    })
+    }
 
-    socket.on('quiz_score', (userId, score) => {
+    function onQuizScore (userId, score) {
       let user = quiz.players.find(p => p.id === userId)
       user.score += score
       socket.to(user.sid).emit('quiz_scored', score)
 
       debugging && console.log(`user ${user.name} scored ${score}`)
-    })
+    }
 
-    socket.on('quiz_end', winnerId => {
+    function onQuizEnd (winnerId) {
       let losers = quiz.players.filter(p => p.id !== winnerId && p.id !== quiz.owner)
       losers.forEach(p => socket.to(p.sid))
       socket.emit('quiz_ended', false)
 
       const winner = quiz.players.find(p => p.id === winnerId)
       socket.to(winner.sid).emit('quiz_ended', true)
-    })
-
-    debugging && console.log(`created quiz ${quizId}`)
+    }
   }
 
   debugging && console.log(`user connected`)
