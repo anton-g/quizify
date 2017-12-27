@@ -2,7 +2,11 @@
   .join-quiz
     h1.title.has-text-centered {{ $t('heading') }}
     p {{ $t('name-question') }}
-    input.name-input(:placeholder="$t('name-placeholder')", v-model="username", @keydown.enter="join")
+    input.name-input(
+      :placeholder="$t('name-placeholder')",
+      :class="{ invalid: invalidName }",
+      v-model="username",
+      @keydown.enter="join")
     a.button.is-dark.is-fullwidth(@click="join") {{ $t('join-button') }}
 </template>
 
@@ -10,7 +14,8 @@
 export default {
   data () {
     return {
-      username: ''
+      username: '',
+      invalidName: false
     }
   },
   created () {
@@ -25,6 +30,11 @@ export default {
   },
   methods: {
     join () {
+      if (this.username.length < 1) {
+        this.invalidName = true
+        return
+      }
+
       this.$store.dispatch('joinSelectedQuiz', this.username)
       .then(() => {
         console.log('joining')
@@ -49,7 +59,7 @@ export default {
   }
 
   .name-input {
-    @include transparent-input();
+    @include default-input();
 
     margin: 0.3rem 0 0.6rem;
   }

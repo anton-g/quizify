@@ -4,15 +4,14 @@
       h1.title.has-text-centered
         | Quizify
         span.tag.is-dark ALPHA
-      transition(type="animation")
-        input.key-input.is-medium(
-          type="text"
-          :placeholder="$t('key-placeholder')"
-          :class="{ invalid: invalidKey }"
-          :value="quizKey.toUpperCase()"
-          @keydown.enter="join"
-          @input="inputQuizKey"
-        )
+      input.key-input.is-medium(
+        type="text"
+        :placeholder="$t('key-placeholder')"
+        :class="{ invalid: invalidKey }"
+        :value="quizKey.toUpperCase()"
+        @keydown.enter="join"
+        @input="inputQuizKey"
+      )
       a.button.is-dark.is-fullwidth(
         :class="{ 'is-loading': isJoining }"
         @click="join"
@@ -52,6 +51,9 @@ export default {
         this.invalidKey = true
         this.isJoining = false
       })
+    },
+    test () {
+      console.log('t')
     },
     inputQuizKey (event) {
       this.invalidKey = false
@@ -109,29 +111,7 @@ export default {
     }
 
     .key-input {
-      @include transparent-input();
-
-      &.invalid {
-        animation: shake .4s linear;
-      }
-
-      @keyframes shake {
-        8%, 41% {
-          -webkit-transform: translateX(-10px);
-        }
-        25%, 58% {
-          -webkit-transform: translateX(10px);
-        }
-        75% {
-          -webkit-transform: translateX(-5px);
-        }
-        92% {
-          -webkit-transform: translateX(5px);
-        }
-        0%, 100% {
-          -webkit-transform: translateX(0);
-        }
-      }
+      @include default-input();
     }
   }
 

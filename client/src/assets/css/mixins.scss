@@ -1,4 +1,4 @@
-@mixin transparent-input() {
+@mixin default-input() {
   width: 100%;
   text-align: center;
   font-size: 1.5rem;
@@ -20,6 +20,28 @@
   &::-webkit-input-placeholder { /* Chrome */
     color: rgba(255, 255, 255, 0.8);
     text-shadow: none;
+  }
+
+  &.invalid {
+    animation: shake .4s linear;
+  }
+
+  @keyframes shake {
+    8%, 41% {
+      -webkit-transform: translateX(-10px);
+    }
+    25%, 58% {
+      -webkit-transform: translateX(10px);
+    }
+    75% {
+      -webkit-transform: translateX(-5px);
+    }
+    92% {
+      -webkit-transform: translateX(5px);
+    }
+    0%, 100% {
+      -webkit-transform: translateX(0);
+    }
   }
 }
 
