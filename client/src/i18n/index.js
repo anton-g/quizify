@@ -15,13 +15,17 @@ export default new VueI18n({
       'questions': {
         'artist': 'What\'s the name of the artist?',
         'song': 'What\'s the name of the song?'
-      }
+      },
+      'correct-answer': 'Woho! You answered correctly!',
+      'correct-answer-score': 'You scored {score} points!'
     },
     'sv': {
       'questions': {
         'artist': 'Vad heter artisten?',
         'song': 'Vad heter låten?'
-      }
+      },
+      'correct-answer': 'Woho! Du gav rätt svar!',
+      'correct-answer-score': 'Du fick {score} poäng!'
     }
   }
 })

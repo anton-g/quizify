@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import izitoast from 'izitoast'
 import router from '@/router'
+import i18n from '@/i18n'
 
 import * as types from '../mutation-types'
 
@@ -77,7 +78,7 @@ const actions = {
   socket_quizScored (_, score) {
     izitoast.show({
       title: 'Correct!',
-      message: `Woho! You answered correctly! ${score > 1 ? `You scored ${score} points!` : ''}`,
+      message: `${i18n.t('correct-answer')} ${score > 1 ? i18n.t('correct-answer-score', { score: score }) : ''}`,
       icon: 'fa fa-star',
       close: false,
       drag: false
