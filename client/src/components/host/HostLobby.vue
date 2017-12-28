@@ -67,8 +67,8 @@ export default {
         buttons: [
           ['<button>Retry</button>', (instance, toast) => {
             instance.hide(toast, {
-              transitionOut: 'fadeOutDown',
-              transitionOutMobile: 'fadeOutDown'
+              transitionOut: 'fadeOutUp',
+              transitionOutMobile: 'fadeOutUp'
             }, 'close')
 
             this.verifyDevice()
