@@ -2,11 +2,11 @@
   "name": "quizify-server",
   "version": "0.0.1",
   "description": "",
-  "main": "server.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "DEBUG=true nodemon server.js --exec 'npm run lint && node'",
-    "lint": "eslint server.js"
+    "dev": "DEBUG=true nodemon src/index.js --exec 'npm run lint && node'",
+    "lint": "eslint src/index.js"
   },
   "repository": {
     "type": "git",

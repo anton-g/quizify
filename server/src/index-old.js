@@ -2,6 +2,7 @@ const http = require('http').createServer()
 const io = require('socket.io')(http)
 const nanoid = require('nanoid')
 const generate = require('nanoid/generate')
+const store = require('./quizStore')
 
 const debugging = process.env.DEBUG
 
@@ -9,8 +10,9 @@ io.on('connection', onConnection)
 const port = process.env.PORT || 8081
 http.listen(port, () => { console.log(`listening on *:${port}`) })
 
-let quizes = {}
 let socketQuizes = {}
+
+store.newQuiz()
 
 function onConnection (socket) {
   socket.on('quiz_verify_key', onQuizVerifyKey)
@@ -18,7 +20,7 @@ function onConnection (socket) {
   socket.on('quiz_create', onQuizCreate)
 
   function onQuizVerifyKey (quizId, ack) {
-    ack(quizes.hasOwnProperty(quizId))
+    ack(store.quizExists(quizId))
   }
 
   function onQuizJoin (quizId, userName, ack) {
@@ -30,7 +32,7 @@ function onConnection (socket) {
       score: 0
     }
 
-    let quiz = quizes[quizId]
+    let quiz = store.get(quizId)
     if (!quiz) {
       ack(false)
       debugging && console.log(`${user.name} tried to join non existing quiz ${quizId}`)
@@ -41,18 +43,11 @@ function onConnection (socket) {
     socket.on('quiz_leave', onQuizLeave)
     socket.on('disconnect', onDisconnect)
 
-    const previousQuiz = socketQuizes[socket.id]
-    if (previousQuiz) {
-      const idx = quiz.players.findIndex(m => m.id === user.id)
-      quiz.players.splice(idx, 1)
-
-      debugging && console.log(`remove user ${user.name} (${user.id}) from quiz ${quizId}`)
-    }
-
-    socket.join(quiz.id)
+    if (socketQuizes[socket.id]) store.removePlayer(quizId, user.id)
     socketQuizes[socket.id] = quiz.id
 
-    quiz.players.push(user)
+    socket.join(quiz.id)
+    store.addPlayer(quiz.id, user)
 
     io.sockets.in(quiz.id).emit('users_update', quiz.players)
     ack(true, user)
@@ -68,8 +63,7 @@ function onConnection (socket) {
     }
 
     function onQuizLeave () {
-      const idx = quiz.players.findIndex(m => m.id === user.id)
-      quiz.players.splice(idx, 1)
+      store.removePlayer(quiz.id, user.id)
       io.sockets.in(quiz.id).emit('users_update', quiz.players)
 
       debugging && console.log(`${user.name} left quiz ${quiz.id}`)
@@ -92,7 +86,6 @@ function onConnection (socket) {
     socket.on('quiz_end', onQuizEnd)
 
     const quizId = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
-    socket.join(quizId)
 
     let quiz = {
       id: quizId,
@@ -101,27 +94,30 @@ function onConnection (socket) {
       started: false,
       paused: false
     }
-    quizes[quizId] = quiz
+    store.add(quiz)
+    socket.join(quiz.id)
 
-    ack(quizId)
-    debugging && console.log(`created quiz ${quizId}`)
+    ack(quiz.id)
+    debugging && console.log(`created quiz ${quiz.id}`)
 
     function onQuizStart () {
       quiz.started = true
-      io.sockets.in(quizId).emit('start_quiz')
+      io.sockets.in(quiz.id).emit('start_quiz')
 
-      debugging && console.log(`Quiz host started quiz ${quizId}`)
+      debugging && console.log(`Quiz host started quiz ${quiz.id}`)
     }
 
     function onDisconnect () {
-      io.sockets.in(quizId).emit('pause')
+      io.sockets.in(quiz.id).emit('pause')
 
       debugging && console.log(`Quiz host disconnected`)
     }
 
     function onQuizResume () {
       quiz.paused = false
-      io.sockets.in(quizId).emit('quiz_resume')
+      io.sockets.in(quiz.id).emit('quiz_resume')
+
+      debugging && console.log(`Quiz resumed`)
     }
 
     function onQuizScore (userId, score) {
@@ -139,6 +135,8 @@ function onConnection (socket) {
 
       const winner = quiz.players.find(p => p.id === winnerId)
       socket.to(winner.sid).emit('quiz_ended', true)
+
+      debugging && console.log(`Quiz ended. Winner was ${winner} (${winner.id})`)
     }
   }
 
