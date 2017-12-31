@@ -34,6 +34,9 @@ const mutations = {
   [types.QUIZ_ENDED] (state, won) {
     state.won = won
   },
+  [types.USER_SCORED] (state, score) {
+    state.user.score += score
+  },
   [types.SOCKET_START_QUIZ] (state) {
     state.quizStarted = true
   },
@@ -75,7 +78,9 @@ const actions = {
     commit(types.QUIZ_SELECT_KEY, '')
     commit(types.SET_USER, {})
   },
-  socket_quizScored (_, score) {
+  socket_quizScored ({ commit }, score) {
+    commit(types.USER_SCORED, score)
+
     izitoast.show({
       title: 'Correct!',
       message: `${i18n.t('correct-answer')} ${score > 1 ? i18n.t('correct-answer-score', { score: score }) : ''}`,
