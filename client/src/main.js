@@ -8,6 +8,8 @@ import store from './store'
 import VueSocketio from 'vue-socket.io'
 import socketio from 'socket.io-client'
 import izitoast from 'izitoast'
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
 
 import 'font-awesome/scss/font-awesome.scss'
 import 'izitoast/dist/css/iziToast.min.css'
@@ -20,6 +22,11 @@ izitoast.settings({
   transitionOutMobile: 'fadeOutUp',
   progressBar: false
 })
+
+Raven
+    .config('https://890cb60280ca496ab20940cc62ba7857@sentry.io/265884')
+    .addPlugin(RavenVue, Vue)
+    .install()
 
 Vue.use(VueSocketio, socketio(`//${window.location.hostname}:8081`, { reconnection: false }), store)
 Vue.config.productionTip = false
