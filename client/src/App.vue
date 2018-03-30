@@ -6,9 +6,42 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
   // TODO when refreshing page, restore state from session storage and rejoin quiz
   // For quiz host: Send back secret token from server to know which quiz to join
+  socket: {
+    disconnect () {
+      console.log('disconnect')
+    },
+    connect_error () {
+      console.log('c_error')
+    },
+    error () {
+      console.log('error')
+    },
+    reconnect_error () {
+      console.log('reconnect_error')
+    },
+    reconnect_failed () {
+      console.log('reconnect_failed')
+    },
+    connect_timeout () {
+      console.log('connect_timeout')
+    }
+  },
+  created () {
+    /*
+    const userId = sessionStorage.getItem('userId')
+    const quizId = sessionStorage.getItem('quizId')
+    console.log('userId', userId)
+    console.log('quizId', quizId)
+    if (userId.length > 0 && quizId.length > 0) {
+      this.$socket.emit('user_reconnect', quizId, userId, result => {
+        console.log('successfully reconnected: ', result)
+      })
+    }
+    */
+  }
 }
 </script>
 

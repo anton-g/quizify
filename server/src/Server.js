@@ -45,12 +45,27 @@ class Server {
       })
 
       // reconnect
+      socket.on('user_reconnect', (quizId, userId, ack) => {
+        const quiz = this.quizes[quizId]
+        if (!quiz) {
+          ack(false)
+          return
+        }
+
+        const user = quiz.players.find(p => p.id === userId)
+        if (!user) {
+          ack(false)
+          return
+        }
+
+        user.reconnect(socket)
+        ack(true)
+      })
     })
   }
 
   createQuiz (host) {
     let quiz = new Quiz(host)
-    console.log('created quiz')
 
     this.quizes[quiz.id] = quiz
 

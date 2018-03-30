@@ -27,7 +27,6 @@ class Quiz extends EventEmitter {
   }
 
   end (winnerId) {
-    console.log('ending ', winnerId)
     let losers = this.players.filter(p => p.id !== winnerId && p.id !== this.host.id)
     losers.forEach(p => p.lost())
 
@@ -47,7 +46,7 @@ class Quiz extends EventEmitter {
 
   addPlayer (player) {
     player.on(protocol.PLAYER_BUZZ, () => this.handleBuzz(player))
-    player.on(protocol.PLAYER_DISCONNECT, () => this.removePlayer(player))
+    // player.on(protocol.PLAYER_DISCONNECT, () => this.removePlayer(player))
 
     this.players.push(player)
 

@@ -27,9 +27,11 @@ const getters = {
 const mutations = {
   [types.QUIZ_SELECT_KEY] (state, key) {
     state.selectedQuizKey = key
+    sessionStorage.setItem('quizId', key)
   },
   [types.SET_USER] (state, user) {
     state.user = user
+    sessionStorage.setItem('userId', user.id)
   },
   [types.QUIZ_ENDED] (state, won) {
     state.won = won

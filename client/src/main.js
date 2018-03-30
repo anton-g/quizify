@@ -28,7 +28,13 @@ Raven
     .addPlugin(RavenVue, Vue)
     .install()
 
-Vue.use(VueSocketio, socketio(`//${window.location.hostname}:8081`, { reconnection: false }), store)
+const socket = socketio(`//${window.location.hostname}:8081`, { reconnection: false, 'sync disconnect on unload': true })
+console.log(socket)
+socket.io.on('disconnect', () => {
+  console.log('test')
+})
+
+Vue.use(VueSocketio, socket, store)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
