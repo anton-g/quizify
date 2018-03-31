@@ -17,6 +17,7 @@
     "@nestjs/mongoose": "^3.0.1",
     "@nestjs/testing": "^4.6.6",
     "@nestjs/websockets": "^4.6.6",
+    "@types/socket.io": "^1.4.33",
     "mongoose": "^5.0.9",
     "nanoid": "^1.0.2",
     "reflect-metadata": "^0.1.12",
