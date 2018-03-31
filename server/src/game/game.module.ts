@@ -5,6 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { GameSchema } from "./schemas/game.schema";
 import { PlayerSchema } from "./schemas/player.schema";
 import { PlayerService } from "./player.service";
+import { GameGateway } from "./game.gateway";
 
 @Module({
     imports: [MongooseModule.forFeature([
@@ -12,6 +13,10 @@ import { PlayerService } from "./player.service";
       { name: 'Player', schema: PlayerSchema }
     ])],
     controllers: [GameController],
-    components: [GameService, PlayerService]
+    components: [
+      GameService,
+      PlayerService,
+      GameGateway
+    ]
 })
 export class GameModule { }
