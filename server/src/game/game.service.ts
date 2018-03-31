@@ -41,7 +41,6 @@ export class GameService {
   }
 
   async get(key: string): Promise<Game> {
-    const result = await this.gameModel.find({ key: key }).limit(1).exec()
-    return result[0]
+    return await this.gameModel.findOne({ key: key }).exec()
   }
 }
