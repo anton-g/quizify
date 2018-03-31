@@ -17,8 +17,9 @@ export class PlayerService {
     ).exec()
   }
 
-  async connect(id: string, socketId: string) {
-    const result = await this.gameModel.findOneAndUpdate(
+  async connect(id: string, socketId: string): Promise<Game> {
+    console.log('Connecting user', id)
+    return await this.gameModel.findOneAndUpdate(
       { "players._id": id },
       { $set: { "players.$.socketId": socketId } }
     ).exec()

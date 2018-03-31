@@ -22,9 +22,17 @@ export class GameService {
 
     const game = new this.gameModel({
       secret: secret,
-      key: key
+      key: key,
+      hostSocket: null
     })
     return await game.save()
+  }
+
+  async setHost(key: string, secret: string, hostSocket: string) {
+    const result = await this.gameModel.findOneAndUpdate(
+      { "key": key, "secret": secret },
+      { $set: { "hostSocket": hostSocket } }
+    ).exec()
   }
 
   async join(key: string, joinGameDto: JoinGameDto): Promise<Game> {
