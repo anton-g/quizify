@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, HttpCode, Body } from "@nestjs/common";
+import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus } from "@nestjs/common";
 import { GameService } from "./game.service";
 import { Game } from "./interfaces/game.interface";
 import { JoinGameDto } from "./dtos/join-game.dto";
@@ -19,6 +19,8 @@ export class GameController {
     @Post(':key/join')
     async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<GameDto> {
       const game = await this.gameService.join(params.key, joinGameDto)
+      if (!game) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
+
       return new GameDto(game)
     }
 
@@ -26,6 +28,8 @@ export class GameController {
     @Get(':key')
     async get (@Param() params): Promise<GameDto> {
       const game = await this.gameService.get(params.key)
+      if (!game) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
+
       return new GameDto(game)
     }
 
