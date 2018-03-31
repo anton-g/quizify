@@ -6,13 +6,14 @@ import { Game } from './interfaces/game.interface';
 import * as nanoid from 'nanoid';
 import * as generate from 'nanoid/generate';
 import { JoinGameDto } from './dtos/join-game.dto';
-import { PlayerService } from './player.service';
+import { PlayerSchema } from './schemas/player.schema';
+import { Player } from './interfaces/player.interface';
 
 @Component()
 export class GameService {
   constructor(
     @InjectModel(GameSchema) private readonly gameModel: Model<Game>,
-    private readonly playerService: PlayerService
+    @InjectModel(PlayerSchema) private readonly playerModel: Model<Player>
   ) { }
 
   async create(): Promise<Game> {
@@ -30,8 +31,12 @@ export class GameService {
     const game = await this.get(key)
     if (!game) return // error?
 
-    const player = await this.playerService.create(joinGameDto.name)
-    game.players.push(player)
+    game.players.push(this.playerModel({
+      name: joinGameDto.name,
+      score: 0,
+      socketId: null
+    }))
+
     return await new this.gameModel(game).save()
   }
 

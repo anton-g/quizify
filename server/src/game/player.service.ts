@@ -3,16 +3,18 @@ import { Component } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { PlayerSchema } from "./schemas/player.schema";
 import { Player } from "./interfaces/player.interface";
+import { GameSchema } from './schemas/game.schema';
+import { Game } from './interfaces/game.interface';
 
 @Component()
 export class PlayerService {
-  constructor( @InjectModel(PlayerSchema) private readonly playerModel: Model<Player>) { }
+  constructor( @InjectModel(GameSchema) private readonly gameModel: Model<Game>) { }
 
-  async create(name: string): Promise<Player> {
-    const player = new this.playerModel({
-      name: name,
-      score: 0
-    })
-    return await player.save()
+  async score(id: string, score: number) {
+    //const result = await this.gameModel.find({ "players._id": id }).limit(1).exec()
+    const result = await this.gameModel.findOneAndUpdate(
+      { "players._id": id },
+      { $inc: { "players.$.score": score } }
+    ).exec()
   }
 }
