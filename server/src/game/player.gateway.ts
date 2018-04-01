@@ -33,6 +33,8 @@ export class PlayerGateway implements OnGatewayDisconnect {
   @SubscribeMessage(GameEvents.Buzz)
   async onBuzz(client: Socket, userId: string) {
     const game: Game = await this.gameService.getByPlayerId(userId)
+    if (game.state !== GameState.Playing) return
+
     this.server.to(game.key).emit(GameEvents.Pause)
     this.gameService.setState(game.key, GameState.Paused)
     this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
