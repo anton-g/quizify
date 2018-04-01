@@ -61,4 +61,8 @@ export class GameService {
   async get(key: string): Promise<Game> {
     return await this.gameModel.findOne({ key: key }).exec()
   }
+
+  async getByPlayerId(id: string): Promise<Game> {
+    return await this.gameModel.findOne({ "players._id": id })
+  }
 }
