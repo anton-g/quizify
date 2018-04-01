@@ -31,9 +31,9 @@ export class HostGateway {
   @SubscribeMessage(GameEvents.Start)
   async onStart(client: Socket, key: string) {
     console.log('start game')
-    this.server.to(key).emit(GameEvents.Start)
     const game = await this.gameService.get(key)
     this.gameService.setState(game.key, GameState.Playing)
+    this.server.to(key).emit(GameEvents.Start)
   }
 
   @SubscribeMessage(GameEvents.Score)

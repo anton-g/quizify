@@ -32,7 +32,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
   async onBuzz(client: Socket, userId: string) {
     const game: Game = await this.gameService.getByPlayerId(userId)
     this.server.to(game.key).emit(GameEvents.Pause)
-    this.server.to(game.hostSocket).emit(GameEvents.Buzz, userId)
+    this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
   }
 
   async handleDisconnect(client: Socket) {
