@@ -8,6 +8,7 @@ import * as generate from 'nanoid/generate';
 import { JoinGameDto } from './dtos/join-game.dto';
 import { PlayerSchema } from './schemas/player.schema';
 import { Player } from './interfaces/player.interface';
+import { GameState } from './game.state';
 
 @Component()
 export class GameService {
@@ -21,6 +22,7 @@ export class GameService {
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
     const game = new this.gameModel({
+      state: GameState.Created,
       secret: secret,
       key: key,
       hostSocket: null
