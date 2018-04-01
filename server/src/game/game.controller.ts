@@ -3,6 +3,7 @@ import { GameService } from "./game.service";
 import { Game } from "./interfaces/game.interface";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { GameDto } from "./dtos/game.dto";
+import { PlayerDto } from "./dtos/player.dto";
 
 @Controller('game')
 export class GameController {
@@ -11,17 +12,17 @@ export class GameController {
     @HttpCode(201)
     @Post()
     async create (): Promise<GameDto> {
-        const game: Game = await this.gameService.create()
-        return new GameDto(game)
+      const game: Game = await this.gameService.create()
+      return new GameDto(game)
     }
 
     @HttpCode(200)
     @Post(':key/join')
-    async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<GameDto> {
-      const game = await this.gameService.join(params.key, joinGameDto)
-      if (!game) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
+    async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<PlayerDto> {
+      const player = await this.gameService.join(params.key, joinGameDto)
+      if (!player) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
 
-      return new GameDto(game)
+      return new PlayerDto(player)
     }
 
     @HttpCode(200)

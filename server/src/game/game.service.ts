@@ -44,18 +44,21 @@ export class GameService {
     ).exec()
   }
 
-  async join(key: string, joinGameDto: JoinGameDto): Promise<Game> {
+  async join(key: string, joinGameDto: JoinGameDto): Promise<Player> {
     const game = await this.get(key)
     if (!game) return // error?
     if (game.state !== GameState.Lobby) return // error?
 
-    game.players.push(this.playerModel({
+    const player = this.playerModel({
       name: joinGameDto.name,
       score: 0,
       socketId: null
-    }))
+    })
+    game.players.push(player)
 
-    return await new this.gameModel(game).save()
+    await new this.gameModel(game).save()
+
+    return player
   }
 
   async get(key: string): Promise<Game> {
