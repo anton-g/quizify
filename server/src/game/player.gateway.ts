@@ -17,13 +17,10 @@ export class PlayerGateway implements OnGatewayDisconnect {
 
   @SubscribeMessage('join')
   async onJoin(client: Socket, userId: string) {
-    console.log(this.server)
     const game = await this.playerService.connect(userId, client.id)
-    console.log('Joining room', game.key)
     client.join(game.key)
-    console.log('Sending update to', game.hostSocket)
+    console.log('joined room', game.key)
     this.server.to(game.hostSocket).emit('update', game)
-    console.log('Sent update')
   }
 
   handleDisconnect(client: Socket) {

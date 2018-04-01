@@ -30,6 +30,13 @@ export class GameService {
     return await game.save()
   }
 
+  async setState(key: string, state: GameState) {
+    const result = await this.gameModel.findOneAndUpdate(
+      { "key": key },
+      { $set: { "state": state } }
+    ).exec()
+  }
+
   async setHost(key: string, secret: string, hostSocket: string) {
     const result = await this.gameModel.findOneAndUpdate(
       { "key": key, "secret": secret },
@@ -40,6 +47,7 @@ export class GameService {
   async join(key: string, joinGameDto: JoinGameDto): Promise<Game> {
     const game = await this.get(key)
     if (!game) return // error?
+    if (game.state !== GameState.Lobby) return // error?
 
     game.players.push(this.playerModel({
       name: joinGameDto.name,
