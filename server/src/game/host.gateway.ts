@@ -36,6 +36,11 @@ export class HostGateway {
     this.server.to(key).emit(GameEvents.Start)
   }
 
+  @SubscribeMessage(GameEvents.Resume)
+  async onResume(client: Socket, key: string) {
+    this.server.to(key).emit(GameEvents.Resume)
+  }
+
   @SubscribeMessage(GameEvents.Score)
   onScore(client: Socket, userId: string) {
     console.log('User scored', userId)
