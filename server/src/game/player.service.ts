@@ -21,7 +21,6 @@ export class PlayerService {
   }
 
   async connect(id: string, socketId: string): Promise<Game> {
-    console.log('Connecting user', id)
     return await this.gameModel.findOneAndUpdate(
       { "players._id": id },
       { $set: { "players.$.socketId": socketId } }

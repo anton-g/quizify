@@ -26,6 +26,8 @@ export class PlayerGateway implements OnGatewayDisconnect {
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
     this.server.to(game.hostSocket).emit(GameEvents.Update, game)
+
+    console.log(`[${game.key}] User ${userId} joined`)
   }
 
   @SubscribeMessage(GameEvents.Buzz)
@@ -33,10 +35,14 @@ export class PlayerGateway implements OnGatewayDisconnect {
     const game: Game = await this.gameService.getByPlayerId(userId)
     this.server.to(game.key).emit(GameEvents.Pause)
     this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
+
+    console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
   async handleDisconnect(client: Socket) {
     const game: Game = await this.playerService.disconnect(client.id)
     this.server.to(game.hostSocket).emit(GameEvents.Update, game)
+
+    console.log(`[${game.key}] User with socket ${client.id} disconnected`)
   }
 }

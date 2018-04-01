@@ -24,29 +24,34 @@ export class HostGateway {
 
   @SubscribeMessage(GameEvents.Host)
   onHost(client: Socket, keys: any) {
-    console.log('set host', client.id)
     this.gameService.setHost(keys.key, keys.secret, client.id)
     this.gameService.setState(keys.key, GameState.Lobby)
+
+    console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
   }
 
   @SubscribeMessage(GameEvents.Start)
   async onStart(client: Socket, key: string) {
-    console.log('start game')
     const game = await this.gameService.get(key)
     this.gameService.setState(game.key, GameState.Playing)
     this.server.to(key).emit(GameEvents.Start)
+
+    console.log(`[${key}] Start game`)
   }
 
   @SubscribeMessage(GameEvents.Resume)
   async onResume(client: Socket, key: string) {
     this.server.to(key).emit(GameEvents.Resume)
+
+    console.log(`[${key}] Resume game`)
   }
 
   @SubscribeMessage(GameEvents.Score)
   async onScore(client: Socket, userId: string) {
-    console.log('User scored', userId)
     const score: number = 1
     const player: Player = await this.playerService.score(userId, score)
     this.server.to(player.socketId).emit(GameEvents.Scored, score)
+
+    console.log(`[?] Player ${player.name} (${userId}) scored ${score}`)
   }
 }
