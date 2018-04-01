@@ -4,3 +4,11 @@ export enum GameState {
   Playing = "PLAYING",
   Done = "DONE"
 }
+
+export enum GameEvents {
+  Host = "HOST",
+  Update = "UPDATE",
+  Start = "START",
+  Join = "JOIN",
+  Score = "SCORE"
+}
