@@ -11,6 +11,7 @@ import { PlayerService } from './player.service';
 import { GameService } from './game.service';
 import { GameState, GameEvents } from './game.state';
 import { GameSchema } from './schemas/game.schema';
+import { Player } from './interfaces/player.interface';
 
 @WebSocketGateway()
 export class HostGateway {
@@ -42,8 +43,10 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Score)
-  onScore(client: Socket, userId: string) {
+  async onScore(client: Socket, userId: string) {
     console.log('User scored', userId)
-    this.playerService.score(userId, 1)
+    const score: number = 1
+    const player: Player = await this.playerService.score(userId, score)
+    this.server.to(player.socketId).emit(GameEvents.Scored, score)
   }
 }

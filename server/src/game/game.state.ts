@@ -15,5 +15,6 @@ export enum GameEvents {
   Join = "JOIN",
   Buzz = "BUZZ",
   Buzzed = "BUZZED",
-  Score = "SCORE"
+  Score = "SCORE",
+  Scored = "SCORED"
 }
