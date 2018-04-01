@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io';
 import { PlayerService } from './player.service';
-import { GameEvents } from './game.state';
+import { GameEvents, GameState } from './game.state';
 import { Game } from './interfaces/game.interface';
 import { GameService } from './game.service';
 
@@ -34,6 +34,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
   async onBuzz(client: Socket, userId: string) {
     const game: Game = await this.gameService.getByPlayerId(userId)
     this.server.to(game.key).emit(GameEvents.Pause)
+    this.gameService.setState(game.key, GameState.Paused)
     this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
 
     console.log(`[${game.key}] User ${userId} buzzed`)

@@ -42,6 +42,7 @@ export class HostGateway {
   @SubscribeMessage(GameEvents.Resume)
   async onResume(client: Socket, key: string) {
     this.server.to(key).emit(GameEvents.Resume)
+    this.gameService.setState(key, GameState.Playing)
 
     console.log(`[${key}] Resume game`)
   }
