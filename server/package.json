@@ -8,6 +8,8 @@
   "scripts": {
     "start": "node index.js",
     "start:watch": "nodemon",
+    "//": "--forceExit workaround, see https://github.com/Mockgoose/Mockgoose/issues/33",
+    "test": "jest --forceExit",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js"
   },
@@ -26,8 +28,26 @@
     "typescript": "^2.7.2"
   },
   "devDependencies": {
+    "@types/jest": "^22.2.2",
     "@types/node": "^9.4.7",
+    "jest": "^22.4.3",
+    "mockgoose": "^7.3.5",
     "nodemon": "^1.17.1",
+    "ts-jest": "^22.4.2",
     "ts-node": "^5.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
