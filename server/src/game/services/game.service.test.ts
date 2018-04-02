@@ -42,10 +42,37 @@ describe('GameService', () => {
   })
 
   describe('create', () => {
-    it('should create a game', async () => {
+    it('should create a game with state CREATED', async () => {
       const game = await gameService.create()
 
       expect(game.state).toBe(GameState.Created)
+    })
+
+    it('should create a game without hostSocket', async () => {
+      const game = await gameService.create()
+
+      expect(game.hostSocket).toBe(undefined)
+    })
+  })
+
+  describe('get', () => {
+    it('should return game with correct key', async () => {
+      const game = await gameService.create()
+      const game2 = await gameService.get(game.key)
+
+      expect(game2.key).toBe(game.key)
+    })
+  })
+
+  describe('setState', () => {
+    it('should update state', async () => {
+      let game = await gameService.create()
+      expect(game.state).toBe(GameState.Created)
+
+      await gameService.setState(game.key, GameState.Lobby)
+      game = await gameService.get(game.key)
+
+      expect(game.state).toBe(GameState.Lobby)
     })
   })
 
