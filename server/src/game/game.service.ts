@@ -25,7 +25,7 @@ export class GameService {
       state: GameState.Created,
       secret: secret,
       key: key,
-      hostSocket: null
+      hostSocket: undefined
     })
     return await game.save()
   }
@@ -52,7 +52,7 @@ export class GameService {
     const player = this.playerModel({
       name: joinGameDto.name,
       score: 0,
-      socketId: null
+      socketId: undefined
     })
     game.players.push(player)
 

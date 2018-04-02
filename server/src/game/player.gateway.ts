@@ -11,6 +11,7 @@ import { PlayerService } from './player.service';
 import { GameEvents, GameState } from './game.state';
 import { Game } from './interfaces/game.interface';
 import { GameService } from './game.service';
+import { GameDto } from './dtos/game.dto';
 
 @WebSocketGateway()
 export class PlayerGateway implements OnGatewayDisconnect {
@@ -25,7 +26,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
   async onJoin(client: Socket, userId: string) {
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
-    this.server.to(game.hostSocket).emit(GameEvents.Update, game)
+    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
 
     console.log(`[${game.key}] User ${userId} joined`)
   }
@@ -44,7 +45,10 @@ export class PlayerGateway implements OnGatewayDisconnect {
 
   async handleDisconnect(client: Socket) {
     const game: Game = await this.playerService.disconnect(client.id)
-    this.server.to(game.hostSocket).emit(GameEvents.Update, game)
+
+    if (!game) return // Host was disconnected
+
+    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
 
     console.log(`[${game.key}] User with socket ${client.id} disconnected`)
   }

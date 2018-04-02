@@ -31,6 +31,6 @@ export class PlayerService {
     return await this.gameModel.findOneAndUpdate(
       { "players.socketId": id },
       { $set: { "players.$.socketId": null } }
-    )
+    ).exec()
   }
 }
