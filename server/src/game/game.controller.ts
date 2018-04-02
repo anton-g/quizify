@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus } from "@nestjs/common";
-import { GameService } from "./game.service";
+import { GameService } from "./services/game.service";
 import { Game } from "./interfaces/game.interface";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { GameDto } from "./dtos/game.dto";

@@ -1,14 +1,14 @@
 import { Model } from 'mongoose';
 import { Component } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
-import { GameSchema } from './schemas/game.schema';
-import { Game } from './interfaces/game.interface';
+import { GameSchema } from '../schemas/game.schema';
+import { Game } from '../interfaces/game.interface';
 import * as nanoid from 'nanoid';
 import * as generate from 'nanoid/generate';
-import { JoinGameDto } from './dtos/join-game.dto';
-import { PlayerSchema } from './schemas/player.schema';
-import { Player } from './interfaces/player.interface';
-import { GameState } from './game.state';
+import { JoinGameDto } from '../dtos/join-game.dto';
+import { PlayerSchema } from '../schemas/player.schema';
+import { Player } from '../interfaces/player.interface';
+import { GameState } from '../game.state';
 
 @Component()
 export class GameService {

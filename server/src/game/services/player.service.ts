@@ -1,9 +1,9 @@
 import { Model } from 'mongoose';
 import { Component } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { GameSchema } from './schemas/game.schema';
-import { Game } from './interfaces/game.interface';
-import { Player } from './interfaces/player.interface';
+import { GameSchema } from '../schemas/game.schema';
+import { Game } from '../interfaces/game.interface';
+import { Player } from '../interfaces/player.interface';
 
 @Component()
 export class PlayerService {

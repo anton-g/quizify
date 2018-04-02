@@ -7,11 +7,11 @@ import {
   OnGatewayDisconnect
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io';
-import { PlayerService } from './player.service';
-import { GameEvents, GameState } from './game.state';
-import { Game } from './interfaces/game.interface';
-import { GameService } from './game.service';
-import { GameDto } from './dtos/game.dto';
+import { PlayerService } from '../services/player.service';
+import { GameService } from '../services/game.service';
+import { GameEvents, GameState } from '../game.state';
+import { Game } from '../interfaces/game.interface';
+import { GameDto } from '../dtos/game.dto';
 
 @WebSocketGateway()
 export class PlayerGateway implements OnGatewayDisconnect {

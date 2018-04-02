@@ -7,11 +7,10 @@ import {
   OnGatewayDisconnect
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io';
-import { PlayerService } from './player.service';
-import { GameService } from './game.service';
-import { GameState, GameEvents } from './game.state';
-import { GameSchema } from './schemas/game.schema';
-import { Player } from './interfaces/player.interface';
+import { PlayerService } from '../services/player.service';
+import { GameService } from '../services/game.service';
+import { GameEvents, GameState } from '../game.state';
+import { Player } from '../interfaces/player.interface';
 
 @WebSocketGateway()
 export class HostGateway {
