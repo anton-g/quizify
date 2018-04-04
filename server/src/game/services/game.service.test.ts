@@ -53,6 +53,13 @@ describe('GameService', () => {
 
       expect(game.hostSocket).toBe(undefined)
     })
+
+    it('should generate different keys', async () => {
+      const game1 = await gameService.create()
+      const game2 = await gameService.create()
+
+      expect(game1.key).not.toBe(game2.key)
+    })
   })
 
   describe('get', () => {
