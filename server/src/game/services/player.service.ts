@@ -23,14 +23,16 @@ export class PlayerService {
   async connect(id: string, socketId: string): Promise<Game> {
     return await this.gameModel.findOneAndUpdate(
       { "players._id": id },
-      { $set: { "players.$.socketId": socketId } }
+      { $set: { "players.$.socketId": socketId } },
+      { new: true }
     ).exec()
   }
 
   async disconnect(id: string) {
     return await this.gameModel.findOneAndUpdate(
       { "players.socketId": id },
-      { $set: { "players.$.socketId": null } }
+      { $set: { "players.$.socketId": null } },
+      { new: true }
     ).exec()
   }
 }

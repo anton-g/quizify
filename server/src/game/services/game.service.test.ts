@@ -30,7 +30,7 @@ describe('GameService', () => {
     inject: [mockgooseProvider.provide],
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       components: [
         mockgooseProvider,
@@ -136,7 +136,7 @@ describe('GameService', () => {
     })
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     await mockgoose.helper.reset()
     await mongoose.disconnect()
   })
