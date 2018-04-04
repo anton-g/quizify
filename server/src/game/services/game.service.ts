@@ -46,8 +46,9 @@ export class GameService {
 
   async join(key: string, joinGameDto: JoinGameDto): Promise<Player> {
     const game = await this.get(key)
-    if (!game) return // error?
-    if (game.state !== GameState.Lobby) return // error?
+    if (!game) return Promise.reject({ error: 'Invalid key' })
+    if (game.state !== GameState.Lobby) return Promise.reject({ error: 'Invalid game state' })
+    if (!joinGameDto.name) return Promise.reject({ error: 'Missing name' })
 
     const player = this.playerModel({
       name: joinGameDto.name,

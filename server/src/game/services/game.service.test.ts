@@ -9,6 +9,8 @@ import { Game } from '../interfaces/game.interface';
 import { Model } from 'mongoose';
 import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { GameState } from '../game.state';
+import { JoinGameDto } from '../dtos/join-game.dto';
+import { Player } from '../interfaces/player.interface';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -80,6 +82,57 @@ describe('GameService', () => {
       game = await gameService.get(game.key)
 
       expect(game.state).toBe(GameState.Lobby)
+    })
+  })
+
+  describe('join', () => {
+    it('should return a player with correct name', async () => {
+      const game: Game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+
+      const name = 'Nisse'
+      const joinGameDto = { name: name }
+      const player: Player = await gameService.join(game.key, joinGameDto)
+      expect(player).toBeTruthy()
+      expect(player.name).toBe(name)
+    })
+
+    it('should add player to game', async () => {
+      const game: Game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+
+      const name = 'Nisse'
+      const joinGameDto = { name: name }
+      const player: Player = await gameService.join(game.key, joinGameDto)
+      const updatedGame: Game = await gameService.get(game.key)
+
+      expect(updatedGame.players[0].name).toBe(name)
+    })
+
+    it('should reject promise if game key is incorrect', async () => {
+      expect.assertions(1)
+      await expect(gameService.join('', new JoinGameDto())).rejects.toEqual({
+        error: 'Invalid key'
+      })
+    })
+
+    it('should reject promise if game state is invalid', async () => {
+      const game: Game = await gameService.create()
+
+      expect.assertions(1)
+      await expect(gameService.join(game.key, new JoinGameDto())).rejects.toEqual({
+        error: 'Invalid game state'
+      })
+    })
+
+    it('should reject promise if name is missing', async () => {
+      const game: Game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+
+      expect.assertions(1)
+      await expect(gameService.join(game.key, new JoinGameDto())).rejects.toEqual({
+        error: 'Missing name'
+      })
     })
   })
 
