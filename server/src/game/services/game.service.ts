@@ -30,17 +30,25 @@ export class GameService {
     return await game.save()
   }
 
-  async setState(key: string, state: GameState) {
-    const result = await this.gameModel.findOneAndUpdate(
+  async setState(key: string, state: GameState): Promise<Game> {
+    if (!key) return Promise.reject({ error: 'Missing key' })
+
+    return await this.gameModel.findOneAndUpdate(
       { "key": key },
-      { $set: { "state": state } }
+      { $set: { "state": state } },
+      { new: true }
     ).exec()
   }
 
-  async setHost(key: string, secret: string, hostSocket: string) {
-    const result = await this.gameModel.findOneAndUpdate(
+  async setHost(key: string, secret: string, hostSocket: string): Promise<Game> {
+    if (!key) return Promise.reject({ error: 'Missing key' })
+    if (!secret) return Promise.reject({ error: 'Missing secret' })
+    if (!hostSocket) return Promise.reject({ error: 'Missing hostSocket' })
+
+    return await this.gameModel.findOneAndUpdate(
       { "key": key, "secret": secret },
-      { $set: { "hostSocket": hostSocket } }
+      { $set: { "hostSocket": hostSocket } },
+      { new: true }
     ).exec()
   }
 

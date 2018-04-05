@@ -83,6 +83,62 @@ describe('GameService', () => {
 
       expect(game.state).toBe(GameState.Lobby)
     })
+
+    it('should return falsy if key doesn\'t match', async () => {
+      const game = await gameService.setState('ABC123', GameState.Created)
+      expect(game).toBeFalsy()
+    })
+
+    it('should reject promise if no game is found', async () => {
+      expect.assertions(1)
+      await expect(gameService.setState(undefined, GameState.Created)).rejects.toEqual({
+        error: 'Missing key'
+      })
+    })
+  })
+
+  describe('setHost', () => {
+    it('should set hostsocket', async () => {
+      let game = await gameService.create()
+      const hostSocketId = '123'
+      game = await gameService.setHost(game.key, game.secret, hostSocketId)
+
+      expect(game.hostSocket).toBe(hostSocketId)
+    })
+
+    it('should return falsy if no game is found', async () => {
+      const game = await gameService.setHost('AAAAAA', 'XYZ', 'socketId')
+      expect(game).toBeFalsy()
+    })
+
+    it('should not update game if secret doesn\'t match key', async () => {
+      const game = await gameService.create()
+      const socketId = '123'
+      await gameService.setHost(game.key, 'incorrectSecret', socketId)
+      const updatedGame = await gameService.get(game.key)
+      expect(updatedGame.hostSocket).not.toBe(socketId)
+    })
+
+    it('should reject promise if game key is falsy', async () => {
+      expect.assertions(1)
+      await expect(gameService.setHost('', '', '')).rejects.toEqual({
+        error: 'Missing key'
+      })
+    })
+
+    it('should reject promise if game secret is falsy', async () => {
+      expect.assertions(1)
+      await expect(gameService.setHost('ABC123', '', '')).rejects.toEqual({
+        error: 'Missing secret'
+      })
+    })
+
+    it('should reject promise if hostSocket is falsy', async () => {
+      expect.assertions(1)
+      await expect(gameService.setHost('ABC123', 'XYZ', '')).rejects.toEqual({
+        error: 'Missing hostSocket'
+      })
+    })
   })
 
   describe('join', () => {
