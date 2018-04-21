@@ -51,6 +51,25 @@ describe('PlayerService', () => {
       game = await playerService.connect(player._id, socketId)
       expect(game.players[0].socketId).toBe(socketId)
     })
+
+    it('should return falsy if player does not exist', async () => {
+      const game = await playerService.connect('aabbccddeeff', '098')
+      expect(game).toBeFalsy()
+    })
+
+    it('should reject if player id is not valid ObjectId', async () => {
+      expect.assertions(1)
+      await expect(playerService.connect('abc', 'xyz')).rejects.toEqual({
+        error: 'Invalid playerId'
+      })
+    })
+
+    it('should reject if socketId is empty', async () => {
+      expect.assertions(1)
+      await expect(playerService.connect('aabbccddeeff', '')).rejects.toEqual({
+        error: 'Missing socketId'
+      })
+    })
   })
 
   afterAll(async () => {

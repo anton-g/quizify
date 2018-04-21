@@ -11,6 +11,7 @@ import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { GameState } from '../game.state';
 import { JoinGameDto } from '../dtos/join-game.dto';
 import { Player } from '../interfaces/player.interface';
+import { create } from 'domain';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -61,15 +62,6 @@ describe('GameService', () => {
       const game2 = await gameService.create()
 
       expect(game1.key).not.toBe(game2.key)
-    })
-  })
-
-  describe('get', () => {
-    it('should return game with correct key', async () => {
-      const game = await gameService.create()
-      const game2 = await gameService.get(game.key)
-
-      expect(game2.key).toBe(game.key)
     })
   })
 
@@ -165,14 +157,14 @@ describe('GameService', () => {
       expect(updatedGame.players[0].name).toBe(name)
     })
 
-    it('should reject promise if game key is incorrect', async () => {
+    it('should reject if game key is incorrect', async () => {
       expect.assertions(1)
       await expect(gameService.join('', new JoinGameDto())).rejects.toEqual({
         error: 'Invalid key'
       })
     })
 
-    it('should reject promise if game state is invalid', async () => {
+    it('should reject if game state is invalid', async () => {
       const game: Game = await gameService.create()
 
       expect.assertions(1)
@@ -181,7 +173,7 @@ describe('GameService', () => {
       })
     })
 
-    it('should reject promise if name is missing', async () => {
+    it('should reject if name is missing', async () => {
       const game: Game = await gameService.create()
       await gameService.setState(game.key, GameState.Lobby)
 
@@ -189,6 +181,36 @@ describe('GameService', () => {
       await expect(gameService.join(game.key, new JoinGameDto())).rejects.toEqual({
         error: 'Missing name'
       })
+    })
+  })
+
+  describe('get', () => {
+    it('should return game with correct key', async () => {
+      const game = await gameService.create()
+      const game2 = await gameService.get(game.key)
+
+      expect(game2.key).toBe(game.key)
+    })
+
+    it('should return null if game doesn\'t exist', async () => {
+      const game = await gameService.get('invalid')
+      expect(game).toBeNull()
+    })
+  })
+
+  describe('getByPlayerId', () => {
+    it('should get game', async () => {
+      const playerName = 'Player'
+      const createdGame = await gameService.create()
+      await gameService.setState(createdGame.key, GameState.Lobby)
+
+      const joinGameDto: JoinGameDto = {
+        name: playerName
+      }
+      const createdPlayer = await gameService.join(createdGame.key, joinGameDto)
+      const game = await gameService.getByPlayerId(createdPlayer._id)
+      expect(game.key).toBe(createdGame.key)
+      expect(game.players[0].name).toBe(playerName)
     })
   })
 

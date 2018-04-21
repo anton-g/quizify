@@ -4,6 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { GameSchema } from '../schemas/game.schema';
 import { Game } from '../interfaces/game.interface';
 import { Player } from '../interfaces/player.interface';
+import * as mongoose from "mongoose";
 
 @Component()
 export class PlayerService {
@@ -11,26 +12,31 @@ export class PlayerService {
     @InjectModel(GameSchema) private readonly gameModel: Model<Game>
   ) { }
 
-  async score(id: string, score: number): Promise<Player> {
+  async score(playerId: string, score: number): Promise<Player> {
+    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject({ error: 'Invalid playerId' })
+
     const result: Game = await this.gameModel.findOneAndUpdate(
-      { "players._id": id },
+      { "players._id": playerId },
       { $inc: { "players.$.score": score } }
     ).exec()
 
-    return result.players.find(p => p._id == id)
+    return result.players.find(p => p._id == playerId)
   }
 
-  async connect(id: string, socketId: string): Promise<Game> {
+  async connect(playerId: string, socketId: string): Promise<Game> {
+    if (!socketId) return Promise.reject({ error: 'Missing socketId' })
+    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject({ error: 'Invalid playerId' })
+
     return await this.gameModel.findOneAndUpdate(
-      { "players._id": id },
+      { "players._id": playerId },
       { $set: { "players.$.socketId": socketId } },
       { new: true }
     ).exec()
   }
 
-  async disconnect(id: string) {
+  async disconnect(playerSocketId: string) {
     return await this.gameModel.findOneAndUpdate(
-      { "players.socketId": id },
+      { "players.socketId": playerSocketId },
       { $set: { "players.$.socketId": null } },
       { new: true }
     ).exec()
