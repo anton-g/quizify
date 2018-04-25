@@ -5,6 +5,7 @@ import { GameSchema } from '../schemas/game.schema';
 import { Game } from '../interfaces/game.interface';
 import { Player } from '../interfaces/player.interface';
 import * as mongoose from "mongoose";
+import { UserException } from '../../common/user.exception';
 
 @Component()
 export class PlayerService {
@@ -13,7 +14,7 @@ export class PlayerService {
   ) { }
 
   async score(playerId: string, score: number): Promise<Player> {
-    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject({ error: 'Invalid playerId' })
+    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject(new UserException('Invalid playerId'))
 
     const result: Game = await this.gameModel.findOneAndUpdate(
       { "players._id": playerId },
@@ -25,7 +26,7 @@ export class PlayerService {
 
   async connect(playerId: string, socketId: string): Promise<Game> {
     if (!socketId) return Promise.reject({ error: 'Missing socketId' })
-    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject({ error: 'Invalid playerId' })
+    if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject(new UserException('Invalid playerId'))
 
     return await this.gameModel.findOneAndUpdate(
       { "players._id": playerId },

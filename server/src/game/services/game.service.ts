@@ -9,6 +9,7 @@ import { JoinGameDto } from '../dtos/join-game.dto';
 import { PlayerSchema } from '../schemas/player.schema';
 import { Player } from '../interfaces/player.interface';
 import { GameState } from '../game.state';
+import { UserException } from '../../common/user.exception';
 
 @Component()
 export class GameService {
@@ -31,7 +32,7 @@ export class GameService {
   }
 
   async setState(key: string, state: GameState): Promise<Game> {
-    if (!key) return Promise.reject({ error: 'Missing key' })
+    if (!key) return Promise.reject(new UserException('Missing key'))
 
     return await this.gameModel.findOneAndUpdate(
       { "key": key },
@@ -41,9 +42,9 @@ export class GameService {
   }
 
   async setHost(key: string, secret: string, hostSocket: string): Promise<Game> {
-    if (!key) return Promise.reject({ error: 'Missing key' })
-    if (!secret) return Promise.reject({ error: 'Missing secret' })
-    if (!hostSocket) return Promise.reject({ error: 'Missing hostSocket' })
+    if (!key) return Promise.reject(new UserException('Missing key'))
+    if (!secret) return Promise.reject(new UserException('Missing secret'))
+    if (!hostSocket) return Promise.reject(new UserException('Missing hostSocket'))
 
     return await this.gameModel.findOneAndUpdate(
       { "key": key, "secret": secret },
@@ -54,9 +55,9 @@ export class GameService {
 
   async join(key: string, joinGameDto: JoinGameDto): Promise<Player> {
     const game = await this.get(key)
-    if (!game) return Promise.reject({ error: 'Invalid key' })
-    if (game.state !== GameState.Lobby) return Promise.reject({ error: 'Invalid game state' })
-    if (!joinGameDto.name) return Promise.reject({ error: 'Missing name' })
+    if (!game) return Promise.reject(new UserException('Invalid key'))
+    if (game.state !== GameState.Lobby) return Promise.reject(new UserException('Invalid game state'))
+    if (!joinGameDto.name) return Promise.reject(new UserException('Missing name'))
 
     const player = this.playerModel({
       name: joinGameDto.name,

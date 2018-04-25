@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus, UseFilters } from "@nestjs/common";
 import { GameService } from "./services/game.service";
 import { Game } from "./interfaces/game.interface";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { GameDto } from "./dtos/game.dto";
 import { PlayerDto } from "./dtos/player.dto";
+import { UserExceptionFilter } from "../common/user-exception.filter";
 
 @Controller('game')
+@UseFilters(new UserExceptionFilter())
 export class GameController {
     constructor(private readonly gameService: GameService) {}
 
@@ -21,7 +23,6 @@ export class GameController {
     async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<PlayerDto> {
       const player = await this.gameService.join(params.key, joinGameDto)
       if (!player) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
-
       return new PlayerDto(player)
     }
 
