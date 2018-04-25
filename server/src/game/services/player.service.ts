@@ -13,6 +13,16 @@ export class PlayerService {
     @InjectModel(GameSchema) private readonly gameModel: Model<Game>
   ) { }
 
+  async find(playerId: string): Promise<Player> {
+    const games: Game[] = await this.gameModel.find(
+      { "players._id": playerId }
+    ).exec()
+
+    if (!(games && games[0] && games[0].players)) return undefined
+
+    return games[0].players.find(p => p._id.toString() == playerId)
+  }
+
   async score(playerId: string, score: number): Promise<Player> {
     if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject(new UserException('Invalid playerId'))
 
@@ -38,7 +48,7 @@ export class PlayerService {
     ).exec()
   }
 
-  async disconnect(playerSocketId: string) {
+  async disconnect(playerSocketId: string): Promise<Game> {
     return await this.gameModel.findOneAndUpdate(
       { "players.socketId": playerSocketId },
       { $set: { "players.$.connected": false } },
@@ -46,7 +56,7 @@ export class PlayerService {
     ).exec()
   }
 
-  async reconnect(oldSocketId: string, newSocketId: string) {
+  async reconnect(oldSocketId: string, newSocketId: string): Promise<Game> {
     return await this.gameModel.findOneAndUpdate(
       { "players.socketId": oldSocketId },
       { $set: { "players.$.socketId": newSocketId } },

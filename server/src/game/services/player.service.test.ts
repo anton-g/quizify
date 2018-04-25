@@ -8,6 +8,9 @@ import { GameService } from './game.service';
 import { GameSchema } from '../schemas/game.schema';
 import { PlayerSchema } from '../schemas/player.schema';
 import { GameState } from '../game.state';
+import { Game } from '../interfaces/game.interface';
+import { Player } from '../interfaces/player.interface';
+import { UserException } from '../../common/user.exception';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -69,6 +72,62 @@ describe('PlayerService', () => {
       await expect(playerService.connect('aabbccddeeff', '')).rejects.toEqual({
         error: 'Missing socketId'
       })
+    })
+  })
+
+  describe('find', () => {
+    let game: Game;
+    let player: Player;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      player = await gameService.join(game.key, { name: 'Nisse' })
+    })
+
+    it('should find player with correct id', async () => {
+      const p = await playerService.find(player._id)
+      expect(p._id).toEqual(player._id)
+    })
+  })
+
+  describe('score', () => {
+    let game: Game;
+    let player: Player;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      player = await gameService.join(game.key, { name: 'Nisse' })
+      game = await playerService.connect(player._id, '123')
+    })
+
+    it('should increase player score', async () => {
+      await playerService.score(player._id, 1)
+      player = await playerService.find(player._id)
+      expect(player.score).toBe(1)
+
+      await playerService.score(player._id, 5)
+      player = await playerService.find(player._id)
+      expect(player.score).toBe(6)
+    })
+
+    it('should decrease player score', async () => {
+      await playerService.score(player._id, 5)
+      player = await playerService.find(player._id)
+      expect(player.score).toBe(5)
+      await playerService.score(player._id, -3)
+      player = await playerService.find(player._id)
+      expect(player.score).toBe(2)
+    })
+
+    it('should reject if playerId is invalid', async () => {
+      const rejection = new UserException('Invalid playerId')
+
+      expect.assertions(3)
+      await expect(playerService.score('', 0)).rejects.toEqual(rejection)
+      await expect(playerService.score('abcdkje', 0)).rejects.toEqual(rejection)
+      await expect(playerService.score('ajskldfjlkasdjlfajskldfjasd', 0)).rejects.toEqual(rejection)
     })
   })
 
