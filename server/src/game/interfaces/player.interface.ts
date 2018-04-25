@@ -3,4 +3,5 @@ export interface Player {
   readonly score: number;
   readonly _id: string;
   readonly socketId: string;
+  readonly connected: boolean;
 }

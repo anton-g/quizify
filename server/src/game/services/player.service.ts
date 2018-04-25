@@ -30,7 +30,10 @@ export class PlayerService {
 
     return await this.gameModel.findOneAndUpdate(
       { "players._id": playerId },
-      { $set: { "players.$.socketId": socketId } },
+      { $set: {
+        "players.$.socketId": socketId,
+        "players.$.connected": true
+      } },
       { new: true }
     ).exec()
   }
@@ -38,7 +41,7 @@ export class PlayerService {
   async disconnect(playerSocketId: string) {
     return await this.gameModel.findOneAndUpdate(
       { "players.socketId": playerSocketId },
-      { $set: { "players.$.socketId": null } },
+      { $set: { "players.$.connected": false } },
       { new: true }
     ).exec()
   }
