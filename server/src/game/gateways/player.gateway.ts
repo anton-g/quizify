@@ -43,6 +43,20 @@ export class PlayerGateway implements OnGatewayDisconnect {
     console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
+  @SubscribeMessage(GameEvents.Reconnect)
+  async onReconnect(client: Socket, oldSocketId: string) {
+    const game: Game = await this.playerService.reconnect(oldSocketId, client.id)
+
+    if (!game) return // could not find game to reconnect to
+    // TODO: ack to user
+
+    client.join(game.key)
+    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
+    // TODO: ack game status to user
+
+    console.log(`[${game.key}] User with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
+  }
+
   async handleDisconnect(client: Socket) {
     const game: Game = await this.playerService.disconnect(client.id)
 

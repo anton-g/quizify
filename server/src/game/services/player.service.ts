@@ -45,4 +45,12 @@ export class PlayerService {
       { new: true }
     ).exec()
   }
+
+  async reconnect(oldSocketId: string, newSocketId: string) {
+    return await this.gameModel.findOneAndUpdate(
+      { "players.socketId": oldSocketId },
+      { $set: { "players.$.socketId": newSocketId } },
+      { new: true }
+    ).exec()
+  }
 }
