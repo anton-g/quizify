@@ -9,8 +9,7 @@
     "start": "node index.js",
     "start:watch": "nodemon",
     "//": "--forceExit workaround, see https://github.com/Mockgoose/Mockgoose/issues/33",
-    "//": "--runInBand workaround for this https://github.com/Mockgoose/Mockgoose/issues/45",
-    "test": "jest --forceExit --runInBand",
+    "test": "jest --forceExit",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js"
   },
