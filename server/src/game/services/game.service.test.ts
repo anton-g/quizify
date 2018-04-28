@@ -215,7 +215,10 @@ describe('GameService', () => {
   })
 
   afterAll(async () => {
-    await mockgoose.helper.reset()
-    await mongoose.disconnect()
+    await mockgoose.helper.reset();
+    await mongoose.disconnect();
+    await mockgoose.mongodHelper.mongoBin.childProcess.on('exit', () => {
+      mockgoose.mongodHelper.mongoBin.childProcess.kill('SIGTERM');
+    });
   })
 })

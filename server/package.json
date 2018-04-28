@@ -8,8 +8,7 @@
   "scripts": {
     "start": "node index.js",
     "start:watch": "nodemon",
-    "//": "--forceExit workaround, see https://github.com/Mockgoose/Mockgoose/issues/33",
-    "test": "jest --forceExit",
+    "test": "jest",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js"
   },

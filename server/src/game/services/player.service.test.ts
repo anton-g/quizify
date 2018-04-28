@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { Mockgoose } from "mockgoose";
+import { mockgooseProvider } from '../../providers/mockgoose.provider';
+import { Mockgoose } from "mockgoose-fix";
 import * as mongoose from "mongoose";
 import { getModelToken } from '@nestjs/mongoose';
-import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { PlayerService } from './player.service';
 import { GameService } from './game.service';
 import { GameSchema } from '../schemas/game.schema';
@@ -196,7 +196,10 @@ describe('PlayerService', () => {
   })
 
   afterAll(async () => {
-    await mockgoose.helper.reset()
-    await mongoose.disconnect()
+    await mockgoose.helper.reset();
+    await mongoose.disconnect();
+    await mockgoose.mongodHelper.mongoBin.childProcess.on('exit', () => {
+      mockgoose.mongodHelper.mongoBin.childProcess.kill('SIGTERM');
+    });
   })
 })
