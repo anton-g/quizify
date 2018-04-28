@@ -29,9 +29,11 @@
   },
   "devDependencies": {
     "@types/jest": "^22.2.2",
+    "@types/mongoose": "^5.0.10",
     "@types/node": "^9.4.7",
     "jest": "^22.4.3",
     "mockgoose": "^7.3.5",
+    "mockgoose-fix": "^7.3.6",
     "nodemon": "^1.17.1",
     "ts-jest": "^22.4.2",
     "ts-node": "^5.0.1"

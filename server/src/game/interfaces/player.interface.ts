@@ -1,4 +1,6 @@
-export interface Player {
+import { Document } from 'mongoose';
+
+export interface Player extends Document {
   readonly name: string;
   readonly score: number;
   readonly _id: string;

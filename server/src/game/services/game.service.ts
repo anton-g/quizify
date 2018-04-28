@@ -59,7 +59,7 @@ export class GameService {
     if (game.state !== GameState.Lobby) return Promise.reject(new UserException('Invalid game state'))
     if (!joinGameDto.name) return Promise.reject(new UserException('Missing name'))
 
-    const player = this.playerModel({
+    const player = new this.playerModel({
       name: joinGameDto.name,
       score: 0,
       socketId: undefined
