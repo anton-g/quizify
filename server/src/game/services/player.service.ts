@@ -18,7 +18,7 @@ export class PlayerService {
       { "players._id": playerId }
     ).exec()
 
-    if (!(games && games[0] && games[0].players)) return undefined
+    if (!games || !games[0] || !games[0].players) return Promise.reject(new UserException(`Can't find player with id ${playerId}`))
 
     return games[0].players.find(p => p._id.toString() == playerId)
   }
@@ -35,7 +35,7 @@ export class PlayerService {
   }
 
   async connect(playerId: string, socketId: string): Promise<Game> {
-    if (!socketId) return Promise.reject({ error: 'Missing socketId' })
+    if (!socketId) return Promise.reject(new UserException('Missing socketId'))
     if (!mongoose.Types.ObjectId.isValid(playerId)) return Promise.reject(new UserException('Invalid playerId'))
 
     return await this.gameModel.findOneAndUpdate(
@@ -49,18 +49,30 @@ export class PlayerService {
   }
 
   async disconnect(playerSocketId: string): Promise<Game> {
-    return await this.gameModel.findOneAndUpdate(
+    if (!playerSocketId) return Promise.reject(new UserException('Invalid socket id'))
+
+    const result: Game = await this.gameModel.findOneAndUpdate(
       { "players.socketId": playerSocketId },
       { $set: { "players.$.connected": false } },
       { new: true }
     ).exec()
+
+    return result
   }
 
   async reconnect(oldSocketId: string, newSocketId: string): Promise<Game> {
-    return await this.gameModel.findOneAndUpdate(
+    if (!oldSocketId) return Promise.reject(new UserException('Invalid old socket id'))
+    if (!newSocketId) return Promise.reject(new UserException('Invalid new socket id'))
+
+    const result: Game = await this.gameModel.findOneAndUpdate(
       { "players.socketId": oldSocketId },
-      { $set: { "players.$.socketId": newSocketId } },
+      { $set: {
+        "players.$.socketId": newSocketId,
+        "players.$.connected": true
+      } },
       { new: true }
     ).exec()
+
+    return result
   }
 }

@@ -89,6 +89,14 @@ describe('PlayerService', () => {
       const p = await playerService.find(player._id)
       expect(p._id).toEqual(player._id)
     })
+
+    it('should throw error if player does not exist', async () => {
+      const playerId = 'incorrect_id'
+      expect.assertions(1)
+      await expect(playerService.find(playerId)).rejects.toEqual(
+        new UserException(`Can't find player with id ${playerId}`)
+      )
+    })
   })
 
   describe('score', () => {
@@ -128,6 +136,62 @@ describe('PlayerService', () => {
       await expect(playerService.score('', 0)).rejects.toEqual(rejection)
       await expect(playerService.score('abcdkje', 0)).rejects.toEqual(rejection)
       await expect(playerService.score('ajskldfjlkasdjlfajskldfjasd', 0)).rejects.toEqual(rejection)
+    })
+  })
+
+  describe('disconnect', () => {
+    let game: Game;
+    let player: Player;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      player = await gameService.join(game.key, { name: 'Nisse' })
+      game = await playerService.connect(player._id, 'disconnect_123')
+      player = await playerService.find(player._id)
+    })
+
+    it('should set connected to false', async () => {
+      await playerService.disconnect(player.socketId)
+      player = await playerService.find(player._id)
+      expect(player.connected).toBe(false)
+    })
+
+    it('should reject if socket id is missing', async () => {
+      expect.assertions(1)
+      await expect(playerService.disconnect('')).rejects.toEqual(new UserException('Invalid socket id'))
+    })
+  })
+
+  describe('reconnect', () => {
+    let game: Game;
+    let player: Player;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      player = await gameService.join(game.key, { name: 'Nisse' })
+      game = await playerService.connect(player._id, 'reconnect_123')
+      game = await playerService.disconnect('reconnect_123')
+      player = await playerService.find(player._id)
+    })
+
+    it('should update socketid', async () => {
+      await playerService.reconnect(player.socketId, 'reconnect_456')
+      player = await playerService.find(player._id)
+      expect(player.socketId).toBe('reconnect_456')
+    })
+
+    it('should set connected to true', async () => {
+      await playerService.reconnect(player.socketId, 'reconnect_456')
+      player = await playerService.find(player._id)
+      expect(player.connected).toBe(true)
+    })
+
+    it('should reject if params are missing', async () => {
+      expect.assertions(2)
+      await expect(playerService.reconnect('', 'reconnect_456')).rejects.toEqual(new UserException('Invalid old socket id'))
+      await expect(playerService.reconnect(player.socketId, '')).rejects.toEqual(new UserException('Invalid new socket id'))
     })
   })
 
