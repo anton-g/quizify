@@ -9,6 +9,7 @@
     "start": "node index.js",
     "start:watch": "nodemon",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js"
   },
