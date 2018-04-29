@@ -7,3 +7,5 @@
 *.ntvs*
 *.njsproj
 *.sln
+
+dist/

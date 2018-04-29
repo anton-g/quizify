@@ -7,11 +7,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "start:watch": "nodemon",
+    "start:dev": "nodemon",
+    "prestart:prod": "rm -rf dist && tsc",
+    "start:prod": "node dist/main.js",
     "test": "jest",
-    "test:cov": "jest --coverage",
-    "prestart:prod": "tsc",
-    "start:prod": "node dist/main.js"
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^4.6.6",
