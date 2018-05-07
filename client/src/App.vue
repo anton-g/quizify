@@ -19,7 +19,7 @@ html, body {
 
 #app {
   display: grid;
-  grid-template-columns: 25% auto 25%;
+  grid-template-columns: 28% auto 28%;
   grid-template-rows: 96px auto;
   min-height: 100%;
   background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%);
