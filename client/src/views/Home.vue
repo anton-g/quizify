@@ -33,7 +33,7 @@ export default {
     }
   },
   components: {
-    FontAwesomeIcon,
+    FontAwesomeIcon
   },
   computed: {
     keyIcon () {
@@ -45,11 +45,12 @@ export default {
   },
   methods: {
     join () {
-      if (this.key)
+      if (this.key) {
         this.$store.dispatch('joinQuiz', { key: this.key, name: 'nisse' })
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
