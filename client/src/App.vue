@@ -8,19 +8,18 @@
 
 <style lang="sass" src="bulma"></style>
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Pacifico');
-@import url('https://fonts.googleapis.com/css?family=Roboto:900');
+@import '~@design';
 
 html, body {
   width: 100%;
   height: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: $font-family-default;
 }
 
 #app {
   display: grid;
   grid-template-columns: 28% auto 28%;
-  grid-template-rows: 96px auto;
+  grid-template-rows: $size-12 auto;
   min-height: 100%;
   background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%);
 
@@ -32,10 +31,10 @@ html, body {
   .header {
     grid-column: 2;
     grid-row: 1;
-    padding: 8px;
+    padding: $size-1;
 
     .title {
-      font-family: 'Pacifico', cursive;
+      font-family: $font-family-heading-branded;
       font-weight: normal;
       color: white;
       text-shadow: 1px 1px black;
@@ -47,7 +46,7 @@ html, body {
 
 @media screen and (max-width: 900px) {
   #app {
-    grid-template-columns: 8px auto 8px;
+    grid-template-columns: $size-1 auto $size-1;
   }
 }
 </style>

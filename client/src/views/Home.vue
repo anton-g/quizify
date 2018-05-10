@@ -54,13 +54,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@design';
+
 h2 {
   font-weight: 900;
 }
 
 .join,
 .create {
-  margin-bottom: 24px;
+  margin-bottom: $size-3;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba($color: #000000, $alpha: 0.18);
@@ -70,7 +72,7 @@ h2 {
     border: none;
     width: 100%;
     font-size: 16px;
-    padding: 8px 32px;
+    padding: $size-1 $size-4;
     background-color: hsl(210, 9%, 96%);
     border-radius: 0;
 
@@ -90,7 +92,7 @@ h2 {
   }
 
   h2 {
-    padding: 16px 0 0 16px;
+    padding: $size-2 0 0 $size-2;
   }
 }
 </style>
