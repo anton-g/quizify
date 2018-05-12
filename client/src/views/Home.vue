@@ -1,6 +1,6 @@
 <template lang="pug">
   .home
-    .join
+    card.join
       h2.title Join quiz
       .field
         .control.has-icons-left
@@ -24,7 +24,7 @@
       .field
         .control
           button.button.is-dark.is-fullwidth(@click="join") Join
-    .create
+    card.create
       h2.title Create quiz
       p.subtitle Get started by logging in with Spotify
       button.button.is-fullwidth
@@ -39,6 +39,7 @@
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faKey, faUser } from '@fortawesome/fontawesome-free-solid'
 import { faSpotify } from '@fortawesome/fontawesome-free-brands'
+import Card from '../components/Card.vue'
 
 export default {
   name: 'home',
@@ -49,7 +50,8 @@ export default {
     }
   },
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    Card
   },
   computed: {
     keyIcon () {
@@ -63,9 +65,10 @@ export default {
     }
   },
   methods: {
-    join () {
+    async join () {
       if (this.key) {
-        this.$store.dispatch('joinQuiz', { key: this.key, name: this.name })
+        await this.$store.dispatch('joinQuiz', { key: this.key, name: this.name })
+        this.$router.push({ name: 'PlayerLobby' })
       }
     }
   }
@@ -75,69 +78,59 @@ export default {
 <style lang="scss" scoped>
 @import '~@design';
 
-.join,
-.create {
-  margin-bottom: $size-3;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba($color: #000000, $alpha: 0.18);
-  overflow: hidden;
+.home {
+  .join {
+    margin-bottom: $size-3;
+    padding: 0;
 
-  h2 {
-    font-weight: 900;
-    margin-bottom: $size-2;
-  }
+    input {
+      border: none;
+      width: 100%;
+      font-size: 16px;
+      padding: $size-1 $size-4;
+      background-color: hsl(210, 9%, 96%);
+      border-radius: 0;
 
-  .field:not(:last-child) {
-    margin-bottom: $size-2;
-  }
-}
+      &::placeholder {
+        color: hsl(210, 9%, 66%);
+        text-transform: none;
+      }
 
-.join {
-  input {
-    border: none;
-    width: 100%;
-    font-size: 16px;
-    padding: $size-1 $size-4;
-    background-color: hsl(210, 9%, 96%);
-    border-radius: 0;
-
-    &::placeholder {
-      color: hsl(210, 9%, 66%);
-      text-transform: none;
+      &.key-input {
+        text-transform: uppercase;
+      }
     }
 
-    &.key-input {
-      text-transform: uppercase;
+    h2 {
+      padding: $size-2;
+      margin-bottom: 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 0;
+    }
+
+    .field:not(:last-child) {
+      margin-bottom: $size-2;
     }
   }
 
-  h2 {
-    padding: $size-2 0 0 $size-2;
-  }
+  .create {
+    .subtitle {
+      margin-bottom: $size-2;
+    }
 
-  button {
-    border: none;
-    border-radius: 0;
-  }
-}
+    button {
+      margin-bottom: $size-2;
+      background-color: #1DB954;
+      border-color: transparent;
+      color: white;
+      font-weight: 700;
 
-.create {
-  padding: $size-2;
-
-  .subtitle {
-    margin-bottom: $size-2;
-  }
-
-  button {
-    margin-bottom: $size-2;
-    background-color: #1DB954;
-    border-color: transparent;
-    color: white;
-    font-weight: 700;
-
-    svg {
-      margin-left: $size-1;
+      svg {
+        margin-left: $size-1;
+      }
     }
   }
 }
