@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import PlayerLobby from './views/PlayerLobby.vue'
+import PlayerPlay from './views/PlayerPlay.vue'
 
 Vue.use(Router)
 
@@ -14,8 +15,13 @@ export default new Router({
     },
     {
       path: '/lobby',
-      name: 'PlayerLobby',
+      name: 'player-lobby',
       component: PlayerLobby
+    },
+    {
+      path: '/play',
+      name: 'player-play',
+      component: PlayerPlay
     }
   ]
 })

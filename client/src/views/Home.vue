@@ -68,7 +68,7 @@ export default {
     async join () {
       if (this.key) {
         await this.$store.dispatch('joinQuiz', { key: this.key, name: this.name })
-        this.$router.push({ name: 'PlayerLobby' })
+        this.$router.push({ name: 'player-lobby' })
       }
     }
   }

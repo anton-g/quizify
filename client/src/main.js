@@ -7,7 +7,7 @@ import io from 'socket.io-client'
 
 Vue.config.productionTip = false
 
-Vue.use(VueSocketio, io('http://localhost:3000'))
+Vue.use(VueSocketio, io('http://localhost:3000'), store)
 
 new Vue({
   router,

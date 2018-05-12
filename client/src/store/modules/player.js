@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Vue from 'vue'
+import router from '@/router'
 
 import * as types from '../mutation-types'
 
@@ -40,6 +41,9 @@ const actions = {
     // TODO ack
     commit(types.PLAYER_JOIN, player)
     commit(types.UPDATE_QUIZ_INFO, game)
+  },
+  socket_start: ({ commit, state }) => {
+    router.push({ name: 'player-play' })
   }
 }
 
