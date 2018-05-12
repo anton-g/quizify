@@ -6,6 +6,8 @@ import * as types from '../mutation-types'
 const socketBus = new Vue()
 
 const state = {
+  me: undefined,
+  quizInfo: undefined
 }
 
 const getters = {
@@ -13,6 +15,10 @@ const getters = {
 
 const mutations = {
   [types.PLAYER_JOIN] (state, player) {
+    state.me = player
+  },
+  [types.UPDATE_QUIZ_INFO] (state, quizInfo) {
+    state.quizInfo = quizInfo
   }
 }
 
@@ -27,7 +33,13 @@ const actions = {
       return
     }
 
-    socketBus.$socket.emit('JOIN', data.id)
+    const player = data.player
+    const game = data.game
+
+    socketBus.$socket.emit('JOIN', player.id)
+    // TODO ack
+    commit(types.PLAYER_JOIN, player)
+    commit(types.UPDATE_QUIZ_INFO, game)
   }
 }
 

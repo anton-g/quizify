@@ -5,6 +5,8 @@ import { JoinGameDto } from "./dtos/join-game.dto";
 import { GameDto } from "./dtos/game.dto";
 import { PlayerDto } from "./dtos/player.dto";
 import { UserExceptionFilter } from "../common/user-exception.filter";
+import { JoinedGameDto } from "./dtos/joined-game.dto";
+import { PlayerGameInfoDto } from "./dtos/player-game-info.dto";
 
 @Controller('game')
 @UseFilters(new UserExceptionFilter())
@@ -20,10 +22,17 @@ export class GameController {
 
     @HttpCode(200)
     @Post(':key/join')
-    async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<PlayerDto> {
+    async join (@Body() joinGameDto: JoinGameDto, @Param() params): Promise<JoinedGameDto> {
       const player = await this.gameService.join(params.key, joinGameDto)
       if (!player) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
-      return new PlayerDto(player)
+
+      const game = await this.gameService.getByPlayerId(player.id)
+      if (!game) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
+
+      return {
+        player: new PlayerDto(player),
+        game: new PlayerGameInfoDto(game)
+      }
     }
 
     @HttpCode(200)
