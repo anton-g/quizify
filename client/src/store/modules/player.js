@@ -1,6 +1,9 @@
 import axios from 'axios'
+import Vue from 'vue'
 
 import * as types from '../mutation-types'
+
+const socketBus = new Vue()
 
 const state = {
 }
@@ -14,14 +17,17 @@ const mutations = {
 }
 
 const actions = {
-  joinQuiz ({ commit, state }, { key, name }) {
-    axios.post(`http://localhost:3000/game/${key}/join`, {
+  async joinQuiz ({ commit, state }, { key, name }) {
+    const { status, data } = await axios.post(`http://localhost:3000/game/${key}/join`, {
       name: name
-    }).then(({ status, data }) => {
-      if (status !== 200 || data.error) {
-        console.log('error')
-      }
     })
+
+    if (status !== 200 || data.error) {
+      console.log('error')
+      return
+    }
+
+    socketBus.$socket.emit('JOIN', data.id)
   }
 }
 
