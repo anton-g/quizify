@@ -30,6 +30,8 @@ h1, h2, h3, h4, h5 {
   .main {
     grid-column: 2;
     grid-row: 2;
+
+    margin-bottom: $size-3;
   }
 
   .header {

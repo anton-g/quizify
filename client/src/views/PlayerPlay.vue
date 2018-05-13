@@ -2,7 +2,7 @@
   .play
     card.buzzer
       h2.title Buzzer
-      button.button.is-fullwidth.is-danger(@click="buzz")
+      button.button.is-fullwidth.is-danger(@click="buzz", :disabled="paused")
     card.stats
       h2.title Stats
 </template>
@@ -16,7 +16,14 @@ export default {
   },
   methods: {
     buzz () {
-      this.$socket.emit('BUZZ', this.$store.state.player.me.id)
+      if (!this.paused) {
+        this.$socket.emit('BUZZ', this.$store.state.player.me.id)
+      }
+    }
+  },
+  computed: {
+    paused () {
+      return this.$store.state.player.paused
     }
   }
 }

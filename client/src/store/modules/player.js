@@ -8,7 +8,8 @@ const socketBus = new Vue()
 
 const state = {
   me: undefined,
-  quizInfo: undefined
+  quizInfo: undefined,
+  paused: false
 }
 
 const getters = {
@@ -20,6 +21,12 @@ const mutations = {
   },
   [types.UPDATE_QUIZ_INFO] (state, quizInfo) {
     state.quizInfo = quizInfo
+  },
+  [types.SOCKET_PAUSE] (state) {
+    state.paused = true
+  },
+  [types.SOCKET_RESUME] (state) {
+    state.paused = false
   }
 }
 
