@@ -27,6 +27,11 @@ const mutations = {
   },
   [types.SOCKET_RESUME] (state) {
     state.paused = false
+  },
+  [types.SOCKET_SCORED] (state, score) {
+    if (state.me) {
+      state.me.score += score
+    }
   }
 }
 

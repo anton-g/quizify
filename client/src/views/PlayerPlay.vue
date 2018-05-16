@@ -5,6 +5,7 @@
       button.button.is-fullwidth.is-danger(@click="buzz", :disabled="paused")
     card.stats
       h2.title Stats
+      p Score: {{ playerScore }}
 </template>
 
 <script>
@@ -24,6 +25,9 @@ export default {
   computed: {
     paused () {
       return this.$store.state.player.paused
+    },
+    playerScore () {
+      return this.$store.state.player.me.score
     }
   }
 }
