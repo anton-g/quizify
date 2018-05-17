@@ -11,6 +11,8 @@ import { PlayerService } from '../services/player.service';
 import { GameService } from '../services/game.service';
 import { GameEvents, GameState } from '../game.state';
 import { Player } from '../interfaces/player.interface';
+import { GameDto } from '../dtos/game.dto';
+import { extractRequest } from '../../common/GatewayHelpers';
 
 @WebSocketGateway()
 export class HostGateway {
@@ -22,9 +24,13 @@ export class HostGateway {
   ) {}
 
   @SubscribeMessage(GameEvents.Host)
-  onHost(client: Socket, keys: any) {
+  async onHost(client: Socket, req) {
+    let { data: keys, ack } = extractRequest(req)
+
     this.gameService.setHost(keys.key, keys.secret, client.id)
-    this.gameService.setState(keys.key, GameState.Lobby)
+    const game = await this.gameService.setState(keys.key, GameState.Lobby)
+
+    ack(new GameDto(game))
 
     console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
   }
