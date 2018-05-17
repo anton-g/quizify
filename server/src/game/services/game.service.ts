@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Component } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { GameSchema } from '../schemas/game.schema';
 import { Game } from '../interfaces/game.interface';
@@ -11,11 +11,11 @@ import { Player } from '../interfaces/player.interface';
 import { GameState } from '../game.state';
 import { UserException } from '../../common/user.exception';
 
-@Component()
+@Injectable()
 export class GameService {
   constructor(
-    @InjectModel(GameSchema) private readonly gameModel: Model<Game>,
-    @InjectModel(PlayerSchema) private readonly playerModel: Model<Player>
+    @InjectModel('Game') private readonly gameModel: Model<Game>,
+    @InjectModel('Player') private readonly playerModel: Model<Player>
   ) { }
 
   async create(): Promise<Game> {

@@ -14,17 +14,17 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@nestjs/common": "^4.6.6",
-    "@nestjs/core": "^4.6.6",
-    "@nestjs/mongoose": "^3.0.1",
-    "@nestjs/testing": "^4.6.6",
-    "@nestjs/websockets": "^4.6.6",
+    "@nestjs/common": "^5.0.0",
+    "@nestjs/core": "^5.0.0",
+    "@nestjs/mongoose": "^4.0.0",
+    "@nestjs/testing": "^5.0.0",
+    "@nestjs/websockets": "^5.0.0",
     "@types/socket.io": "^1.4.33",
     "cors": "^2.8.4",
     "mongoose": "^5.0.9",
     "nanoid": "^1.0.2",
     "reflect-metadata": "^0.1.12",
-    "rxjs": "^5.5.6",
+    "rxjs": "^6.0.0",
     "typescript": "^2.7.2"
   },
   "devDependencies": {
@@ -32,7 +32,6 @@
     "@types/mongoose": "^5.0.10",
     "@types/node": "^9.4.7",
     "jest": "^22.4.3",
-    "mockgoose": "^7.3.5",
     "mockgoose-fix": "^7.3.6",
     "nodemon": "^1.17.1",
     "ts-jest": "^22.4.2",

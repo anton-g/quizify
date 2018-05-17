@@ -19,13 +19,13 @@ describe('PlayerService', () => {
   let gameService: GameService;
 
   const gameProvider = {
-    provide: getModelToken(GameSchema),
+    provide: getModelToken('Game'),
     useFactory: async connection => connection.model('game', GameSchema),
     inject: [mockgooseProvider.provide],
   } as any;
 
   const playerProvider = {
-    provide: getModelToken(PlayerSchema),
+    provide: getModelToken('Player'),
     useFactory: async connection => connection.model('player', PlayerSchema),
     inject: [mockgooseProvider.provide],
   } as any;

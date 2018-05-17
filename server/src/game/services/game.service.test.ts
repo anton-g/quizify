@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { GameService } from "./game.service";
-import { Mockgoose } from "mockgoose";
+import { Mockgoose } from "mockgoose-fix";
 import * as mongoose from "mongoose";
 import { getModelToken } from '@nestjs/mongoose';
 import { GameSchema } from '../schemas/game.schema';
@@ -20,13 +20,13 @@ describe('GameService', () => {
   let gameModel: Model<Game>
 
   const gameProvider = {
-    provide: getModelToken(GameSchema),
+    provide: getModelToken('Game'),
     useFactory: async connection => connection.model('game', GameSchema),
     inject: [mockgooseProvider.provide],
   } as any;
 
   const playerProvider = {
-    provide: getModelToken(PlayerSchema),
+    provide: getModelToken('Player'),
     useFactory: async connection => connection.model('player', PlayerSchema),
     inject: [mockgooseProvider.provide],
   } as any;

@@ -14,7 +14,7 @@ import { HostGateway } from "./gateways/host.gateway";
       { name: 'Player', schema: PlayerSchema }
     ])],
     controllers: [GameController],
-    components: [
+    providers: [
       GameService,
       PlayerService,
       PlayerGateway,
