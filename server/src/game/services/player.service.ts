@@ -28,7 +28,8 @@ export class PlayerService {
 
     const result: Game = await this.gameModel.findOneAndUpdate(
       { "players._id": playerId },
-      { $inc: { "players.$.score": score } }
+      { $inc: { "players.$.score": score } },
+      { new: true }
     ).exec()
 
     return result.players.find(p => p._id == playerId)

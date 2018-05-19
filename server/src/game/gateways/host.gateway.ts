@@ -13,6 +13,7 @@ import { GameEvents, GameState } from '../game.state';
 import { Player } from '../interfaces/player.interface';
 import { GameDto } from '../dtos/game.dto';
 import { extractRequest } from '../../common/GatewayHelpers';
+import { PlayerDto } from '../dtos/player.dto';
 
 @WebSocketGateway()
 export class HostGateway {
@@ -36,27 +37,39 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Start)
-  async onStart(client: Socket, key: string) {
-    const game = await this.gameService.get(key)
-    this.gameService.setState(game.key, GameState.Playing)
+  async onStart(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
+
+    let game = await this.gameService.get(key)
+    game = await this.gameService.setState(game.key, GameState.Playing)
     this.server.to(key).emit(GameEvents.Start)
+
+    ack(new GameDto(game))
 
     console.log(`[${key}] Start game`)
   }
 
   @SubscribeMessage(GameEvents.Resume)
-  async onResume(client: Socket, key: string) {
+  async onResume(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
+
     this.server.to(key).emit(GameEvents.Resume)
-    this.gameService.setState(key, GameState.Playing)
+    const game = await this.gameService.setState(key, GameState.Playing)
+
+    ack(new GameDto(game))
 
     console.log(`[${key}] Resume game`)
   }
 
   @SubscribeMessage(GameEvents.Score)
-  async onScore(client: Socket, userId: string) {
+  async onScore(client: Socket, req) {
+    let { data: userId, ack } = extractRequest(req)
+
     const score: number = 1
     const player: Player = await this.playerService.score(userId, score)
     this.server.to(player.socketId).emit(GameEvents.Scored, score)
+
+    ack(new PlayerDto(player))
 
     console.log(`[?] Player ${player.name} (${userId}) scored ${score}`)
   }
