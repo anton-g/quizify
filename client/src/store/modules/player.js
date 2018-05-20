@@ -8,13 +8,15 @@ const socketBus = new Vue()
 
 const state = {
   me: undefined,
-  quizInfo: undefined,
-  paused: false
+  quizInfo: undefined
 }
 
 const getters = {
   isConnectedToQuiz (state, getters, rootState) {
     return rootState.common.connected && !!state.me && !!state.quizInfo
+  },
+  paused (state) {
+    return state.quizInfo && state.quizInfo.state === 'PAUSED'
   }
 }
 
@@ -26,10 +28,10 @@ const mutations = {
     state.quizInfo = quizInfo
   },
   [types.SOCKET_PAUSE] (state) {
-    state.paused = true
+    state.quizInfo.state = 'PAUSED'
   },
   [types.SOCKET_RESUME] (state) {
-    state.paused = false
+    state.quizInfo.state = 'PLAYING'
   },
   [types.SOCKET_SCORED] (state, score) {
     if (state.me) {

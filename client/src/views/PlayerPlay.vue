@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     paused () {
-      return this.$store.state.player.paused
+      return this.$store.getters.paused
     },
     playerScore () {
       return this.$store.state.player.me.score
