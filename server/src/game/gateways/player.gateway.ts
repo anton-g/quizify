@@ -12,6 +12,8 @@ import { GameService } from '../services/game.service';
 import { GameEvents, GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { GameDto } from '../dtos/game.dto';
+import { extractRequest } from '../../common/GatewayHelpers';
+import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 
 @WebSocketGateway()
 export class PlayerGateway implements OnGatewayDisconnect {
@@ -23,16 +25,22 @@ export class PlayerGateway implements OnGatewayDisconnect {
   ) {}
 
   @SubscribeMessage(GameEvents.Join)
-  async onJoin(client: Socket, userId: string) {
+  async onJoin(client: Socket, req) {
+    let { data: userId, ack } = extractRequest(req)
+
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
     this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
+
+    ack(new PlayerGameInfoDto(game))
 
     console.log(`[${game.key}] User ${userId} joined`)
   }
 
   @SubscribeMessage(GameEvents.Buzz)
-  async onBuzz(client: Socket, userId: string) {
+  async onBuzz(client: Socket, req) {
+    let { data: userId, ack } = extractRequest(req)
+
     const game: Game = await this.gameService.getByPlayerId(userId)
     if (game.state !== GameState.Playing) return
 
@@ -40,11 +48,15 @@ export class PlayerGateway implements OnGatewayDisconnect {
     this.gameService.setState(game.key, GameState.Paused)
     this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
 
+    ack()
+
     console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
   @SubscribeMessage(GameEvents.Reconnect)
-  async onReconnect(client: Socket, oldSocketId: string) {
+  async onReconnect(client: Socket, req) {
+    let { data: oldSocketId, ack } = extractRequest(req)
+
     const game: Game = await this.playerService.reconnect(oldSocketId, client.id)
 
     if (!game) return // could not find game to reconnect to
@@ -52,7 +64,8 @@ export class PlayerGateway implements OnGatewayDisconnect {
 
     client.join(game.key)
     this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
-    // TODO: ack game status to user
+
+    ack(new PlayerGameInfoDto(game))
 
     console.log(`[${game.key}] User with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
   }

@@ -3,6 +3,6 @@ export function extractRequest (req: any): { data: any, ack?: Function } {
     const [data, ack] = req
     return { data, ack }
   } else {
-    return { data: req }
+    return { data: req, ack: () => {} }
   }
 }
