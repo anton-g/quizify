@@ -28,7 +28,7 @@ export class HostGateway {
   async onHost(client: Socket, req) {
     let { data: keys, ack } = extractRequest(req)
 
-    this.gameService.setHost(keys.key, keys.secret, client.id)
+    await this.gameService.setHost(keys.key, keys.secret, client.id)
     const game = await this.gameService.setState(keys.key, GameState.Lobby)
 
     ack(new GameDto(game))
