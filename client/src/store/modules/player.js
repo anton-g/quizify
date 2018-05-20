@@ -13,6 +13,9 @@ const state = {
 }
 
 const getters = {
+  isConnectedToQuiz (state, getters, rootState) {
+    return rootState.common.connected && !!state.me && !!state.quizInfo
+  }
 }
 
 const mutations = {

@@ -1,10 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store'
 import Home from './views/Home.vue'
 import PlayerLobby from './views/PlayerLobby.vue'
 import PlayerPlay from './views/PlayerPlay.vue'
 
 Vue.use(Router)
+
+const checkIsConnectedToQuiz = (to, from, next) => {
+  console.log('getters', store.getters)
+  if (store.getters.isConnectedToQuiz) {
+    next()
+  } else {
+    next({ name: 'home' })
+  }
+}
 
 export default new Router({
   routes: [
@@ -16,12 +26,14 @@ export default new Router({
     {
       path: '/lobby',
       name: 'player-lobby',
-      component: PlayerLobby
+      component: PlayerLobby,
+      beforeEnter: checkIsConnectedToQuiz
     },
     {
       path: '/play',
       name: 'player-play',
-      component: PlayerPlay
+      component: PlayerPlay,
+      beforeEnter: checkIsConnectedToQuiz
     }
   ]
 })
