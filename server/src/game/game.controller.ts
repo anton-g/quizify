@@ -29,10 +29,7 @@ export class GameController {
       const game = await this.gameService.getByPlayerId(player.id)
       if (!game) throw new HttpException('Not found', HttpStatus.NOT_FOUND)
 
-      return {
-        player: new PlayerDto(player),
-        game: new PlayerGameInfoDto(game)
-      }
+      return new JoinedGameDto(player, game)
     }
 
     @HttpCode(200)

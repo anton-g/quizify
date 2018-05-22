@@ -59,7 +59,27 @@ const actions = {
     socketBus.$socket.emit('JOIN', player.id, (game) => {
       // Just in case game have been updated
       commit(types.UPDATE_QUIZ_INFO, game)
+
+      localStorage.setItem('socket', socketBus.$socket.id)
+
+      router.push({ name: 'player-lobby' })
     })
+  },
+  async reconnectQuiz ({ commit, state }, data) {
+    const player = data.player
+    const game = data.game
+    commit(types.PLAYER_JOIN, player)
+    commit(types.UPDATE_QUIZ_INFO, game)
+
+    localStorage.setItem('socket', socketBus.$socket.id)
+
+    if (game.state === 'LOBBY') {
+      router.push({ name: 'player-lobby' })
+    } else if (game.state === 'PLAYING' || game.state === 'PAUSED') {
+      router.push({ name: 'player-play' })
+    } else {
+      console.log('-handle game finished-')
+    }
   },
   socket_start: ({ commit, state }) => {
     router.push({ name: 'player-play' })

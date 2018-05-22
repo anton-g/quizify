@@ -53,6 +53,25 @@ export default {
     FontAwesomeIcon,
     Card
   },
+  created () {
+    console.log('Checking if previous connected quiz exists..')
+    const socket = localStorage.getItem('socket')
+    if (!socket) {
+      console.log('Could not find any previous game.')
+      return
+    }
+
+    console.log(`Found previous socket ${socket}, trying to reconnect..`)
+    this.$socket.emit('RECONN', socket, (data) => {
+      if (!data) {
+        console.log('Could not reconnect.. :(')
+        return
+      }
+
+      console.log('Successfully reconnected! Restoring game state..')
+      this.$store.dispatch('reconnectQuiz', data)
+    })
+  },
   computed: {
     keyIcon () {
       return faKey
@@ -68,7 +87,6 @@ export default {
     async join () {
       if (this.key) {
         await this.$store.dispatch('joinQuiz', { key: this.key, name: this.name })
-        this.$router.push({ name: 'player-lobby' })
       }
     }
   }

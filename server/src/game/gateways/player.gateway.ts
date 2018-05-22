@@ -14,6 +14,8 @@ import { Game } from '../interfaces/game.interface';
 import { GameDto } from '../dtos/game.dto';
 import { extractRequest } from '../../common/GatewayHelpers';
 import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
+import { JoinedGameDto } from '../dtos/joined-game.dto';
+import { Player } from '../interfaces/player.interface';
 
 @WebSocketGateway()
 export class PlayerGateway implements OnGatewayDisconnect {
@@ -65,7 +67,13 @@ export class PlayerGateway implements OnGatewayDisconnect {
     client.join(game.key)
     this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
 
-    ack(new PlayerGameInfoDto(game))
+    const player: Player = game.players.find(p => p.socketId == client.id)
+    if (!player) {
+      // something went wrong, should throw error?
+      ack(false)
+    }
+
+    ack(new JoinedGameDto(player, game))
 
     console.log(`[${game.key}] User with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
   }
