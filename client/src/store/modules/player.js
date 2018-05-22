@@ -53,11 +53,13 @@ const actions = {
 
     const player = data.player
     const game = data.game
-
-    socketBus.$socket.emit('JOIN', player.id)
-    // TODO ack
     commit(types.PLAYER_JOIN, player)
     commit(types.UPDATE_QUIZ_INFO, game)
+
+    socketBus.$socket.emit('JOIN', player.id, (game) => {
+      // Just in case game have been updated
+      commit(types.UPDATE_QUIZ_INFO, game)
+    })
   },
   socket_start: ({ commit, state }) => {
     router.push({ name: 'player-play' })
