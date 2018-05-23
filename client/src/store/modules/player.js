@@ -65,24 +65,35 @@ const actions = {
       router.push({ name: 'player-lobby' })
     })
   },
-  async reconnectQuiz ({ commit, state }, data) {
-    const player = data.player
-    const game = data.game
-    commit(types.PLAYER_JOIN, player)
-    commit(types.UPDATE_QUIZ_INFO, game)
+  async reconnectQuiz ({ commit, state }, socket) {
+    console.log('Reconnecting..')
+    socketBus.$socket.emit('RECONN', socket, (data) => {
+      if (!data) {
+        console.log('Could not reconnect.. :(')
+        return
+      }
 
-    localStorage.setItem('socket', socketBus.$socket.id)
+      console.log('Successfully reconnected! Restoring game state..')
+      const player = data.player
+      const game = data.game
+      commit(types.PLAYER_JOIN, player)
+      commit(types.UPDATE_QUIZ_INFO, game)
 
-    if (game.state === 'LOBBY') {
-      router.push({ name: 'player-lobby' })
-    } else if (game.state === 'PLAYING' || game.state === 'PAUSED') {
-      router.push({ name: 'player-play' })
-    } else {
-      console.log('-handle game finished-')
-    }
+      localStorage.setItem('socket', socketBus.$socket.id)
+
+      if (game.state === 'LOBBY') {
+        router.push({ name: 'player-lobby' })
+      } else if (game.state === 'PLAYING' || game.state === 'PAUSED') {
+        router.push({ name: 'player-play' })
+      } else {
+        // TODO handle other states
+        console.log('-unknown state-')
+      }
+    })
   },
   socket_start: ({ commit, state }) => {
     router.push({ name: 'player-play' })
+    // TODO update game state
   }
 }
 

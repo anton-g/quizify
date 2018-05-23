@@ -62,15 +62,7 @@ export default {
     }
 
     console.log(`Found previous socket ${socket}, trying to reconnect..`)
-    this.$socket.emit('RECONN', socket, (data) => {
-      if (!data) {
-        console.log('Could not reconnect.. :(')
-        return
-      }
-
-      console.log('Successfully reconnected! Restoring game state..')
-      this.$store.dispatch('reconnectQuiz', data)
-    })
+    this.$store.dispatch('reconnectQuiz', socket)
   },
   computed: {
     keyIcon () {
