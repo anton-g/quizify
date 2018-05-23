@@ -67,7 +67,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
     client.join(game.key)
     this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
 
-    const player: Player = game.players.find(p => p.socketId == client.id)
+    const player: Player = game.players.find(p => p.socketId === client.id)
     if (!player) {
       // something went wrong, should throw error?
       ack(false)

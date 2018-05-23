@@ -6,5 +6,7 @@ export const GameSchema = new mongoose.Schema({
   key: String,
   secret: String,
   hostSocket: String,
-  players: [PlayerSchema]
+  players: [PlayerSchema],
+  questions: Array,
+  currentQuestion: Number
 });

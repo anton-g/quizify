@@ -22,11 +22,19 @@ export class GameService {
     const secret: string = nanoid()
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
+    const questions = [
+      'This is a question?',
+      'Is this a question',
+      'Is this real life'
+    ]
+
     const game = new this.gameModel({
       state: GameState.Created,
       secret: secret,
       key: key,
-      hostSocket: undefined
+      hostSocket: undefined,
+      questions: questions,
+      currentQuestion: 1
     })
     return await game.save()
   }
