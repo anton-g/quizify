@@ -100,6 +100,9 @@ const actions = {
   },
   socket_nextQuestion: ({ commit }, data) => {
     commit(types.UPDATE_QUIZ_INFO, data)
+  },
+  socket_prevQuestion: ({ commit }, data) => {
+    commit(types.UPDATE_QUIZ_INFO, data)
   }
 }
 

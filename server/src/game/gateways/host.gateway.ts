@@ -104,7 +104,25 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.PrevQuestion)
-  async onPrevQuestion(client: Socket) {
+  async onPrevQuestion(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
 
+    let game = await this.gameService.get(key)
+    if (!game || game.hostSocket !== client.id || game.currentQuestion <= 1) {
+      return
+    }
+
+    game = await this.gameService.update(game.key, {
+      currentQuestion: game.currentQuestion - 1,
+    })
+
+    const gameUpdate: Partial<PlayerGameInfoDto> = {
+      currentQuestion: game.currentQuestion
+    }
+    this.server.to(game.key).emit(GameEvents.PrevQuestion, gameUpdate)
+
+    ack()
+
+    console.log(`[${game.key}] Previous question (${game.currentQuestion}/${game.questions.length})`)
   }
 }
