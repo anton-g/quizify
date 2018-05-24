@@ -83,7 +83,11 @@ export class GameService {
     return await this.gameModel.findOne({ key: key }).exec()
   }
 
+  async update(key: string, game: Partial<Game>): Promise<Game> {
+    return await this.gameModel.findOneAndUpdate({ 'key': key }, game, { new: true }).exec()
+  }
+
   async getByPlayerId(playerId: string): Promise<Game> {
-    return await this.gameModel.findOne({ "players._id": playerId })
+    return await this.gameModel.findOne({ "players._id": playerId }).exec()
   }
 }

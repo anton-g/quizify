@@ -14,6 +14,8 @@ import { Player } from '../interfaces/player.interface';
 import { GameDto } from '../dtos/game.dto';
 import { extractRequest } from '../../common/GatewayHelpers';
 import { PlayerDto } from '../dtos/player.dto';
+import { Game } from '../interfaces/game.interface';
+import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 
 @WebSocketGateway()
 export class HostGateway {
@@ -42,7 +44,11 @@ export class HostGateway {
 
     let game = await this.gameService.get(key)
     game = await this.gameService.setState(game.key, GameState.Playing)
-    this.server.to(key).emit(GameEvents.Start)
+
+    const gameUpdate: Partial<PlayerGameInfoDto> = {
+      state: game.state
+    }
+    this.server.to(key).emit(GameEvents.Start, gameUpdate)
 
     ack(new GameDto(game))
 
@@ -72,5 +78,33 @@ export class HostGateway {
     ack(new PlayerDto(player))
 
     console.log(`[?] Player ${player.name} (${userId}) scored ${score}`)
+  }
+
+  @SubscribeMessage(GameEvents.NextQuestion)
+  async onNextQuestion(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
+
+    let game = await this.gameService.get(key)
+    if (!game || game.hostSocket !== client.id || game.currentQuestion === game.questions.length) {
+      return
+    }
+
+    game = await this.gameService.update(game.key, {
+      currentQuestion: game.currentQuestion + 1,
+    })
+
+    const gameUpdate: Partial<PlayerGameInfoDto> = {
+      currentQuestion: game.currentQuestion
+    }
+    this.server.to(game.key).emit(GameEvents.NextQuestion, gameUpdate)
+
+    ack()
+
+    console.log(`[${game.key}] Next question (${game.currentQuestion}/${game.questions.length})`)
+  }
+
+  @SubscribeMessage(GameEvents.PrevQuestion)
+  async onPrevQuestion(client: Socket) {
+
   }
 }

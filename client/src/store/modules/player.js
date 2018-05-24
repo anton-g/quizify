@@ -24,8 +24,11 @@ const mutations = {
   [types.PLAYER_JOIN] (state, player) {
     state.me = player
   },
-  [types.UPDATE_QUIZ_INFO] (state, quizInfo) {
-    state.quizInfo = quizInfo
+  [types.UPDATE_QUIZ_INFO] (state, newData) {
+    state.quizInfo = {
+      ...state.quizInfo,
+      ...newData
+    }
   },
   [types.SOCKET_PAUSE] (state) {
     state.quizInfo.state = 'PAUSED'
@@ -91,9 +94,12 @@ const actions = {
       }
     })
   },
-  socket_start: ({ commit, state }) => {
+  socket_start: ({ commit, state }, data) => {
     router.push({ name: 'player-play' })
-    // TODO update game state
+    commit(types.UPDATE_QUIZ_INFO, data)
+  },
+  socket_nextQuestion: ({ commit }, data) => {
+    commit(types.UPDATE_QUIZ_INFO, data)
   }
 }
 

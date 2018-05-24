@@ -17,5 +17,7 @@ export enum GameEvents {
   Buzzed = "BUZZED",
   Score = "SCORE",
   Scored = "SCORED",
-  Reconnect = "RECONN"
+  Reconnect = "RECONN",
+  NextQuestion = "NEXT_QUESTION",
+  PrevQuestion = "PREV_QUESTION"
 }
