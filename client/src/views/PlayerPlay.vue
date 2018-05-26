@@ -7,7 +7,7 @@
     card.stats
       h2.title Stats
       p Score: {{ playerScore }}
-      p Question: {{ currentQuestion }}
+      p Question: {{ currentQuestion }}
 </template>
 
 <script>

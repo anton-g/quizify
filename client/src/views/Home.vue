@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { SOCKET_STORAGE_ITEM } from '../common/constants'
+
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faKey, faUser } from '@fortawesome/fontawesome-free-solid'
 import { faSpotify } from '@fortawesome/fontawesome-free-brands'
@@ -55,7 +57,7 @@ export default {
   },
   created () {
     console.log('Checking if previous connected quiz exists..')
-    const socket = localStorage.getItem('socket')
+    const socket = localStorage.getItem(SOCKET_STORAGE_ITEM)
     if (!socket) {
       console.log('Could not find any previous game.')
       return

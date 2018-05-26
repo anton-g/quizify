@@ -4,6 +4,8 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
+import { SOCKET_STORAGE_ITEM } from '../../common/constants'
+
 const socketBus = new Vue()
 
 const state = {
@@ -63,7 +65,7 @@ const actions = {
       // Just in case game have been updated
       commit(types.UPDATE_QUIZ_INFO, game)
 
-      localStorage.setItem('socket', socketBus.$socket.id)
+      localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
       router.push({ name: 'player-lobby' })
     })
@@ -82,7 +84,7 @@ const actions = {
       commit(types.PLAYER_JOIN, player)
       commit(types.UPDATE_QUIZ_INFO, game)
 
-      localStorage.setItem('socket', socketBus.$socket.id)
+      localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
       if (game.state === 'LOBBY') {
         router.push({ name: 'player-lobby' })
@@ -106,7 +108,10 @@ const actions = {
   },
   socket_endGame: ({ commit }, data) => {
     router.push({ name: 'player-end' })
+
     commit(types.UPDATE_QUIZ_INFO, data)
+
+    localStorage.removeItem(SOCKET_STORAGE_ITEM)
   }
 }
 
