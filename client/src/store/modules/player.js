@@ -103,6 +103,10 @@ const actions = {
   },
   socket_prevQuestion: ({ commit }, data) => {
     commit(types.UPDATE_QUIZ_INFO, data)
+  },
+  socket_endGame: ({ commit }, data) => {
+    router.push({ name: 'player-end' })
+    commit(types.UPDATE_QUIZ_INFO, data)
   }
 }
 

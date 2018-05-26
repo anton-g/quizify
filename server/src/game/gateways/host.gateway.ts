@@ -125,4 +125,26 @@ export class HostGateway {
 
     console.log(`[${game.key}] Previous question (${game.currentQuestion}/${game.questions.length})`)
   }
+
+  @SubscribeMessage(GameEvents.EndGame)
+  async onEndGame(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
+
+    let game = await this.gameService.get(key)
+    if (!game || game.hostSocket !== client.id) {
+      return
+    }
+
+    game = await this.gameService.setState(game.key, GameState.Ended)
+
+    const gameUpdate: Partial<PlayerGameInfoDto> = {
+      state: game.state
+    }
+
+    this.server.to(game.key).emit(GameEvents.EndGame, gameUpdate)
+
+    ack()
+
+    console.log(`[${game.key}] Game ended`)
+  }
 }

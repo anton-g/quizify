@@ -3,6 +3,7 @@ export enum GameState {
   Lobby = "LOBBY",
   Playing = "PLAYING",
   Paused = "PAUSED",
+  Ended = "ENDED",
   Done = "DONE"
 }
 
@@ -19,5 +20,6 @@ export enum GameEvents {
   Scored = "SCORED",
   Reconnect = "RECONN",
   NextQuestion = "NEXT_QUESTION",
-  PrevQuestion = "PREV_QUESTION"
+  PrevQuestion = "PREV_QUESTION",
+  EndGame = "END_GAME"
 }

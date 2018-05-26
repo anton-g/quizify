@@ -4,6 +4,7 @@ import store from './store'
 import Home from './views/Home.vue'
 import PlayerLobby from './views/PlayerLobby.vue'
 import PlayerPlay from './views/PlayerPlay.vue'
+import PlayerEnd from './views/PlayerEnd.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,12 @@ export default new Router({
       path: '/play',
       name: 'player-play',
       component: PlayerPlay,
+      beforeEnter: checkIsConnectedToQuiz
+    },
+    {
+      path: '/end',
+      name: 'player-end',
+      component: PlayerEnd,
       beforeEnter: checkIsConnectedToQuiz
     }
   ]
