@@ -10,7 +10,8 @@ const socketBus = new Vue()
 
 const state = {
   me: undefined,
-  quizInfo: undefined
+  quizInfo: undefined,
+  result: undefined
 }
 
 const getters = {
@@ -31,6 +32,9 @@ const mutations = {
       ...state.quizInfo,
       ...newData
     }
+  },
+  [types.SET_RESULT_INFO] (state, data) {
+    state.result = data
   },
   [types.SOCKET_PAUSE] (state) {
     state.quizInfo.state = 'PAUSED'
@@ -109,7 +113,7 @@ const actions = {
   socket_endGame: ({ commit }, data) => {
     router.push({ name: 'player-end' })
 
-    commit(types.UPDATE_QUIZ_INFO, data)
+    commit(types.SET_RESULT_INFO, data.results)
 
     localStorage.removeItem(SOCKET_STORAGE_ITEM)
   }

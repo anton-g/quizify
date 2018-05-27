@@ -16,6 +16,7 @@ import { extractRequest } from '../../common/GatewayHelpers';
 import { PlayerDto } from '../dtos/player.dto';
 import { Game } from '../interfaces/game.interface';
 import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
+import { GameEndedDto } from '../dtos/game-ended.dto';
 
 @WebSocketGateway()
 export class HostGateway {
@@ -137,11 +138,8 @@ export class HostGateway {
 
     game = await this.gameService.setState(game.key, GameState.Ended)
 
-    const gameUpdate: Partial<PlayerGameInfoDto> = {
-      state: game.state
-    }
-
-    this.server.to(game.key).emit(GameEvents.EndGame, gameUpdate)
+    const gameEnded = new GameEndedDto(game)
+    this.server.to(game.key).emit(GameEvents.EndGame, gameEnded)
 
     ack()
 
