@@ -23,20 +23,10 @@ export default {
   },
   computed: {
     results () {
-      let result = [
-        { id: 1, name: 'Anton Gunnarsson', score: 10 },
-        { id: 2, name: 'Nisse', score: 12 },
-        { id: 3, name: 'Solen', score: 4 },
-        { id: 4, name: 'Lilla My', score: 7 },
-        { id: 5, name: 'Carola', score: 3 },
-        { id: 6, name: 'Katten Jansson', score: 5 },
-        { id: 7, name: 'Pelle Svanslös', score: 7 }
-      ]
-      return result.slice().sort((a, b) => b.score - a.score)
-      // return this.$store.state.player.result.slice().sort((a, b) => b.score - a.score)
+      return this.$store.state.player.result.slice().sort((a, b) => b.score - a.score)
     },
     won () {
-      return true // this.results[0].id === this.$store.state.player.me.id
+      return this.results[0].id === this.$store.state.player.me.id
     },
     title () {
       return this.won ? 'You won!' : 'Game ended'
