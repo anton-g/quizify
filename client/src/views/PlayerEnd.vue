@@ -7,7 +7,8 @@
         .icon-wrapper(:style="{ visibility: idx > 0 ? 'hidden' : 'visible' }")
           FontAwesomeIcon(:icon="trophyIcon")
         .name {{ player.name }}
-        .score {{ player.score }} p
+        .score {{ player.score }}
+          span pts
     .field
       .control
         button.button.is-dark.is-pulled-right(@click="home") Home
@@ -87,8 +88,15 @@ export default {
 
       .score {
         margin-left: auto;
-        padding: $size-1 $size-2;
+        padding: 0 $size-2;
         z-index: 2;
+        font-size: $size-3;
+
+        span {
+          margin-left: 2px;
+          font-size: $size-2;
+          color: rgba(0, 0, 0, 0.5)
+        }
       }
 
       .icon-wrapper {
