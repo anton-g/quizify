@@ -9,7 +9,6 @@ import PlayerEnd from './views/PlayerEnd.vue'
 Vue.use(Router)
 
 const checkIsConnectedToQuiz = (to, from, next) => {
-  console.log('getters', store.getters)
   if (store.getters.isConnectedToQuiz) {
     next()
   } else {

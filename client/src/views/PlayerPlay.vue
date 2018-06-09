@@ -5,9 +5,8 @@
       a(@click="buzz", :class="{ disabled: paused }")
         span Buzz!
     card.stats
-      h2.title Stats
-      p Score: {{ playerScore }}
-      p Question: {{ currentQuestion }}
+      h2.title {{ playerScore }} points
+      p Question {{ currentQuestion }} of {{ questionCount }}
 </template>
 
 <script>
@@ -33,6 +32,9 @@ export default {
     },
     currentQuestion () {
       return this.$store.state.player.quizInfo.currentQuestion
+    },
+    questionCount () {
+      return this.$store.state.player.quizInfo.questionCount
     }
   }
 }
