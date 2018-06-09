@@ -6,6 +6,7 @@ import { Game } from '../interfaces/game.interface';
 import { Player } from '../interfaces/player.interface';
 import * as mongoose from "mongoose";
 import { UserException } from '../../common/user.exception';
+import { GameState } from '../game.state';
 
 @Injectable()
 export class PlayerService {
@@ -66,7 +67,10 @@ export class PlayerService {
     if (!newSocketId) return Promise.reject(new UserException('Invalid new socket id'))
 
     const result: Game = await this.gameModel.findOneAndUpdate(
-      { "players.socketId": oldSocketId },
+      {
+        "players.socketId": oldSocketId,
+        "state": { $ne: GameState.Ended }
+      },
       { $set: {
         "players.$.socketId": newSocketId,
         "players.$.connected": true
