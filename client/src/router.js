@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import PlayerLobby from './views/PlayerLobby.vue'
 import PlayerPlay from './views/PlayerPlay.vue'
 import PlayerEnd from './views/PlayerEnd.vue'
+import HostCreate from './views/HostCreate.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       name: 'player-end',
       component: PlayerEnd,
       beforeEnter: checkIsConnectedToQuiz
+    },
+    {
+      path: '/create',
+      name: 'host-create',
+      component: HostCreate
     }
   ]
 })

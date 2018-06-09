@@ -27,7 +27,7 @@
     card.create
       h2.title Create quiz
       p.subtitle Get started by logging in with Spotify
-      button.button.is-fullwidth
+      button.button.is-fullwidth(@click="create")
         | Log in with Spotify
         FontAwesomeIcon(:icon="spotifyIcon", size="lg")
       p
@@ -82,6 +82,9 @@ export default {
       if (this.key) {
         await this.$store.dispatch('joinQuiz', { key: this.key, name: this.name })
       }
+    },
+    create () {
+      this.$store.dispatch('createQuiz')
     }
   }
 }
