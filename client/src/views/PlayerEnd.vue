@@ -1,13 +1,16 @@
 <template lang="pug">
-  card
+  card.results
     h2.title {{ title }}
-    ul
+    ul.result-list
       li.player(v-for="(player, idx) in results")
         .fill(:style="{ width: fillWidth(player) + '%' }")
         .icon-wrapper(:style="{ visibility: idx > 0 ? 'hidden' : 'visible' }")
           FontAwesomeIcon(:icon="trophyIcon")
         .name {{ player.name }}
         .score {{ player.score }} p
+    .field
+      .control
+        button.button.is-dark.is-pulled-right(@click="home") Home
 </template>
 
 <script>
@@ -41,6 +44,10 @@ export default {
   methods: {
     fillWidth (player) {
       return (player.score / this.maxScore) * 100
+    },
+    home () {
+      this.$router.push({ name: 'home' })
+      this.$store.dispatch('cleanup')
     }
   }
 }
@@ -49,40 +56,46 @@ export default {
 <style lang="scss" scoped>
 @import '~@design';
 
-.player {
-  display: flex;
-  background-color: rgba(235, 235, 235, 1.0);
-  border-radius: $size-1;
-  position: relative;
-  overflow: hidden;
+.results {
+  .result-list {
+    margin-bottom: $size-2;
 
-  &:not(:last-child) {
-    margin-bottom: $size-1;
-  }
+    .player {
+      display: flex;
+      background-color: rgba(235, 235, 235, 1.0);
+      border-radius: $size-1;
+      position: relative;
+      overflow: hidden;
 
-  .fill {
-    position: absolute;
-    height: 100%;
-    background-color: #42e695;
-    z-index: 1;
-    outline: 4px solid white;
-  }
+      &:not(:last-child) {
+        margin-bottom: $size-1;
+      }
 
-  .name {
-    padding: $size-1;
-    z-index: 2;
-    font-weight: bold;
-  }
+      .fill {
+        position: absolute;
+        height: 100%;
+        background-color: #42e695;
+        z-index: 1;
+        outline: 4px solid white;
+      }
 
-  .score {
-    margin-left: auto;
-    padding: $size-1 $size-2;
-    z-index: 2;
-  }
+      .name {
+        padding: $size-1;
+        z-index: 2;
+        font-weight: bold;
+      }
 
-  .icon-wrapper {
-    padding: $size-1 0 $size-1 $size-1;
-    z-index: 2;
+      .score {
+        margin-left: auto;
+        padding: $size-1 $size-2;
+        z-index: 2;
+      }
+
+      .icon-wrapper {
+        padding: $size-1 0 $size-1 $size-1;
+        z-index: 2;
+      }
+    }
   }
 }
 </style>

@@ -33,6 +33,11 @@ const mutations = {
       ...newData
     }
   },
+  [types.CLEANUP] (state) {
+    state.me = undefined
+    state.quizInfo = undefined
+    state.result = undefined
+  },
   [types.SET_RESULT_INFO] (state, data) {
     state.result = data
   },
@@ -99,6 +104,9 @@ const actions = {
         console.log('-unknown state-')
       }
     })
+  },
+  cleanup ({ commit, state }) {
+    commit(types.CLEANUP)
   },
   socket_start: ({ commit, state }, data) => {
     router.push({ name: 'player-play' })
