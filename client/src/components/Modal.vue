@@ -1,5 +1,5 @@
 <template lang="pug">
-  .modal
+  .modal(:class="{ 'is-active': active }")
     .modal-background
     .modal-content
       slot(name="content")
@@ -15,6 +15,9 @@ import Card from './Card.vue'
 export default {
   components: {
     Card
+  },
+  props: {
+    active: Boolean
   },
   name: 'modal'
 }
