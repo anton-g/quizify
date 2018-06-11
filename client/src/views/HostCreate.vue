@@ -44,7 +44,7 @@ export default {
   },
   data () {
     return {
-      showPlaylistSelection: false,
+      showPlaylistSelection: true,
       playlist: undefined
     }
   },
@@ -185,10 +185,25 @@ export default {
 }
 
 @media screen and (max-width: 900px) {
-  .featured-playlists {
-    grid-auto-flow: row;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(auto-fit, minmax(30%, 1fr));
+  .featured-playlists-wrapper {
+    .featured-playlists {
+      grid-auto-flow: row;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(auto-fit, minmax(30%, 1fr));
+      grid-row-gap: $size-2;
+
+      .featured-playlist {
+        width: 100%;
+        height: 120px;
+
+        img {
+          width: 100%;
+          height: unset;
+
+          top: -50%;
+        }
+      }
+    }
   }
 }
 
