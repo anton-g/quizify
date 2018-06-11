@@ -3,83 +3,34 @@
     h2.title Create quiz
     .field
       .control
-        button.button.is-dark.is-fullwidth Select playlist
+        button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ playlist ? playlist.name : 'Select playlist' }}
     .field.is-grouped
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
       .control
         button.button.is-dark.is-fullwidth Create
-    modal(:active="showModal", @close="showModal = false")
+    modal(:active="showPlaylistSelection", @close="showPlaylistSelection = false")
       h2.title Featured playlists
       .featured-playlists-wrapper
         .featured-playlists
-          a.featured-playlist(:style="{ background: '#a4b6dd' }")
-            img(src="https://mosaic.scdn.co/640/11b1054a8d4b86106085ec30073e50e6f584639e6be8b8cd5690385c28304aafc58ace5ce6dbdc977c6ab0bd116e14ecdd58299a1d103df4e195ac2d93e156ad7762357bea213e53cf346e5f8fe3efae")
-            span.name Alla ska med
-            span.info 23 tracks
-          a.featured-playlist(:style="{ background: '#d09292' }")
-            img(src="https://i.scdn.co/image/8cb5ccc8a642e06a69dbdb2f0c47d597057cb3b1")
-            span.name Dansband gör covers
-            span.info 54 tracks
-          a.featured-playlist(:style="{ background: '#c094cc' }")
-            img(src="https://mosaic.scdn.co/640/2993cba1f3c5e99613b7c5d1cc7df07e7d71cb8679970c9df607f89a5895e9b1aac1f4d1b5281d197c99322cf4f696082b86d92a5e4ab93e6cc49bfafa75bec32c71f5f4339c41b6ca816f4dd4cac111")
-            span.name Generationsquiz
-            span.info 301 tracks
+          a.featured-playlist(
+            v-for="(playlist, idx) in featuredPlaylists",
+            :style="{ background: featureColor(idx) }",
+            @click="select(playlist)"
+          )
+            img(:src="playlist.img")
+            span.name {{ playlist.name }}
+            span.info {{ playlist.length }} tracks
         a.more-link.button.is-text See more
       .user-playlists-wrapper
         h2.title Your playlists
         .user-playlists
           ul
-            li.user-playlist
-              a
-                span.name Julquiz
-                span.info 10 tracks
-            li.user-playlist
-              a
-                span.name Amanda 25
-                span.info 18 tracks
-            li.user-playlist
-              a
-                span.name Lajvet
-                span.info 22 tracks
-            li.user-playlist
-              a
-                span.name Always bushes of seagulls
-                span.info 10 tracks
-            li.user-playlist
-              a
-                span.name sümmer
-                span.info 199 tracks
-            li.user-playlist
-              a
-                span.name Och vi ska också glömmas bort
-                span.info 30 tracks
-            li.user-playlist
-              a
-                span.name Julquiz
-                span.info 10 tracks
-            li.user-playlist
-              a
-                span.name Amanda 25
-                span.info 18 tracks
-            li.user-playlist
-              a
-                span.name Lajvet
-                span.info 22 tracks
-            li.user-playlist
-              a
-                span.name Always bushes of seagulls
-                span.info 10 tracks
-            li.user-playlist
-              a
-                span.name sümmer
-                span.info 199 tracks
-            li.user-playlist
-              a
-                span.name Och vi ska också glömmas bort
-                span.info 30 tracks
+            li.user-playlist(v-for="playlist in userPlaylists")
+              a(@click="select(playlist)")
+                span.name {{ playlist.name }}
+                span.info {{ playlist.length }} tracks
         a.more-link.button.is-text See more
-
 </template>
 
 <script>
@@ -93,13 +44,82 @@ export default {
   },
   data () {
     return {
-      showModal: true
+      showPlaylistSelection: false,
+      playlist: undefined
+    }
+  },
+  computed: {
+    featuredPlaylists () {
+      return [
+        {
+          name: 'Alla ska med',
+          length: 23,
+          img: 'https://mosaic.scdn.co/640/11b1054a8d4b86106085ec30073e50e6f584639e6be8b8cd5690385c28304aafc58ace5ce6dbdc977c6ab0bd116e14ecdd58299a1d103df4e195ac2d93e156ad7762357bea213e53cf346e5f8fe3efae'
+        },
+        {
+          name: 'Dansband gör covers',
+          length: 54,
+          img: 'https://i.scdn.co/image/8cb5ccc8a642e06a69dbdb2f0c47d597057cb3b1'
+        },
+        {
+          name: 'Generationsquiz',
+          length: 301,
+          img: 'https://mosaic.scdn.co/640/2993cba1f3c5e99613b7c5d1cc7df07e7d71cb8679970c9df607f89a5895e9b1aac1f4d1b5281d197c99322cf4f696082b86d92a5e4ab93e6cc49bfafa75bec32c71f5f4339c41b6ca816f4dd4cac111'
+        }
+      ].slice(0, 3)
+    },
+    userPlaylists () {
+      return [
+        {
+          name: 'Julquiz',
+          length: 10
+        },
+        {
+          name: 'Amanda 25',
+          length: 18
+        },
+        {
+          name: 'Lajvet',
+          length: 22
+        },
+        {
+          name: 'Always bushes of seagulls',
+          length: 10
+        },
+        {
+          name: 'Sümmer',
+          length: 199
+        },
+        {
+          name: 'Och vi ska också glömmas bort',
+          length: 98
+        }
+      ]
     }
   },
   methods: {
     cancel () {
       // TODO
       console.log('cancel creation')
+    },
+    select (playlist) {
+      console.log('selected playlist', playlist)
+      this.playlist = playlist
+      this.showPlaylistSelection = false
+    },
+    featureColor (idx) {
+      const colors = [
+        '#a4b6dd',
+        '#d09292',
+        '#c094cc',
+        '#2d5b6b',
+        '#c47a53',
+        '#8f4731',
+        '#52494c',
+        '#7b7d2a'
+      ]
+
+      return colors[idx]
     }
   }
 }
