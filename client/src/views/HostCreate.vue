@@ -3,7 +3,7 @@
     h2.title Create quiz
     .field
       .control
-        button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ playlist ? playlist.name : 'Select playlist' }}
+        button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
     .field.is-grouped
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
@@ -44,8 +44,7 @@ export default {
   },
   data () {
     return {
-      showPlaylistSelection: true,
-      playlist: undefined
+      showPlaylistSelection: false
     }
   },
   computed: {
@@ -95,6 +94,9 @@ export default {
           length: 98
         }
       ]
+    },
+    selectedPlaylist () {
+      return this.$store.state.host.playlist
     }
   },
   methods: {
@@ -104,8 +106,8 @@ export default {
     },
     select (playlist) {
       console.log('selected playlist', playlist)
-      this.playlist = playlist
       this.showPlaylistSelection = false
+      this.$store.dispatch('selectPlaylist', playlist)
     },
     featureColor (idx) {
       const colors = [

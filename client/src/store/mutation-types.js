@@ -3,6 +3,8 @@ export const UPDATE_QUIZ_INFO = 'UPDATE_QUIZ_INFO'
 export const SET_RESULT_INFO = 'SET_RESULT_INFO'
 export const CLEANUP = 'CLEANUP'
 
+export const SET_PLAYLIST = 'SET_PLAYLIST'
+
 export const SOCKET_PAUSE = 'SOCKET_PAUSE'
 export const SOCKET_RESUME = 'SOCKET_RESUME'
 export const SOCKET_SCORED = 'SOCKET_SCORED'
