@@ -6,6 +6,7 @@ import PlayerLobby from './views/PlayerLobby.vue'
 import PlayerPlay from './views/PlayerPlay.vue'
 import PlayerEnd from './views/PlayerEnd.vue'
 import HostCreate from './views/HostCreate.vue'
+import HostLobby from './views/HostLobby.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/create',
       name: 'host-create',
       component: HostCreate
+    },
+    {
+      path: '/create/lobby',
+      name: 'host-lobby',
+      component: HostLobby
     }
   ]
 })

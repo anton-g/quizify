@@ -4,6 +4,7 @@ export const SET_RESULT_INFO = 'SET_RESULT_INFO'
 export const CLEANUP = 'CLEANUP'
 
 export const SET_PLAYLIST = 'SET_PLAYLIST'
+export const SET_QUIZ = 'SET_QUIZ'
 
 export const SOCKET_PAUSE = 'SOCKET_PAUSE'
 export const SOCKET_RESUME = 'SOCKET_RESUME'

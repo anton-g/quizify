@@ -84,7 +84,7 @@ export default {
       }
     },
     create () {
-      this.$store.dispatch('createQuiz')
+      this.$store.dispatch('login')
     }
   }
 }

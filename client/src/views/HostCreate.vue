@@ -8,7 +8,7 @@
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
       .control
-        button.button.is-dark.is-fullwidth Create
+        button.button.is-dark.is-fullwidth(@click="create") Create
     modal(:active="showPlaylistSelection", @close="showPlaylistSelection = false")
       h2.title Featured playlists
       .featured-playlists-wrapper
@@ -108,6 +108,9 @@ export default {
       console.log('selected playlist', playlist)
       this.showPlaylistSelection = false
       this.$store.dispatch('selectPlaylist', playlist)
+    },
+    create () {
+      this.$store.dispatch('create')
     },
     featureColor (idx) {
       const colors = [
