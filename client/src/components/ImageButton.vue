@@ -1,6 +1,6 @@
 <template lang="pug">
   a.image-button(
-    @click="$emit(click)",
+    @click="$emit('click')",
     :style="style"
   )
     img(:src="img")
