@@ -3,7 +3,7 @@
     @click="$emit('click')",
     :style="style"
   )
-    img(:src="img")
+    .img(:style="imageStyle")
     span.text {{ text }}
     span.subtext(v-if="subtext") {{ subtext }}
 </template>
@@ -24,6 +24,11 @@ export default {
         background: this.color,
         height: (this.height ? this.height : '190px'),
         width: (this.width ? this.width : '190px')
+      }
+    },
+    imageStyle () {
+      return {
+        'background-image': `url("${this.img}")`
       }
     }
   }
@@ -48,14 +53,15 @@ export default {
 
   padding-bottom: $size-1;
 
-  img {
+  .img {
     position: absolute;
     top: 0;
-    width: 190px;
-    height: 190px;
+    width: 100%;
+    height: 100%;
     z-index: 1;
     mix-blend-mode: multiply;
     filter: grayscale(100%);
+    background-size: cover;
   }
 
   .text {
