@@ -13,14 +13,15 @@
       h2.title Featured playlists
       .featured-playlists-wrapper
         .featured-playlists
-          a.featured-playlist(
-            v-for="(playlist, idx) in featuredPlaylists",
-            :style="{ background: featureColor(idx) }",
-            @click="select(playlist)"
-          )
-            img(:src="playlist.img")
-            span.name {{ playlist.name }}
-            span.info {{ playlist.length }} tracks
+          image-button(
+            v-for="(playlist, idx) in featuredPlaylists"
+            :text="playlist.name",
+            :subtext="playlist.length + ' tracks'",
+            :img="playlist.img",
+            :color="featureColor(idx)"
+            :height="$mq | mq({ tablet: '120px', desktop: '190px' })"
+            :width="$mq | mq({ tablet: '100%', desktop: '190px' })"
+            @click="select(playlist)")
         a.more-link.button.is-text See more
       .user-playlists-wrapper
         h2.title Your playlists
@@ -36,11 +37,13 @@
 <script>
 import Card from '../components/Card.vue'
 import Modal from '../components/Modal.vue'
+import ImageButton from '../components/ImageButton.vue'
 
 export default {
   components: {
     Card,
-    Modal
+    Modal,
+    ImageButton
   },
   data () {
     return {
@@ -105,7 +108,6 @@ export default {
       console.log('cancel creation')
     },
     select (playlist) {
-      console.log('selected playlist', playlist)
       this.showPlaylistSelection = false
       this.$store.dispatch('selectPlaylist', playlist)
     },
@@ -141,51 +143,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
     column-gap: $size-2;
-
-    .featured-playlist {
-      height: 190px;
-      width: 190px;
-      border-radius: $size-2;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
-
-      transition: box-shadow 0.3s, transform 0.3s;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      position: relative;
-      color: white;
-      overflow: hidden;
-
-      img {
-        position: absolute;
-        top: 0;
-        width: 190px;
-        height: 190px;
-        z-index: 1;
-        mix-blend-mode: multiply;
-        filter: grayscale(100%);
-      }
-
-      .name {
-        padding-left: $size-1;
-        font-weight: bold;
-        z-index: 2;
-        text-shadow: 1px 1px rgba(0,0,0,0.15);
-      }
-
-      .info {
-        padding-left: $size-1;
-        margin-bottom: $size-1;
-        z-index: 2;
-        text-shadow: 1px 1px rgba(0,0,0,0.15);
-      }
-
-      &:hover {
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
-        transform: translate(0px, -4px);
-      }
-    }
   }
 }
 
@@ -196,18 +153,6 @@ export default {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(auto-fit, minmax(30%, 1fr));
       grid-row-gap: $size-2;
-
-      .featured-playlist {
-        width: 100%;
-        height: 120px;
-
-        img {
-          width: 100%;
-          height: unset;
-
-          top: -50%;
-        }
-      }
     }
   }
 }
