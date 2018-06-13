@@ -9,41 +9,22 @@
         button.button.is-danger.is-outlined(@click="cancel") Cancel
       .control
         button.button.is-dark.is-fullwidth(@click="create") Create
-    modal(:active="showPlaylistSelection", @close="showPlaylistSelection = false")
-      h2.title Featured playlists
-      .featured-playlists-wrapper
-        .featured-playlists
-          image-button(
-            v-for="(playlist, idx) in featuredPlaylists"
-            :text="playlist.name",
-            :subtext="playlist.length + ' tracks'",
-            :img="playlist.img",
-            :color="featureColor(idx)"
-            :height="$mq | mq({ tablet: '120px', desktop: '190px' })"
-            :width="$mq | mq({ tablet: '100%', desktop: '190px' })"
-            @click="select(playlist)")
-        a.more-link.button.is-text See more
-      .user-playlists-wrapper
-        h2.title Your playlists
-        .user-playlists
-          ul
-            li.user-playlist(v-for="playlist in userPlaylists")
-              a(@click="select(playlist)")
-                span.name {{ playlist.name }}
-                span.info {{ playlist.length }} tracks
-        a.more-link.button.is-text See more
+    playlist-picker(
+      :active="showPlaylistSelection",
+      :featuredPlaylists="featuredPlaylists",
+      :playlists="userPlaylists"
+      @close="showPlaylistSelection = false",
+      @select="select")
 </template>
 
 <script>
 import Card from '../components/Card.vue'
-import Modal from '../components/Modal.vue'
-import ImageButton from '../components/ImageButton.vue'
+import PlaylistPicker from '../components/PlaylistPicker.vue'
 
 export default {
   components: {
     Card,
-    Modal,
-    ImageButton
+    PlaylistPicker
   },
   data () {
     return {
@@ -103,90 +84,21 @@ export default {
     }
   },
   methods: {
+    select (playlist) {
+      this.$store.dispatch('selectPlaylist', playlist)
+      this.showPlaylistSelection = false
+    },
     cancel () {
       // TODO
       console.log('cancel creation')
     },
-    select (playlist) {
-      this.showPlaylistSelection = false
-      this.$store.dispatch('selectPlaylist', playlist)
-    },
     create () {
       this.$store.dispatch('create')
-    },
-    featureColor (idx) {
-      const colors = [
-        '#a4b6dd',
-        '#d09292',
-        '#c094cc',
-        '#2d5b6b',
-        '#c47a53',
-        '#8f4731',
-        '#52494c',
-        '#7b7d2a'
-      ]
-
-      return colors[idx]
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~@design';
 
-.featured-playlists-wrapper {
-  display: flex;
-  flex-direction: column;
-
-  .featured-playlists {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
-    column-gap: $size-2;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .featured-playlists-wrapper {
-    .featured-playlists {
-      grid-auto-flow: row;
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(auto-fit, minmax(30%, 1fr));
-      grid-row-gap: $size-2;
-    }
-  }
-}
-
-.user-playlists-wrapper {
-  display: flex;
-  flex-direction: column;
-
-  .user-playlists {
-    .user-playlist {
-      border-radius: $size-1;
-
-      a {
-        display: flex;
-        justify-content: space-between;
-        padding: $size-1;
-
-        .name {
-          color: black;
-        }
-
-        .info {
-          color: rgba(0, 0, 0, 0.5);
-        }
-      }
-
-      &:hover {
-        background-color: whitesmoke;
-      }
-    }
-  }
-}
-
-.more-link {
-  margin: $size-2 0 0 auto;
-}
 </style>
