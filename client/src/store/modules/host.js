@@ -64,6 +64,12 @@ const mutations = {
   },
   [types.SET_QUIZ] (state, quiz) {
     state.quiz = quiz
+  },
+  [types.UPDATE_QUIZ] (state, update) {
+    state.quiz = {
+      ...state.quiz,
+      ...update
+    }
   }
 }
 
@@ -94,6 +100,9 @@ const actions = {
       commit(types.SET_QUIZ, res)
       router.push({ name: 'host-lobby' })
     })
+  },
+  socket_update: ({ commit }, update) => {
+    commit(types.UPDATE_QUIZ, update)
   }
 }
 

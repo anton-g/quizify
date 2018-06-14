@@ -12,7 +12,7 @@
     )
     button.button Start
     h3.title.is-4 Players
-    player-list
+    player-list(:players="players")
     playlist-picker(
       :active="showPlaylistPicker",
       :featuredPlaylists="featuredPlaylists",
@@ -48,6 +48,9 @@ export default {
     },
     selectedPlaylist () {
       return this.$store.state.host.playlist
+    },
+    players () {
+      return this.$store.state.host.quiz.players
     }
   },
   methods: {

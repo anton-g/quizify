@@ -1,11 +1,11 @@
 <template lang="pug">
   ul.player-list
-    li.player(v-for="index in 5", :class="{ connected: true }")
+    li.player(v-for="player in players", :class="{ connected: player.connected }")
       .connectivity
         FontAwesomeIcon(:icon="circleIcon", transform="shrink-6")
       .name
-        | Anton
-      .info(v-if="index === 1")
+        | {{ player.name }}
+      .info(v-if="false")
         | You
 </template>
 
@@ -14,6 +14,9 @@ import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faCircle } from '@fortawesome/fontawesome-free-solid'
 
 export default {
+  props: [
+    'players'
+  ],
   components: {
     FontAwesomeIcon,
   },

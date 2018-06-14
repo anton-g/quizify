@@ -27,7 +27,7 @@ const mutations = {
   [types.PLAYER_JOIN] (state, player) {
     state.me = player
   },
-  [types.UPDATE_QUIZ_INFO] (state, newData) {
+  [types.UPDATE_QUIZ] (state, newData) {
     state.quizInfo = {
       ...state.quizInfo,
       ...newData
@@ -68,11 +68,11 @@ const actions = {
     const player = data.player
     const game = data.game
     commit(types.PLAYER_JOIN, player)
-    commit(types.UPDATE_QUIZ_INFO, game)
+    commit(types.UPDATE_QUIZ, game)
 
     socketBus.$socket.emit('JOIN', player.id, (game) => {
       // Just in case game have been updated
-      commit(types.UPDATE_QUIZ_INFO, game)
+      commit(types.UPDATE_QUIZ, game)
 
       localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
@@ -91,7 +91,7 @@ const actions = {
       const player = data.player
       const game = data.game
       commit(types.PLAYER_JOIN, player)
-      commit(types.UPDATE_QUIZ_INFO, game)
+      commit(types.UPDATE_QUIZ, game)
 
       localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
@@ -110,13 +110,13 @@ const actions = {
   },
   socket_start: ({ commit, state }, data) => {
     router.push({ name: 'player-play' })
-    commit(types.UPDATE_QUIZ_INFO, data)
+    commit(types.UPDATE_QUIZ, data)
   },
   socket_nextQuestion: ({ commit }, data) => {
-    commit(types.UPDATE_QUIZ_INFO, data)
+    commit(types.UPDATE_QUIZ, data)
   },
   socket_prevQuestion: ({ commit }, data) => {
-    commit(types.UPDATE_QUIZ_INFO, data)
+    commit(types.UPDATE_QUIZ, data)
   },
   socket_endGame: ({ commit }, data) => {
     router.push({ name: 'player-end' })
