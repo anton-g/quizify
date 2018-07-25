@@ -1,17 +1,18 @@
 <template lang="pug">
   ul.player-list
-    li.player(v-for="player in players", :class="{ connected: player.connected }")
+    li.player(v-for="(player, idx) in players", :class="{ connected: player.connected }")
       .connectivity
-        FontAwesomeIcon(:icon="circleIcon", transform="shrink-6")
+        FontAwesomeIcon(:icon="connectivityIcon", transform="shrink-6")
       .name
         | {{ player.name }}
-      .info(v-if="false")
-        | You
+      .actions
+        a.action(@click="kick(idx)")
+          FontAwesomeIcon(:icon="kickIcon", transform="grow-3")
 </template>
 
 <script>
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faCircle } from '@fortawesome/fontawesome-free-solid'
+import { faCircle, faTimesCircle } from '@fortawesome/fontawesome-free-solid'
 
 export default {
   props: [
@@ -21,8 +22,16 @@ export default {
     FontAwesomeIcon,
   },
   computed: {
-    circleIcon () {
+    connectivityIcon () {
       return faCircle
+    },
+    kickIcon () {
+      return faTimesCircle
+    }
+  },
+  methods: {
+    kick (idx) {
+      console.log(`kicking player ${idx}`)
     }
   }
 }
@@ -44,13 +53,17 @@ export default {
     }
 
     .name {
-      margin-left: $size-1;
+      margin: 0 $size-1;
       color: gray;
     }
 
-    .info {
+    .actions {
       margin-left: auto;
-      color: lightgray;
+
+      .action {
+        height: 24px;
+        color: lightgray;
+      }
     }
 
     &.connected {
