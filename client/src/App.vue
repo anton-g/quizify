@@ -49,6 +49,10 @@ h1, h2, h3, h4, h5 {
   }
 }
 
+.selection-none {
+  user-select: none;
+}
+
 @media screen and (max-width: 900px) {
   #app {
     grid-template-columns: $size-1 auto $size-1;

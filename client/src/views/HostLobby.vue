@@ -1,6 +1,6 @@
 <template lang="pug">
   card.lobby
-    h2.title
+    h2.selection-none.title
       | Lobby
       span.key {{ key }}
     ImageButton(
@@ -78,6 +78,7 @@ export default {
 }
 
 .key {
+  user-select: text;
   font-family: $font-family-default;
   font-weight: normal;
   background-color: #EEE;
