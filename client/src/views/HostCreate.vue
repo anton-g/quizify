@@ -1,6 +1,7 @@
 <template lang="pug">
   card.create
     h2.title Create quiz
+    p.intro Laboris in consequat aliquip consectetur laborum in cillum nisi ex officia.
     .field
       .control
         button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
@@ -48,8 +49,7 @@ export default {
       this.showPlaylistSelection = false
     },
     cancel () {
-      // TODO
-      console.log('cancel creation')
+      this.$router.push({ name: 'home' })
     },
     create () {
       this.$store.dispatch('create')
@@ -59,5 +59,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@design';
 
+.title {
+  margin-bottom: $size-2;
+}
+
+.intro {
+  margin-bottom: $size-1;
+}
 </style>
