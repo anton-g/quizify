@@ -1,16 +1,18 @@
 <template lang="pug">
   card.lobby
-    h2.title Lobby
+    h2.title
+      | Lobby
+      span.key {{ key }}
     ImageButton(
       :img="selectedPlaylist.img",
       :text="selectedPlaylist.name",
-      subtext="Click to change"
+      subtext="Click to change playlist"
       height="70px",
       width="100%",
       color="#52494c",
       @click="showPlaylistPicker = true"
     )
-    button.button Start
+    button.button.is-dark.is-fullwidth.start-button(@click="start") Start
     h3.title.is-4 Players
     player-list(:players="players")
     playlist-picker(
@@ -51,17 +53,37 @@ export default {
     },
     players () {
       return this.$store.state.host.quiz.players
+    },
+    key () {
+      return this.$store.state.host.quiz.key
     }
   },
   methods: {
     select (playlist) {
       this.$store.dispatch('selectPlaylist', playlist)
       this.showPlaylistPicker = false
+    },
+    start () {
+      // this.$store.dispatch('start')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '~@design';
 
+.start-button {
+  margin: $size-2 0;
+}
+
+.key {
+  font-family: $font-family-default;
+  font-weight: normal;
+  background-color: #EEE;
+  border-radius: $size-1;
+  padding: $size-1;
+  font-size: $size-3;
+  margin-left: $size-1;
+}
 </style>
