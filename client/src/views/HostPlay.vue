@@ -4,9 +4,11 @@
     button.button Prev
     button.button Pause/Play
     button.button Next
-    modal(:active="buzzed", v-if="buzzed")
+    modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
-      p Something about the current song and question
+      .question What's the name of the artist?
+      .artist Haddaway
+      .song What is love
       .actions
         button.button.is-danger.is-fullwidth(@click="incorrect") Incorrect
         button.button.is-outlined.is-dark.is-fullwidth(@click="correct") Correct
@@ -43,8 +45,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.actions {
-  display: flex;
-  justify-content: space-between;
+@import '~@design';
+
+.buzz-info {
+  .title {
+    margin-bottom: $size-1;
+  }
+
+  .question {
+    text-align: center;
+    margin-bottom: $size-1;
+  }
+
+  .artist {
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .song {
+    text-align: center;
+  }
+
+  .actions {
+    margin-top: $size-1;
+    display: flex;
+    justify-content: space-between;
+
+    :first-child {
+      margin-right: $size-1;
+    }
+
+    :last-child {
+      margin-left: $size-1;
+    }
+  }
 }
 </style>
