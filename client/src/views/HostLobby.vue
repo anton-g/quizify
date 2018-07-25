@@ -9,7 +9,7 @@
       subtext="Click to change playlist"
       height="70px",
       width="100%",
-      color="#52494c",
+      color="#237032",
       @click="showPlaylistPicker = true"
     )
     button.button.is-dark.is-fullwidth.start-button(@click="start") Start
@@ -64,7 +64,7 @@ export default {
       this.showPlaylistPicker = false
     },
     start () {
-      // this.$store.dispatch('start')
+      this.$store.dispatch('start')
     }
   }
 }

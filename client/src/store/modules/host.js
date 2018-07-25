@@ -55,7 +55,9 @@ const state = {
 }
 
 const getters = {
-
+  hasActiveQuiz (state, getters, rootState) {
+    return rootState.common.connected && !!state.quiz
+  }
 }
 
 const mutations = {
@@ -99,6 +101,12 @@ const actions = {
     }, (res) => {
       commit(types.SET_QUIZ, res)
       router.push({ name: 'host-lobby' })
+    })
+  },
+  async start ({ state, commit }) {
+    socketBus.$socket.emit('START', state.quiz.key, (quiz) => {
+      commit(types.SET_QUIZ, quiz)
+      router.push({ name: 'host-play' })
     })
   },
   socket_update: ({ commit }, update) => {

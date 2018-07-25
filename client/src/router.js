@@ -7,6 +7,7 @@ import PlayerPlay from './views/PlayerPlay.vue'
 import PlayerEnd from './views/PlayerEnd.vue'
 import HostCreate from './views/HostCreate.vue'
 import HostLobby from './views/HostLobby.vue'
+import HostPlay from './views/HostPlay.vue'
 
 Vue.use(Router)
 
@@ -15,6 +16,14 @@ const checkIsConnectedToQuiz = (to, from, next) => {
     next()
   } else {
     next({ name: 'home' })
+  }
+}
+
+const checkHasQuiz = (to, from, next) => {
+  if (store.getters.hasActiveQuiz) {
+    next()
+  } else {
+    next({ name: 'host-create' })
   }
 }
 
@@ -51,7 +60,14 @@ export default new Router({
     {
       path: '/create/lobby',
       name: 'host-lobby',
-      component: HostLobby
+      component: HostLobby,
+      beforeEnter: checkHasQuiz
+    },
+    {
+      path: '/create/play',
+      name: 'host-play',
+      component: HostPlay,
+      beforeEnter: checkHasQuiz
     }
   ]
 })
