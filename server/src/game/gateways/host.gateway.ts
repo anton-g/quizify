@@ -68,6 +68,18 @@ export class HostGateway {
     console.log(`[${key}] Resume game`)
   }
 
+  @SubscribeMessage(GameEvents.Pause)
+  async onPause(client: Socket, req) {
+    let { data: key, ack } = extractRequest(req)
+
+    this.server.to(key).emit(GameEvents.Pause)
+    const game = await this.gameService.setState(key, GameState.Paused)
+
+    ack(new GameDto(game))
+
+    console.log(`[${key}] Paused game`)
+  }
+
   @SubscribeMessage(GameEvents.Score)
   async onScore(client: Socket, req) {
     let { data: userId, ack } = extractRequest(req)

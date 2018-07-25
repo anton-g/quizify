@@ -2,7 +2,7 @@
   card.play
     p game
     button.button Prev
-    button.button Pause/Play
+    button.button(@click="togglePlayState") {{ isPaused ? 'Resume' : 'Pause' }}
     button.button Next
     modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
@@ -30,6 +30,9 @@ export default {
     },
     playerName () {
       return this.$store.state.host.buzzedPlayer.name
+    },
+    isPaused () {
+      return this.$store.getters.isPaused
     }
   },
   methods: {
@@ -39,6 +42,13 @@ export default {
     correct () {
       this.$store.dispatch('score')
       this.$store.dispatch('resetBuzz')
+    },
+    togglePlayState () {
+      if (this.isPaused) {
+        this.$store.dispatch('resume')
+      } else {
+        this.$store.dispatch('pause')
+      }
     }
   }
 }

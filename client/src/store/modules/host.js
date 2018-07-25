@@ -61,6 +61,9 @@ const getters = {
   },
   isBuzzed (state) {
     return !!state.buzzedPlayer
+  },
+  isPaused (state) {
+    return state.quiz && state.quiz.state === 'PAUSED'
   }
 }
 
@@ -130,6 +133,16 @@ const actions = {
     socketBus.$socket.emit('SCORE', state.buzzedPlayer.id, (player) => {
       commit(types.UPDATE_PLAYER, player)
       socketBus.$socket.emit('RESUME', state.quiz.key)
+    })
+  },
+  pause ({ state, commit }) {
+    socketBus.$socket.emit('PAUSE', state.quiz.key, (quiz) => {
+      commit(types.UPDATE_QUIZ, quiz)
+    })
+  },
+  resume ({ state, commit }) {
+    socketBus.$socket.emit('RESUME', state.quiz.key, (quiz) => {
+      commit(types.UPDATE_QUIZ, quiz)
     })
   },
   socket_update: ({ commit }, update) => {
