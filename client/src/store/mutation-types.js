@@ -1,6 +1,8 @@
 export const PLAYER_JOIN = 'PLAYER_JOIN'
 export const UPDATE_QUIZ = 'UPDATE_QUIZ'
+export const UPDATE_PLAYER = 'UPDATE_PLAYER'
 export const SET_RESULT_INFO = 'SET_RESULT_INFO'
+export const SET_BUZZED_PLAYER = 'SET_BUZZED_PLAYER'
 export const CLEANUP = 'CLEANUP'
 
 export const SET_PLAYLIST = 'SET_PLAYLIST'

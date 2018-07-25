@@ -9,6 +9,7 @@ const socketBus = new Vue()
 const state = {
   playlist: undefined,
   quiz: undefined,
+  buzzedPlayer: undefined,
   featuredPlaylists: [
     {
       name: 'Alla ska med',
@@ -57,6 +58,9 @@ const state = {
 const getters = {
   hasActiveQuiz (state, getters, rootState) {
     return rootState.common.connected && !!state.quiz
+  },
+  isBuzzed (state) {
+    return !!state.buzzedPlayer
   }
 }
 
@@ -72,6 +76,15 @@ const mutations = {
       ...state.quiz,
       ...update
     }
+  },
+  [types.UPDATE_PLAYER] (state, player) {
+    const idx = state.quiz.players.findIndex(p => p.id === player.id)
+    if (idx > -1) {
+      state.quiz.players[idx] = player
+    }
+  },
+  [types.SET_BUZZED_PLAYER] (state, player) {
+    state.buzzedPlayer = player
   }
 }
 
@@ -109,8 +122,24 @@ const actions = {
       router.push({ name: 'host-play' })
     })
   },
+  resetBuzz ({ commit }) {
+    commit(types.SET_BUZZED_PLAYER, undefined)
+    socketBus.$socket.emit('RESUME', state.quiz.key)
+  },
+  score ({ state, commit }) {
+    socketBus.$socket.emit('SCORE', state.buzzedPlayer.id, (player) => {
+      commit(types.UPDATE_PLAYER, player)
+      socketBus.$socket.emit('RESUME', state.quiz.key)
+    })
+  },
   socket_update: ({ commit }, update) => {
     commit(types.UPDATE_QUIZ, update)
+  },
+  socket_buzzed: ({ state, commit }, playerId) => {
+    const player = state.quiz.players.find(p => p.id === playerId)
+    console.log(`${player.name} buzzed`)
+
+    commit(types.SET_BUZZED_PLAYER, player)
   }
 }
 
