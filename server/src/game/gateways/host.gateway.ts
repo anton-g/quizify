@@ -106,12 +106,12 @@ export class HostGateway {
       currentQuestion: game.currentQuestion + 1,
     })
 
-    const gameUpdate: Partial<PlayerGameInfoDto> = {
+    const gameUpdate: Partial<GameDto> = {
       currentQuestion: game.currentQuestion
     }
     this.server.to(game.key).emit(GameEvents.NextQuestion, gameUpdate)
 
-    ack()
+    ack(gameUpdate)
 
     console.log(`[${game.key}] Next question (${game.currentQuestion}/${game.questions.length})`)
   }
@@ -129,12 +129,12 @@ export class HostGateway {
       currentQuestion: game.currentQuestion - 1,
     })
 
-    const gameUpdate: Partial<PlayerGameInfoDto> = {
+    const gameUpdate: Partial<GameDto> = {
       currentQuestion: game.currentQuestion
     }
     this.server.to(game.key).emit(GameEvents.PrevQuestion, gameUpdate)
 
-    ack()
+    ack(gameUpdate)
 
     console.log(`[${game.key}] Previous question (${game.currentQuestion}/${game.questions.length})`)
   }

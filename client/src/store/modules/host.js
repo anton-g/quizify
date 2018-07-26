@@ -57,13 +57,16 @@ const state = {
 
 const getters = {
   hasActiveQuiz (state, getters, rootState) {
-    return rootState.common.connected && !!state.quiz
+    return rootState.common.connected && state.quiz
   },
   isBuzzed (state) {
     return !!state.buzzedPlayer
   },
   isPaused (state) {
     return state.quiz && state.quiz.state === 'PAUSED'
+  },
+  finalQuestion (state) {
+    return state.quiz && state.quiz.currentQuestion === state.quiz.questions.length
   }
 }
 
@@ -143,6 +146,21 @@ const actions = {
   resume ({ state, commit }) {
     socketBus.$socket.emit('RESUME', state.quiz.key, (quiz) => {
       commit(types.UPDATE_QUIZ, quiz)
+    })
+  },
+  prevQuestion ({ state, commit }) {
+    socketBus.$socket.emit('PREV_QUESTION', state.quiz.key, quiz => {
+      commit(types.UPDATE_QUIZ, quiz)
+    })
+  },
+  nextQuestion ({ state, commit }) {
+    socketBus.$socket.emit('NEXT_QUESTION', state.quiz.key, quiz => {
+      commit(types.UPDATE_QUIZ, quiz)
+    })
+  },
+  endQuiz ({ state, commit }) {
+    socketBus.$socket.emit('END_GAME', state.quiz.key, result => {
+      console.log('end')
     })
   },
   socket_update: ({ commit }, update) => {

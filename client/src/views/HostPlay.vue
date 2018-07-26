@@ -1,9 +1,9 @@
 <template lang="pug">
   card.play
     p game
-    button.button Prev
+    button.button(@click="prev") Prev
     button.button(@click="togglePlayState") {{ isPaused ? 'Resume' : 'Pause' }}
-    button.button Next
+    button.button(@click="next") {{ lastQuestion ? 'End' : 'Next' }}
     modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
       .question What's the name of the artist?
@@ -33,6 +33,9 @@ export default {
     },
     isPaused () {
       return this.$store.getters.isPaused
+    },
+    lastQuestion () {
+      return this.$store.getters.finalQuestion
     }
   },
   methods: {
@@ -49,6 +52,16 @@ export default {
       } else {
         this.$store.dispatch('pause')
       }
+    },
+    prev () {
+      this.$store.dispatch('prevQuestion')
+    },
+    next () {
+      const action = this.lastQuestion ? 'endQuiz' : 'nextQuestion'
+      this.$store.dispatch(action)
+    },
+    end () {
+      this.$store.dispatch('endQuiz')
     }
   }
 }
