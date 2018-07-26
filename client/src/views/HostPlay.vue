@@ -1,13 +1,13 @@
 <template lang="pug">
   card.play
     .info
-      span.questionNo {{ currentQuestion }} / {{ questionCount }}
+      span.questionNo {{ currentQuestionNo }} / {{ questionCount }}
       h2.question What is the name of the artist?
       img.image(src="https://picsum.photos/200/?random")
       p.artist Glennmark Eriksson Strömstedt
       p.song När vi gräver guld i USA
     .actions
-      button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestion === 1")
+      button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestionNo === 1")
         .q-icon
           FontAwesomeIcon(:icon="prevIcon")
         | Prev
@@ -59,8 +59,11 @@ export default {
     questionCount () {
       return this.$store.state.host.quiz.questions.length
     },
+    currentQuestionNo () {
+      return this.$store.state.host.quiz.currentQuestionNo
+    },
     currentQuestion () {
-      return this.$store.state.host.quiz.currentQuestion
+      return this.$store.getters.currentQuestion
     },
     prevIcon () {
       return faBackward
@@ -123,6 +126,8 @@ export default {
   }
 
   .image {
+    width: 200px;
+    height: 200px;
     border-radius: $size-2;
     margin-bottom: $size-1;
   }

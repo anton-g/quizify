@@ -9,5 +9,5 @@ export interface Game extends Document {
   readonly hostSocket: string;
   readonly players: Player[];
   readonly questions: string[];
-  readonly currentQuestion: number;
+  readonly currentQuestionNo: number;
 }

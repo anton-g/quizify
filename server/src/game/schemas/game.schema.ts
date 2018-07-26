@@ -8,5 +8,5 @@ export const GameSchema = new mongoose.Schema({
   hostSocket: String,
   players: [PlayerSchema],
   questions: Array,
-  currentQuestion: Number
+  currentQuestionNo: Number
 });

@@ -23,9 +23,33 @@ export class GameService {
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
     const questions = [
-      'This is a question?',
-      'Is this a question',
-      'Is this real life'
+      {
+        question: 'What is the name of the artist?',
+        track: {
+          artist: 'Haddaway',
+          song: 'What is love?',
+          length: 232,
+          img: 'https://picsum.photos/200/200/?image=11'
+        }
+      },
+      {
+        question: 'What is the name of the song?',
+        track: {
+          artist: 'Glennmark Eriksson Strömstedt',
+          song: 'När vi gräver guld i USA',
+          length: 232,
+          img: 'https://picsum.photos/200/200/?image=23'
+        }
+      },
+      {
+        question: 'What is the name of the artist?',
+        track: {
+          artist: 'Bleachers',
+          song: 'Dont Take The Money',
+          length: 232,
+          img: 'https://picsum.photos/200/200/?image=55'
+        }
+      }
     ]
 
     const game = new this.gameModel({
@@ -34,7 +58,7 @@ export class GameService {
       key: key,
       hostSocket: undefined,
       questions: questions,
-      currentQuestion: 1
+      currentQuestionNo: 1
     })
     return await game.save()
   }

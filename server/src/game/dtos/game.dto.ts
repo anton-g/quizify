@@ -10,7 +10,7 @@ export class GameDto {
     this.hostSocket = game.hostSocket;
     this.players = game.players.map(p => new PlayerDto(p));
     this.questions = game.questions;
-    this.currentQuestion = game.currentQuestion;
+    this.currentQuestionNo = game.currentQuestionNo;
   }
 
   readonly state: GameState;
@@ -19,5 +19,5 @@ export class GameDto {
   readonly hostSocket: string;
   readonly players: PlayerDto[];
   readonly questions: string[];
-  readonly currentQuestion: number;
+  readonly currentQuestionNo: number;
 }

@@ -6,7 +6,7 @@
         span Buzz!
     card.stats
       h2.title {{ playerScore }} points
-      p Question {{ currentQuestion }} of {{ questionCount }}
+      p Question {{ currentQuestionNo }} of {{ questionCount }}
 </template>
 
 <script>
@@ -30,8 +30,8 @@ export default {
     playerScore () {
       return this.$store.state.player.me.score
     },
-    currentQuestion () {
-      return this.$store.state.player.quizInfo.currentQuestion
+    currentQuestionNo () {
+      return this.$store.state.player.quizInfo.currentQuestionNo
     },
     questionCount () {
       return this.$store.state.player.quizInfo.questionCount

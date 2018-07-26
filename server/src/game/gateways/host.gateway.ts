@@ -98,22 +98,22 @@ export class HostGateway {
     let { data: key, ack } = extractRequest(req)
 
     let game = await this.gameService.get(key)
-    if (!game || game.hostSocket !== client.id || game.currentQuestion === game.questions.length) {
+    if (!game || game.hostSocket !== client.id || game.currentQuestionNo === game.questions.length) {
       return
     }
 
     game = await this.gameService.update(game.key, {
-      currentQuestion: game.currentQuestion + 1,
+      currentQuestionNo: game.currentQuestionNo + 1,
     })
 
     const gameUpdate: Partial<GameDto> = {
-      currentQuestion: game.currentQuestion
+      currentQuestionNo: game.currentQuestionNo
     }
     this.server.to(game.key).emit(GameEvents.NextQuestion, gameUpdate)
 
     ack(gameUpdate)
 
-    console.log(`[${game.key}] Next question (${game.currentQuestion}/${game.questions.length})`)
+    console.log(`[${game.key}] Next question (${game.currentQuestionNo}/${game.questions.length})`)
   }
 
   @SubscribeMessage(GameEvents.PrevQuestion)
@@ -121,22 +121,22 @@ export class HostGateway {
     let { data: key, ack } = extractRequest(req)
 
     let game = await this.gameService.get(key)
-    if (!game || game.hostSocket !== client.id || game.currentQuestion <= 1) {
+    if (!game || game.hostSocket !== client.id || game.currentQuestionNo <= 1) {
       return
     }
 
     game = await this.gameService.update(game.key, {
-      currentQuestion: game.currentQuestion - 1,
+      currentQuestionNo: game.currentQuestionNo - 1,
     })
 
     const gameUpdate: Partial<GameDto> = {
-      currentQuestion: game.currentQuestion
+      currentQuestionNo: game.currentQuestionNo
     }
     this.server.to(game.key).emit(GameEvents.PrevQuestion, gameUpdate)
 
     ack(gameUpdate)
 
-    console.log(`[${game.key}] Previous question (${game.currentQuestion}/${game.questions.length})`)
+    console.log(`[${game.key}] Previous question (${game.currentQuestionNo}/${game.questions.length})`)
   }
 
   @SubscribeMessage(GameEvents.EndGame)

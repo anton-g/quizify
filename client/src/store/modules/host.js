@@ -67,6 +67,9 @@ const getters = {
   },
   finalQuestion (state) {
     return state.quiz && state.quiz.currentQuestion === state.quiz.questions.length
+  },
+  currentQuestion (state) {
+    return state.quiz && state.quiz.questions[0]
   }
 }
 

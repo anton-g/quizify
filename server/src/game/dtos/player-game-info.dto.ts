@@ -5,12 +5,12 @@ export class PlayerGameInfoDto {
   constructor (game: Game) {
     this.playlist = 'A playlist name';
     this.questionCount = game.questions.length;
-    this.currentQuestion = game.currentQuestion;
+    this.currentQuestionNo = game.currentQuestionNo;
     this.state = game.state;
   }
 
   readonly playlist: string;
   readonly questionCount: number;
-  readonly currentQuestion: number;
+  readonly currentQuestionNo: number;
   readonly state: GameState;
 }
