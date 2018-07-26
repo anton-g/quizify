@@ -10,8 +10,8 @@ export class PlaylistController {
 
   @HttpCode(200)
   @Get('featured')
-  async get (): Promise<PlaylistDto[]> {
-    const playlists = await this.playlistService.get()
+  async getFeatured (): Promise<PlaylistDto[]> {
+    const playlists = await this.playlistService.getFeatured()
     return playlists.map(p => new PlaylistDto(p))
   }
 }
