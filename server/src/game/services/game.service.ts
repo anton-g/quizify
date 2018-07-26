@@ -56,7 +56,10 @@ export class GameService {
       state: GameState.Created,
       secret: secret,
       key: key,
-      hostSocket: undefined,
+      host: {
+        socket: undefined,
+        connected: false
+      },
       questions: questions,
       currentQuestionNo: 1
     })
@@ -76,11 +79,11 @@ export class GameService {
   async setHost(key: string, secret: string, hostSocket: string): Promise<Game> {
     if (!key) return Promise.reject(new UserException('Missing key'))
     if (!secret) return Promise.reject(new UserException('Missing secret'))
-    if (!hostSocket) return Promise.reject(new UserException('Missing hostSocket'))
+    if (!hostSocket) return Promise.reject(new UserException('Missing host.socket'))
 
     return await this.gameModel.findOneAndUpdate(
       { "key": key, "secret": secret },
-      { $set: { "hostSocket": hostSocket } },
+      { $set: { "host.socket": hostSocket } },
       { new: true }
     ).exec()
   }
@@ -113,5 +116,17 @@ export class GameService {
 
   async getByPlayerId(playerId: string): Promise<Game> {
     return await this.gameModel.findOne({ "players._id": playerId }).exec()
+  }
+
+  async disconnectHost(hostSocketId: string): Promise<Game> {
+    if (!hostSocketId) return Promise.reject(new UserException('Invalid socket id'))
+
+    const result: Game = await this.gameModel.findOneAndUpdate(
+      { "host.socket": hostSocketId },
+      { $set: { "host.connected": false } },
+      { new: true }
+    ).exec()
+
+    return result
   }
 }

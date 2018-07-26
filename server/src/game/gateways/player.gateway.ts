@@ -18,7 +18,7 @@ import { JoinedGameDto } from '../dtos/joined-game.dto';
 import { Player } from '../interfaces/player.interface';
 
 @WebSocketGateway()
-export class PlayerGateway implements OnGatewayDisconnect {
+export class PlayerGateway {
   @WebSocketServer() server: Server;
 
   constructor (
@@ -32,7 +32,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
 
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
-    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
+    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
 
     ack(new PlayerGameInfoDto(game))
 
@@ -48,7 +48,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
 
     this.server.to(game.key).emit(GameEvents.Pause)
     this.gameService.setState(game.key, GameState.Paused)
-    this.server.to(game.hostSocket).emit(GameEvents.Buzzed, userId)
+    this.server.to(game.host.socket).emit(GameEvents.Buzzed, userId)
 
     ack()
 
@@ -65,7 +65,7 @@ export class PlayerGateway implements OnGatewayDisconnect {
     // TODO: ack to user
 
     client.join(game.key)
-    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
+    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
 
     const player: Player = game.players.find(p => p.socketId === client.id)
     if (!player) {
@@ -76,15 +76,5 @@ export class PlayerGateway implements OnGatewayDisconnect {
     ack(new JoinedGameDto(player, game))
 
     console.log(`[${game.key}] User with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
-  }
-
-  async handleDisconnect(client: Socket) {
-    const game: Game = await this.playerService.disconnect(client.id)
-
-    if (!game) return // Host was disconnected
-
-    this.server.to(game.hostSocket).emit(GameEvents.Update, new GameDto(game))
-
-    console.log(`[${game.key}] User with socket ${client.id} disconnected`)
   }
 }

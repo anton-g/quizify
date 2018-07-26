@@ -98,7 +98,7 @@ export class HostGateway {
     let { data: key, ack } = extractRequest(req)
 
     let game = await this.gameService.get(key)
-    if (!game || game.hostSocket !== client.id || game.currentQuestionNo === game.questions.length) {
+    if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.questions.length) {
       return
     }
 
@@ -121,7 +121,7 @@ export class HostGateway {
     let { data: key, ack } = extractRequest(req)
 
     let game = await this.gameService.get(key)
-    if (!game || game.hostSocket !== client.id || game.currentQuestionNo <= 1) {
+    if (!game || game.host.socket !== client.id || game.currentQuestionNo <= 1) {
       return
     }
 
@@ -144,7 +144,7 @@ export class HostGateway {
     let { data: key, ack } = extractRequest(req)
 
     let game = await this.gameService.get(key)
-    if (!game || game.hostSocket !== client.id) {
+    if (!game || game.host.socket !== client.id) {
       return
     }
 

@@ -7,7 +7,7 @@ export class GameDto {
     this.state = game.state;
     this.key = game.key;
     this.secret = game.secret;
-    this.hostSocket = game.hostSocket;
+    this.host = new HostDto(game.host);
     this.players = game.players.map(p => new PlayerDto(p));
     this.questions = game.questions;
     this.currentQuestionNo = game.currentQuestionNo;
@@ -16,8 +16,18 @@ export class GameDto {
   readonly state: GameState;
   readonly key: string;
   readonly secret: string;
-  readonly hostSocket: string;
+  readonly host: HostDto;
   readonly players: PlayerDto[];
   readonly questions: string[];
   readonly currentQuestionNo: number;
+}
+
+export class HostDto {
+  constructor (host: any) {
+    this.socket = host.socket;
+    this.connected = host.connected;
+  }
+
+  readonly socket: string;
+  readonly connected: boolean;
 }

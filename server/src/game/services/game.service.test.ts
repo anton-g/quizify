@@ -51,10 +51,10 @@ describe('GameService', () => {
       expect(game.state).toBe(GameState.Created)
     })
 
-    it('should create a game without hostSocket', async () => {
+    it('should create a game without host.socket', async () => {
       const game = await gameService.create()
 
-      expect(game.hostSocket).toBe(undefined)
+      expect(game.host.socket).toBe(undefined)
     })
 
     it('should generate different keys', async () => {
@@ -90,12 +90,12 @@ describe('GameService', () => {
   })
 
   describe('setHost', () => {
-    it('should set hostsocket', async () => {
+    it('should set host socket', async () => {
       let game = await gameService.create()
       const hostSocketId = '123'
       game = await gameService.setHost(game.key, game.secret, hostSocketId)
 
-      expect(game.hostSocket).toBe(hostSocketId)
+      expect(game.host.socket).toBe(hostSocketId)
     })
 
     it('should return falsy if no game is found', async () => {
@@ -108,7 +108,7 @@ describe('GameService', () => {
       const socketId = '123'
       await gameService.setHost(game.key, 'incorrectSecret', socketId)
       const updatedGame = await gameService.get(game.key)
-      expect(updatedGame.hostSocket).not.toBe(socketId)
+      expect(updatedGame.host.socket).not.toBe(socketId)
     })
 
     it('should reject promise if game key is falsy', async () => {
@@ -125,10 +125,10 @@ describe('GameService', () => {
       })
     })
 
-    it('should reject promise if hostSocket is falsy', async () => {
+    it('should reject promise if host.socket is falsy', async () => {
       expect.assertions(1)
       await expect(gameService.setHost('ABC123', 'XYZ', '')).rejects.toEqual({
-        error: 'Missing hostSocket'
+        error: 'Missing host.socket'
       })
     })
   })
