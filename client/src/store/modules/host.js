@@ -4,6 +4,8 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
+import { HOST_SOCKET_STORAGE_ITEM } from '../../common/constants'
+
 const socketBus = new Vue()
 
 const state = {
@@ -135,6 +137,32 @@ const actions = {
     }, (res) => {
       commit(types.SET_QUIZ, res)
       router.push({ name: 'host-lobby' })
+
+      localStorage.setItem(HOST_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
+    })
+  },
+  async reconnectHost ({ commit, state }, socket) {
+    socketBus.$socket.emit('RECONN_H', socket, (quiz) => {
+      if (!quiz) {
+        console.log('Could not reconnect.. :(')
+        return
+      }
+
+      console.log('Successfully reconnected! Restoring game state..')
+      commit(types.SET_QUIZ, quiz)
+      // TODO TEMP, remove when playlist is saved on server
+      commit(types.SET_PLAYLIST, state.playlists[0])
+
+      if (quiz.state === 'LOBBY') {
+        router.push({ name: 'host-lobby' })
+      } else if (quiz.state === 'PLAYING' || quiz.state === 'PAUSED') {
+        router.push({ name: 'host-play' })
+      } else {
+        // TODO handle other states
+        console.log('-unknown state-')
+      }
+
+      localStorage.setItem(HOST_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
     })
   },
   async start ({ state, commit }) {
@@ -178,6 +206,8 @@ const actions = {
       commit(types.SET_RESULT, response.results)
       router.push({ name: 'host-end' })
     })
+
+    localStorage.removeItem(HOST_SOCKET_STORAGE_ITEM)
   },
   cleanupHost ({ commit }) {
     commit(types.CLEANUP_HOST)

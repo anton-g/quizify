@@ -4,7 +4,7 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
-import { SOCKET_STORAGE_ITEM } from '../../common/constants'
+import { PLAYER_SOCKET_STORAGE_ITEM } from '../../common/constants'
 
 const socketBus = new Vue()
 
@@ -33,7 +33,7 @@ const mutations = {
       ...newData
     }
   },
-  [types.CLEANUP] (state) {
+  [types.CLEANUP_PLAYER] (state) {
     state.me = undefined
     state.quizInfo = undefined
     state.result = undefined
@@ -74,14 +74,14 @@ const actions = {
       // Just in case game have been updated
       commit(types.UPDATE_QUIZ, game)
 
-      localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
+      localStorage.setItem(PLAYER_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
       router.push({ name: 'player-lobby' })
     })
   },
-  async reconnectQuiz ({ commit, state }, socket) {
+  async reconnectPlayer ({ commit, state }, socket) {
     console.log('Reconnecting..')
-    socketBus.$socket.emit('RECONN', socket, (data) => {
+    socketBus.$socket.emit('RECONN_P', socket, (data) => {
       if (!data) {
         console.log('Could not reconnect.. :(')
         return
@@ -93,7 +93,7 @@ const actions = {
       commit(types.PLAYER_JOIN, player)
       commit(types.UPDATE_QUIZ, game)
 
-      localStorage.setItem(SOCKET_STORAGE_ITEM, socketBus.$socket.id)
+      localStorage.setItem(PLAYER_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
 
       if (game.state === 'LOBBY') {
         router.push({ name: 'player-lobby' })
@@ -123,7 +123,7 @@ const actions = {
 
     commit(types.SET_RESULT_INFO, data.results)
 
-    localStorage.removeItem(SOCKET_STORAGE_ITEM)
+    localStorage.removeItem(PLAYER_SOCKET_STORAGE_ITEM)
   }
 }
 

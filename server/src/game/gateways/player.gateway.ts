@@ -55,7 +55,7 @@ export class PlayerGateway {
     console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
-  @SubscribeMessage(GameEvents.Reconnect)
+  @SubscribeMessage(GameEvents.ReconnectPlayer)
   async onReconnect(client: Socket, req) {
     let { data: oldSocketId, ack } = extractRequest(req)
 

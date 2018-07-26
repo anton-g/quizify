@@ -83,7 +83,12 @@ export class GameService {
 
     return await this.gameModel.findOneAndUpdate(
       { "key": key, "secret": secret },
-      { $set: { "host.socket": hostSocket } },
+      { $set:
+        {
+          "host.socket": hostSocket,
+          "host.connected": true
+        }
+      },
       { new: true }
     ).exec()
   }
@@ -124,6 +129,25 @@ export class GameService {
     const result: Game = await this.gameModel.findOneAndUpdate(
       { "host.socket": hostSocketId },
       { $set: { "host.connected": false } },
+      { new: true }
+    ).exec()
+
+    return result
+  }
+
+  async reconnectHost(oldSocketId: string, newSocketId: string): Promise<Game> {
+    if (!oldSocketId) return Promise.reject(new UserException('Invalid old socket id'))
+    if (!newSocketId) return Promise.reject(new UserException('Invalid new socket id'))
+
+    const result: Game = await this.gameModel.findOneAndUpdate(
+      {
+        "host.socket": oldSocketId,
+        "state": { $ne: GameState.Ended }
+      },
+      { $set: {
+        "host.socket": newSocketId,
+        "host.connected": true
+      } },
       { new: true }
     ).exec()
 

@@ -21,8 +21,10 @@
 <script>
 import Card from '../components/Card.vue'
 import PlaylistPicker from '../components/PlaylistPicker.vue'
+import { reconnectOnCreation } from '../mixins/ReconnectMixin.js'
 
 export default {
+  mixins: [reconnectOnCreation],
   components: {
     Card,
     PlaylistPicker

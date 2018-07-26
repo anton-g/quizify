@@ -6,6 +6,7 @@ import { GameSchema } from "./schemas/game.schema";
 import { PlayerSchema } from "./schemas/player.schema";
 import { PlayerService } from "./services/player.service";
 import { PlayerGateway } from "./gateways/player.gateway";
+import { CommonGateway } from "./gateways/common.gateway";
 import { HostGateway } from "./gateways/host.gateway";
 
 @Module({
@@ -17,6 +18,7 @@ import { HostGateway } from "./gateways/host.gateway";
     providers: [
       GameService,
       PlayerService,
+      CommonGateway,
       PlayerGateway,
       HostGateway
     ]

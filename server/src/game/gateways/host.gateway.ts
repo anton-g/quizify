@@ -157,4 +157,18 @@ export class HostGateway {
 
     console.log(`[${game.key}] Game ended`)
   }
+
+  @SubscribeMessage(GameEvents.ReconnectHost)
+  async onReconnect(client: Socket, req) {
+    let { data: oldSocketId, ack } = extractRequest(req)
+
+    const game: Game = await this.gameService.reconnectHost(oldSocketId, client.id)
+
+    if (!game) return // could not find game to reconnect to
+    // should probably do some error handling here
+
+    ack(new GameDto(game))
+
+    console.log(`[${game.key}] Host with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
+  }
 }

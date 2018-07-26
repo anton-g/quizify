@@ -6,12 +6,12 @@ import {
 import { Server, Socket } from 'socket.io';
 import { PlayerService } from '../services/player.service';
 import { GameService } from '../services/game.service';
-import { GameEvents } from '../game.state';
+import { GameEvents, GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { GameDto } from '../dtos/game.dto';
 
 @WebSocketGateway()
-export class HostGateway implements OnGatewayDisconnect {
+export class CommonGateway implements OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
   constructor (
@@ -25,6 +25,10 @@ export class HostGateway implements OnGatewayDisconnect {
     if (!game) {
       // Handle host disconnect
       game = await this.gameService.disconnectHost(client.id)
+      if (game.state === GameState.Playing) {
+        this.server.to(game.key).emit(GameEvents.Pause)
+        await this.gameService.setState(game.key, GameState.Paused)
+      }
     } else {
       // Handle player disconnect
       this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
