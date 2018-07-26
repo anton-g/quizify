@@ -11,6 +11,7 @@ import { GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { Player } from '../interfaces/player.interface';
 import { UserException } from '../../common/user.exception';
+import { PlaylistSchema } from '../schemas/playlist.schema';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -30,12 +31,19 @@ describe('PlayerService', () => {
     inject: [mockgooseProvider.provide],
   } as any;
 
+  const PlaylistProvider = {
+    provide: getModelToken('Playlist'),
+    useFactory: async connection => connection.model('Playlist', PlaylistSchema),
+    inject: [mockgooseProvider.provide],
+  } as any;
+
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      components: [
+      providers: [
         mockgooseProvider,
         gameProvider,
         playerProvider,
+        PlaylistProvider,
         PlayerService,
         GameService
       ]

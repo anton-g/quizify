@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Mongoose } from 'mongoose';
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { GameSchema } from '../schemas/game.schema';
@@ -10,12 +10,14 @@ import { PlayerSchema } from '../schemas/player.schema';
 import { Player } from '../interfaces/player.interface';
 import { GameState } from '../game.state';
 import { UserException } from '../../common/user.exception';
+import { Playlist } from '../interfaces/playlist.interface';
 
 @Injectable()
 export class GameService {
   constructor(
     @InjectModel('Game') private readonly gameModel: Model<Game>,
-    @InjectModel('Player') private readonly playerModel: Model<Player>
+    @InjectModel('Player') private readonly playerModel: Model<Player>,
+    @InjectModel('Playlist') private readonly PlaylistModel: Model<Playlist>
   ) { }
 
   async create(): Promise<Game> {
@@ -61,19 +63,21 @@ export class GameService {
         connected: false
       },
       questions: questions,
-      currentQuestionNo: 1
+      currentQuestionNo: 1,
+      playlist: '5b5a1648fb9010202167cd62'
     })
-    return await game.save()
+    await game.save()
+
+    return this.get(game.key)
   }
 
   async setState(key: string, state: GameState): Promise<Game> {
     if (!key) return Promise.reject(new UserException('Missing key'))
 
-    return await this.gameModel.findOneAndUpdate(
+    return await this._findOneAndUpdate(
       { "key": key.toUpperCase() },
-      { $set: { "state": state } },
-      { new: true }
-    ).exec()
+      { $set: { "state": state } }
+    )
   }
 
   async setHost(key: string, secret: string, hostSocket: string): Promise<Game> {
@@ -81,16 +85,15 @@ export class GameService {
     if (!secret) return Promise.reject(new UserException('Missing secret'))
     if (!hostSocket) return Promise.reject(new UserException('Missing host.socket'))
 
-    return await this.gameModel.findOneAndUpdate(
+    return await this._findOneAndUpdate(
       { "key": key.toUpperCase(), "secret": secret },
       { $set:
         {
           "host.socket": hostSocket,
           "host.connected": true
         }
-      },
-      { new: true }
-    ).exec()
+      }
+    )
   }
 
   async join(key: string, joinGameDto: JoinGameDto): Promise<Player> {
@@ -112,25 +115,36 @@ export class GameService {
   }
 
   async get(key: string): Promise<Game> {
-    return await this.gameModel.findOne({ key: key.toUpperCase() }).exec()
+    return await this.gameModel
+                      .findOne({ key: key.toUpperCase() })
+                      .populate({
+                        path: 'playlist',
+                        model: this.PlaylistModel
+                      })
+                      .exec()
   }
 
   async update(key: string, game: Partial<Game>): Promise<Game> {
-    return await this.gameModel.findOneAndUpdate({ 'key': key.toUpperCase() }, game, { new: true }).exec()
+    return await this._findOneAndUpdate({ 'key': key.toUpperCase() }, game)
   }
 
   async getByPlayerId(playerId: string): Promise<Game> {
-    return await this.gameModel.findOne({ "players._id": playerId }).exec()
+    return await this.gameModel
+                      .findOne({ "players._id": playerId })
+                      .populate({
+                        path: 'playlist',
+                        model: this.PlaylistModel
+                      })
+                      .exec()
   }
 
   async disconnectHost(hostSocketId: string): Promise<Game> {
     if (!hostSocketId) return Promise.reject(new UserException('Invalid socket id'))
 
-    const result: Game = await this.gameModel.findOneAndUpdate(
+    const result: Game = await this._findOneAndUpdate(
       { "host.socket": hostSocketId },
-      { $set: { "host.connected": false } },
-      { new: true }
-    ).exec()
+      { $set: { "host.connected": false } }
+    )
 
     return result
   }
@@ -139,7 +153,7 @@ export class GameService {
     if (!oldSocketId) return Promise.reject(new UserException('Invalid old socket id'))
     if (!newSocketId) return Promise.reject(new UserException('Invalid new socket id'))
 
-    const result: Game = await this.gameModel.findOneAndUpdate(
+    const result: Game = await this._findOneAndUpdate(
       {
         "host.socket": oldSocketId,
         "state": { $ne: GameState.Ended }
@@ -147,10 +161,22 @@ export class GameService {
       { $set: {
         "host.socket": newSocketId,
         "host.connected": true
-      } },
-      { new: true }
-    ).exec()
+      } }
+    )
 
     return result
+  }
+
+  async _findOneAndUpdate(conditions, update) {
+    return await this.gameModel
+                    .findOneAndUpdate(
+                      conditions,
+                      update,
+                    { new: true })
+                    .populate({
+                      path: 'playlist',
+                      model: this.PlaylistModel
+                    })
+                    .exec()
   }
 }

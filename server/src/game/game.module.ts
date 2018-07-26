@@ -8,16 +8,24 @@ import { PlayerService } from "./services/player.service";
 import { PlayerGateway } from "./gateways/player.gateway";
 import { CommonGateway } from "./gateways/common.gateway";
 import { HostGateway } from "./gateways/host.gateway";
+import { PlaylistSchema } from "./schemas/playlist.schema";
+import { PlaylistController } from "./playlist.controller";
+import { PlaylistService } from "./services/playlist.service";
 
 @Module({
     imports: [MongooseModule.forFeature([
       { name: 'Game', schema: GameSchema },
-      { name: 'Player', schema: PlayerSchema }
+      { name: 'Player', schema: PlayerSchema },
+      { name: 'Playlist', schema: PlaylistSchema }
     ])],
-    controllers: [GameController],
+    controllers: [
+      GameController,
+      PlaylistController
+    ],
     providers: [
       GameService,
       PlayerService,
+      PlaylistService,
       CommonGateway,
       PlayerGateway,
       HostGateway

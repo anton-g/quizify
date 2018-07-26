@@ -12,13 +12,13 @@ import { GameState } from '../game.state';
 import { JoinGameDto } from '../dtos/join-game.dto';
 import { Player } from '../interfaces/player.interface';
 import { UserException } from '../../common/user.exception';
-import { async } from '../../../node_modules/rxjs/internal/scheduler/async';
+import { async } from 'rxjs/internal/scheduler/async';
+import { PlaylistSchema } from '../schemas/playlist.schema';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
 describe('GameService', () => {
   let gameService: GameService;
-  let gameModel: Model<Game>
 
   const gameProvider = {
     provide: getModelToken('Game'),
@@ -32,12 +32,19 @@ describe('GameService', () => {
     inject: [mockgooseProvider.provide],
   } as any;
 
+  const PlaylistProvider = {
+    provide: getModelToken('Playlist'),
+    useFactory: async connection => connection.model('Playlist', PlaylistSchema),
+    inject: [mockgooseProvider.provide],
+  } as any;
+
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      components: [
+      providers: [
         mockgooseProvider,
         gameProvider,
         playerProvider,
+        PlaylistProvider,
         GameService
       ]
     }).compile()

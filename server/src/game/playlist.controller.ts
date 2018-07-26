@@ -1,7 +1,7 @@
 import { Controller, UseFilters, Get, HttpCode } from "@nestjs/common";
 import { UserExceptionFilter } from "../common/user-exception.filter";
-import { FeaturedPlaylistDto } from "./dtos/featured-playlist.dto";
 import { PlaylistService } from "./services/playlist.service";
+import { PlaylistDto } from "./dtos/playlist.dto";
 
 @Controller('playlist')
 @UseFilters(new UserExceptionFilter())
@@ -10,8 +10,8 @@ export class PlaylistController {
 
   @HttpCode(200)
   @Get('featured')
-  async get (): Promise<FeaturedPlaylistDto[]> {
+  async get (): Promise<PlaylistDto[]> {
     const playlists = await this.playlistService.get()
-    return playlists.map(p => new FeaturedPlaylistDto(p))
+    return playlists.map(p => new PlaylistDto(p))
   }
 }
