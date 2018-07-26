@@ -11,7 +11,8 @@ import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { GameState } from '../game.state';
 import { JoinGameDto } from '../dtos/join-game.dto';
 import { Player } from '../interfaces/player.interface';
-import { create } from 'domain';
+import { UserException } from '../../common/user.exception';
+import { async } from '../../../node_modules/rxjs/internal/scheduler/async';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -211,6 +212,54 @@ describe('GameService', () => {
       const game = await gameService.getByPlayerId(createdPlayer._id)
       expect(game.key).toBe(createdGame.key)
       expect(game.players[0].name).toBe(playerName)
+    })
+  })
+
+  describe('disconnect', () => {
+    let game: Game;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      game = await gameService.setHost(game.key, game.secret, 'host-socket-id')
+    })
+
+    it('should set host connect to false', async () => {
+      game = await gameService.disconnectHost('host-socket-id')
+      expect(game.host.connected).toBe(false)
+    })
+
+    it('should reject if socket id is missing', async () => {
+      expect.assertions(1)
+      await expect(gameService.disconnectHost('')).rejects.toEqual(new UserException('Invalid socket id'))
+    })
+  })
+
+  describe('reconnect', () => {
+    let game: Game;
+
+    beforeEach(async () => {
+      game = await gameService.create()
+      await gameService.setState(game.key, GameState.Lobby)
+      await gameService.setHost(game.key, game.secret, 'host-socket-id')
+      await gameService.disconnectHost('host-socket-id')
+      game = await gameService.get(game.key)
+    })
+
+    it('should update socket id', async () => {
+      game = await gameService.reconnectHost('host-socket-id', 'host-socket-id-new')
+      expect(game.host.socket).toBe('host-socket-id-new')
+    })
+
+    it('should set connected to true', async () => {
+      game = await gameService.reconnectHost('host-socket-id', 'host-socket-id-new')
+      expect(game.host.connected).toBe(true)
+    })
+
+    it('should reject if params are missing', async () => {
+      expect.assertions(2)
+      await expect(gameService.reconnectHost('', 'host-socket-id-new')).rejects.toEqual(new UserException('Invalid old socket id'))
+      await expect(gameService.reconnectHost('host-socket-id', '')).rejects.toEqual(new UserException('Invalid new socket id'))
     })
   })
 
