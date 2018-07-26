@@ -2,10 +2,10 @@
   card.play
     .info
       span.questionNo {{ currentQuestionNo }} / {{ questionCount }}
-      h2.question What is the name of the artist?
-      img.image(src="https://picsum.photos/200/?random")
-      p.artist Glennmark Eriksson Strömstedt
-      p.song När vi gräver guld i USA
+      h2.question {{ currentQuestion.question }}
+      img.image(:src="currentQuestion.track.img")
+      p.artist {{ currentQuestion.track.artist }}
+      p.song {{ currentQuestion.track.song }}
     .actions
       button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestionNo === 1")
         .q-icon
@@ -21,9 +21,9 @@
           FontAwesomeIcon(:icon="nextIcon")
     modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
-      .question What's the name of the artist?
-      .artist Haddaway
-      .song What is love
+      .question {{ currentQuestion.question }}
+      .artist {{ currentQuestion.track.artist }}
+      .song {{ currentQuestion.track.song }}
       .actions
         button.button.is-danger.is-fullwidth(@click="incorrect") Incorrect
         button.button.is-outlined.is-dark.is-fullwidth(@click="correct") Correct

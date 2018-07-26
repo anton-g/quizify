@@ -57,19 +57,21 @@ const state = {
 
 const getters = {
   hasActiveQuiz (state, getters, rootState) {
-    return rootState.common.connected && state.quiz
+    return rootState.common.connected && !!state.quiz
   },
   isBuzzed (state) {
     return !!state.buzzedPlayer
   },
   isPaused (state) {
-    return state.quiz && state.quiz.state === 'PAUSED'
+    return !!state.quiz && state.quiz.state === 'PAUSED'
   },
   finalQuestion (state) {
-    return state.quiz && state.quiz.currentQuestion === state.quiz.questions.length
+    return !!state.quiz && state.quiz.currentQuestionNo === state.quiz.questions.length
   },
   currentQuestion (state) {
-    return state.quiz && state.quiz.questions[0]
+    if (state.quiz) {
+      return state.quiz.questions[state.quiz.currentQuestionNo - 1]
+    }
   }
 }
 
