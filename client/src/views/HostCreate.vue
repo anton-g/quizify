@@ -52,7 +52,9 @@ export default {
       this.$router.push({ name: 'home' })
     },
     create () {
-      this.$store.dispatch('create')
+      if (this.selectedPlaylist) {
+        this.$store.dispatch('create')
+      }
     }
   }
 }
