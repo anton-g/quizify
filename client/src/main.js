@@ -5,6 +5,7 @@ import store from './store'
 import VueMq from 'vue-mq'
 import VueSocketio from 'vue-socket.io-extended'
 import io from 'socket.io-client'
+import { API_URL } from './common/constants'
 
 Vue.config.productionTip = false
 
@@ -16,7 +17,7 @@ Vue.use(VueMq, {
     fullhd: Infinity
   }
 })
-Vue.use(VueSocketio, io('http://localhost:3000'), store)
+Vue.use(VueSocketio, io(API_URL), store)
 
 new Vue({
   router,

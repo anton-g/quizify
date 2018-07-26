@@ -34,6 +34,9 @@ export default {
       showPlaylistSelection: false
     }
   },
+  created () {
+    this.$store.dispatch('loadFeaturedPlaylists')
+  },
   computed: {
     featuredPlaylists () {
       return this.$store.state.host.featuredPlaylists.slice(0, 3)
