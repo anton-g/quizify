@@ -1,9 +1,24 @@
 <template lang="pug">
   card.play
-    p game
-    button.button(@click="prev") Prev
-    button.button(@click="togglePlayState") {{ isPaused ? 'Resume' : 'Pause' }}
-    button.button(@click="next") {{ lastQuestion ? 'End' : 'Next' }}
+    .info
+      span.questionNo {{ currentQuestion }} / {{ questionCount }}
+      h2.question What is the name of the artist?
+      img.image(src="https://picsum.photos/200/?random")
+      p.artist Glennmark Eriksson Strömstedt
+      p.song När vi gräver guld i USA
+    .actions
+      button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestion === 1")
+        .q-icon
+          FontAwesomeIcon(:icon="prevIcon")
+        | Prev
+      button.button.is-dark.is-fullwidth(@click="togglePlayState")
+        | {{ isPaused ? 'Resume' : 'Pause' }}
+        .q-icon
+          FontAwesomeIcon(:icon="togglePlayIcon")
+      button.button.is-dark.is-fullwidth(@click="next", :class="{ 'is-danger': lastQuestion }")
+        | {{ lastQuestion ? 'End' : 'Next' }}
+        .q-icon(v-if="!lastQuestion")
+          FontAwesomeIcon(:icon="nextIcon")
     modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
       .question What's the name of the artist?
@@ -19,10 +34,14 @@
 import Card from '../components/Card.vue'
 import Modal from '../components/Modal.vue'
 
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import { faBackward, faForward, faPlay, faPause } from '@fortawesome/fontawesome-free-solid'
+
 export default {
   components: {
     Card,
-    Modal
+    Modal,
+    FontAwesomeIcon
   },
   computed: {
     buzzed () {
@@ -36,6 +55,21 @@ export default {
     },
     lastQuestion () {
       return this.$store.getters.finalQuestion
+    },
+    questionCount () {
+      return this.$store.state.host.quiz.questions.length
+    },
+    currentQuestion () {
+      return this.$store.state.host.quiz.currentQuestion
+    },
+    prevIcon () {
+      return faBackward
+    },
+    nextIcon () {
+      return faForward
+    },
+    togglePlayIcon () {
+      return this.isPaused ? faPlay : faPause
     }
   },
   methods: {
@@ -69,6 +103,53 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@design';
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .questionNo {
+    color: gray;
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: $size-1;
+  }
+
+  .question {
+    font-size: $size-3;
+    line-height: $size-3;
+    margin-bottom: $size-2;
+  }
+
+  .image {
+    border-radius: $size-2;
+    margin-bottom: $size-1;
+  }
+
+  .artist {
+    font-family: $font-family-heading;
+  }
+}
+
+.actions {
+  margin-top: $size-2;
+  display: flex;
+
+  .button {
+    .q-icon {
+      padding: 0 4px;
+    }
+  }
+
+  > :first-child {
+    margin-right: $size-1;
+  }
+
+  > :last-child {
+    margin-left: $size-1;
+  }
+}
 
 .buzz-info {
   .title {
