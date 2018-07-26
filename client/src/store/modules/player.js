@@ -105,8 +105,8 @@ const actions = {
       }
     })
   },
-  cleanup ({ commit, state }) {
-    commit(types.CLEANUP)
+  cleanupPlayer ({ commit, state }) {
+    commit(types.CLEANUP_PLAYER)
   },
   socket_start: ({ commit, state }, data) => {
     router.push({ name: 'player-play' })

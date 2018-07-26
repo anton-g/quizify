@@ -153,7 +153,7 @@ export class HostGateway {
     const gameEnded = new GameEndedDto(game)
     this.server.to(game.key).emit(GameEvents.EndGame, gameEnded)
 
-    ack()
+    ack(gameEnded)
 
     console.log(`[${game.key}] Game ended`)
   }

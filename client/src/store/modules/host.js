@@ -10,6 +10,7 @@ const state = {
   playlist: undefined,
   quiz: undefined,
   buzzedPlayer: undefined,
+  result: [],
   featuredPlaylists: [
     {
       name: 'Alla ska med',
@@ -96,6 +97,15 @@ const mutations = {
   },
   [types.SET_BUZZED_PLAYER] (state, player) {
     state.buzzedPlayer = player
+  },
+  [types.SET_RESULT] (state, result) {
+    state.result = result
+  },
+  [types.CLEANUP_HOST] (state) {
+    state.playlist = undefined
+    state.quiz = undefined
+    state.buzzedPlayer = undefined
+    state.result = []
   }
 }
 
@@ -164,9 +174,13 @@ const actions = {
     })
   },
   endQuiz ({ state, commit }) {
-    socketBus.$socket.emit('END_GAME', state.quiz.key, result => {
-      console.log('end')
+    socketBus.$socket.emit('END_GAME', state.quiz.key, response => {
+      commit(types.SET_RESULT, response.results)
+      router.push({ name: 'host-end' })
     })
+  },
+  cleanupHost ({ commit }) {
+    commit(types.CLEANUP_HOST)
   },
   socket_update: ({ commit }, update) => {
     commit(types.UPDATE_QUIZ, update)

@@ -8,6 +8,7 @@ import PlayerEnd from './views/PlayerEnd.vue'
 import HostCreate from './views/HostCreate.vue'
 import HostLobby from './views/HostLobby.vue'
 import HostPlay from './views/HostPlay.vue'
+import HostEnd from './views/HostEnd.vue'
 
 Vue.use(Router)
 
@@ -67,6 +68,12 @@ export default new Router({
       path: '/create/play',
       name: 'host-play',
       component: HostPlay,
+      beforeEnter: checkHasQuiz
+    },
+    {
+      path: '/create/end',
+      name: 'host-end',
+      component: HostEnd,
       beforeEnter: checkHasQuiz
     }
   ]
