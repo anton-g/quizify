@@ -70,7 +70,7 @@ export class GameService {
     if (!key) return Promise.reject(new UserException('Missing key'))
 
     return await this.gameModel.findOneAndUpdate(
-      { "key": key },
+      { "key": key.toUpperCase() },
       { $set: { "state": state } },
       { new: true }
     ).exec()
@@ -82,7 +82,7 @@ export class GameService {
     if (!hostSocket) return Promise.reject(new UserException('Missing host.socket'))
 
     return await this.gameModel.findOneAndUpdate(
-      { "key": key, "secret": secret },
+      { "key": key.toUpperCase(), "secret": secret },
       { $set:
         {
           "host.socket": hostSocket,
@@ -112,11 +112,11 @@ export class GameService {
   }
 
   async get(key: string): Promise<Game> {
-    return await this.gameModel.findOne({ key: key }).exec()
+    return await this.gameModel.findOne({ key: key.toUpperCase() }).exec()
   }
 
   async update(key: string, game: Partial<Game>): Promise<Game> {
-    return await this.gameModel.findOneAndUpdate({ 'key': key }, game, { new: true }).exec()
+    return await this.gameModel.findOneAndUpdate({ 'key': key.toUpperCase() }, game, { new: true }).exec()
   }
 
   async getByPlayerId(playerId: string): Promise<Game> {
