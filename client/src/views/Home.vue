@@ -40,7 +40,7 @@ import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faKey, faUser } from '@fortawesome/fontawesome-free-solid'
 import { faSpotify } from '@fortawesome/fontawesome-free-brands'
 import Card from '../components/Card.vue'
-import { reconnectOnCreation } from '../mixins/ReconnectMixin.js'
+import { reconnectOnCreation } from '../mixins/reconnect.js'
 
 export default {
   name: 'home',

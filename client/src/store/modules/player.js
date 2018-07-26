@@ -55,7 +55,7 @@ const mutations = {
 }
 
 const actions = {
-  async joinQuiz ({ commit, state }, { key, name }) {
+  async joinQuiz ({ commit }, { key, name }) {
     const { status, data } = await axios.post(`${API_URL}/game/${key}/join`, {
       name: name
     })
@@ -79,7 +79,7 @@ const actions = {
       router.push({ name: 'player-lobby' })
     })
   },
-  async reconnectPlayer ({ commit, state }, socket) {
+  async reconnectPlayer ({ commit }, socket) {
     console.log('Reconnecting..')
     socketBus.$socket.emit('RECONN_P', socket, (data) => {
       if (!data) {
@@ -105,10 +105,10 @@ const actions = {
       }
     })
   },
-  cleanupPlayer ({ commit, state }) {
+  cleanupPlayer ({ commit }) {
     commit(types.CLEANUP_PLAYER)
   },
-  socket_start: ({ commit, state }, data) => {
+  socket_start: ({ commit }, data) => {
     router.push({ name: 'player-play' })
     commit(types.UPDATE_QUIZ, data)
   },

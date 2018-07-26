@@ -199,7 +199,7 @@ const actions = {
   cleanupHost ({ commit }) {
     commit(types.CLEANUP_HOST)
   },
-  async loadFeaturedPlaylists ({ state, commit }) {
+  async loadFeaturedPlaylists ({ commit }) {
     const { status, data: featuredPlaylists } = await axios.get(`${API_URL}/playlist/featured`)
 
     if (status !== 200) {

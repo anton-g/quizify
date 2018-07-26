@@ -5,9 +5,6 @@ const state = {
   connected: false
 }
 
-const getters = {
-}
-
 const mutations = {
   [types.SOCKET_CONNECT] (state) {
     state.connected = true
@@ -17,12 +14,7 @@ const mutations = {
   }
 }
 
-const actions = {
-}
-
 export default {
   state,
-  getters,
-  mutations,
-  actions
+  mutations
 }
