@@ -48,7 +48,7 @@ const mutations = {
   [types.SOCKET_RESUME] (state) {
     state.quizInfo.state = 'PLAYING'
   },
-  [types.SOCKET_SCORED] (state, score) {
+  [types.SCORED] (state, score) {
     if (state.me) {
       state.me.score += score
     }
@@ -81,7 +81,6 @@ const actions = {
     })
   },
   async reconnectPlayer ({ commit }, socket) {
-    console.log('Reconnecting..')
     izitoast.show({
       class: 'toast-reconnect',
       title: 'Reconnecting!',
@@ -96,7 +95,6 @@ const actions = {
         return
       }
 
-      console.log('Successfully reconnected! Restoring game state..')
       const player = data.player
       const game = data.game
       commit(types.PLAYER_JOIN, player)
@@ -134,6 +132,14 @@ const actions = {
   },
   socket_prevQuestion: ({ commit }, data) => {
     commit(types.UPDATE_QUIZ, data)
+  },
+  socket_scored: ({ commit }, score) => {
+    commit(types.SCORED, score)
+
+    izitoast.show({
+      title: 'Correct!',
+      message: `You scored ${score} point!`
+    })
   },
   socket_endGame: ({ commit }, data) => {
     router.push({ name: 'player-end' })
