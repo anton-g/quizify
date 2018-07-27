@@ -7,6 +7,7 @@ import { PlayerDto } from "./dtos/player.dto";
 import { UserExceptionFilter } from "../common/user-exception.filter";
 import { JoinedGameDto } from "./dtos/joined-game.dto";
 import { PlayerGameInfoDto } from "./dtos/player-game-info.dto";
+import { CreateQuizOptionsDto } from "./dtos/create-quiz-options.dto";
 
 @Controller('game')
 @UseFilters(new UserExceptionFilter())
@@ -15,8 +16,8 @@ export class GameController {
 
     @HttpCode(201)
     @Post()
-    async create (): Promise<GameDto> {
-      const game: Game = await this.gameService.create()
+    async create (@Body() options: CreateQuizOptionsDto): Promise<GameDto> {
+      const game: Game = await this.gameService.create(options)
       return new GameDto(game)
     }
 

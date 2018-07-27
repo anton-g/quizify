@@ -9,7 +9,6 @@ import { HOST_SOCKET_STORAGE_ITEM, API_URL } from '../../common/constants'
 const socketBus = new Vue()
 
 const state = {
-  playlist: undefined,
   quiz: undefined,
   buzzedPlayer: undefined,
   result: [],
@@ -63,9 +62,6 @@ const getters = {
 }
 
 const mutations = {
-  [types.SET_PLAYLIST] (state, playlist) {
-    state.playlist = playlist
-  },
   [types.SET_QUIZ] (state, quiz) {
     state.quiz = quiz
   },
@@ -103,11 +99,10 @@ const actions = {
     // todo lot of spotify stuff
     router.push({ name: 'host-create' })
   },
-  selectPlaylist ({ commit }, playlist) {
-    commit(types.SET_PLAYLIST, playlist)
-  },
-  async create ({ commit }) {
-    const { status, data } = await axios.post(`${API_URL}/game`)
+  async create ({ commit }, options) {
+    const { status, data } = await axios.post(`${API_URL}/game`, {
+      playlist: options.playlist.id
+    })
 
     if (status !== 201 || data.error) {
       console.log('error')
@@ -128,6 +123,14 @@ const actions = {
       localStorage.setItem(HOST_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
     })
   },
+  async updatePlaylist ({ commit, state }, playlist) {
+    socketBus.$socket.emit('CHANGE_PLAYLIST', {
+      key: state.quiz.key,
+      playlist: playlist.id
+    }, quiz => {
+      commit(types.UPDATE_QUIZ, quiz)
+    })
+  },
   async reconnectHost ({ commit, state }, socket) {
     socketBus.$socket.emit('RECONN_H', socket, (quiz) => {
       if (!quiz) {
@@ -137,8 +140,6 @@ const actions = {
 
       console.log('Successfully reconnected! Restoring game state..')
       commit(types.SET_QUIZ, quiz)
-      // TODO TEMP, remove when playlist is saved on server
-      commit(types.SET_PLAYLIST, state.playlists[0])
 
       if (quiz.state === 'LOBBY') {
         router.push({ name: 'host-lobby' })

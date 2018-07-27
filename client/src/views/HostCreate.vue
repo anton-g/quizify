@@ -31,7 +31,8 @@ export default {
   },
   data () {
     return {
-      showPlaylistSelection: false
+      showPlaylistSelection: false,
+      selectedPlaylist: undefined
     }
   },
   created () {
@@ -43,14 +44,11 @@ export default {
     },
     userPlaylists () {
       return this.$store.state.host.playlists
-    },
-    selectedPlaylist () {
-      return this.$store.state.host.playlist
     }
   },
   methods: {
     select (playlist) {
-      this.$store.dispatch('selectPlaylist', playlist)
+      this.selectedPlaylist = playlist
       this.showPlaylistSelection = false
     },
     cancel () {
@@ -58,7 +56,10 @@ export default {
     },
     create () {
       if (this.selectedPlaylist) {
-        this.$store.dispatch('create')
+        const options = {
+          playlist: this.selectedPlaylist
+        }
+        this.$store.dispatch('create', options)
       }
     }
   }

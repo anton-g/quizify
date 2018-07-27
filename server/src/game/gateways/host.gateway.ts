@@ -39,6 +39,20 @@ export class HostGateway {
     console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
   }
 
+  @SubscribeMessage(GameEvents.ChangePlaylist)
+  async onChangePlaylist(client: Socket, req) {
+    let { data: data, ack } = extractRequest(req)
+
+    const gameUpdate: Partial<Game> = {
+      playlist: data.playlist
+    }
+
+    const game = await this.gameService.update(data.key, gameUpdate)
+    ack(new GameDto(game))
+
+    this.server.to(game.key).emit(GameEvents.ChangePlaylist, new PlayerGameInfoDto(game))
+  }
+
   @SubscribeMessage(GameEvents.Start)
   async onStart(client: Socket, req) {
     let { data: key, ack } = extractRequest(req)

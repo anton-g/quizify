@@ -11,16 +11,17 @@ import { Player } from '../interfaces/player.interface';
 import { GameState } from '../game.state';
 import { UserException } from '../../common/user.exception';
 import { Playlist } from '../interfaces/playlist.interface';
+import { CreateQuizOptionsDto } from '../dtos/create-quiz-options.dto';
 
 @Injectable()
 export class GameService {
   constructor(
     @InjectModel('Game') private readonly gameModel: Model<Game>,
     @InjectModel('Player') private readonly playerModel: Model<Player>,
-    @InjectModel('Playlist') private readonly PlaylistModel: Model<Playlist>
+    @InjectModel('Playlist') private readonly playlistModel: Model<Playlist>
   ) { }
 
-  async create(): Promise<Game> {
+  async create(options: CreateQuizOptionsDto): Promise<Game> {
     const secret: string = nanoid()
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
@@ -64,7 +65,7 @@ export class GameService {
       },
       questions: questions,
       currentQuestionNo: 1,
-      playlist: '5b5a1648fb9010202167cd62'
+      playlist: options.playlist
     })
     await game.save()
 
@@ -119,7 +120,7 @@ export class GameService {
                       .findOne({ key: key.toUpperCase() })
                       .populate({
                         path: 'playlist',
-                        model: this.PlaylistModel
+                        model: this.playlistModel
                       })
                       .exec()
   }
@@ -133,7 +134,7 @@ export class GameService {
                       .findOne({ "players._id": playerId })
                       .populate({
                         path: 'playlist',
-                        model: this.PlaylistModel
+                        model: this.playlistModel
                       })
                       .exec()
   }
@@ -175,7 +176,7 @@ export class GameService {
                     { new: true })
                     .populate({
                       path: 'playlist',
-                      model: this.PlaylistModel
+                      model: this.playlistModel
                     })
                     .exec()
   }

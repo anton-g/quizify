@@ -8,6 +8,7 @@ export enum GameState {
 
 export enum GameEvents {
   Host = "HOST",
+  ChangePlaylist = "CHANGE_PLAYLIST",
   Update = "UPDATE",
   Start = "START",
   Pause = "PAUSE",

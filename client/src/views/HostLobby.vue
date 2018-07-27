@@ -49,7 +49,7 @@ export default {
       return this.$store.state.host.playlists
     },
     selectedPlaylist () {
-      return this.$store.state.host.playlist
+      return this.$store.state.host.quiz.playlist
     },
     players () {
       return this.$store.state.host.quiz.players
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     select (playlist) {
-      this.$store.dispatch('selectPlaylist', playlist)
+      this.$store.dispatch('updatePlaylist', playlist)
       this.showPlaylistPicker = false
     },
     start () {

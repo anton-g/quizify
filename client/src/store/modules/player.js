@@ -108,6 +108,9 @@ const actions = {
   cleanupPlayer ({ commit }) {
     commit(types.CLEANUP_PLAYER)
   },
+  socket_changePlaylist: ({ commit }, data) => {
+    commit(types.UPDATE_QUIZ, data)
+  },
   socket_start: ({ commit }, data) => {
     router.push({ name: 'player-play' })
     commit(types.UPDATE_QUIZ, data)

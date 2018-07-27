@@ -5,7 +5,6 @@ export const SET_RESULT_INFO = 'SET_RESULT_INFO'
 export const CLEANUP_PLAYER = 'CLEANUP_PLAYER'
 
 export const CLEANUP_HOST = 'CLEANUP_HOST'
-export const SET_PLAYLIST = 'SET_PLAYLIST'
 export const SET_QUIZ = 'SET_QUIZ'
 export const SET_BUZZED_PLAYER = 'SET_BUZZED_PLAYER'
 export const SET_RESULT = 'SET_RESULT'

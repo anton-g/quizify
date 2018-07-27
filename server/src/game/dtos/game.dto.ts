@@ -1,6 +1,7 @@
 import { Game } from "../interfaces/game.interface";
 import { PlayerDto } from "./player.dto";
 import { GameState } from "../game.state";
+import { PlaylistDto } from "./playlist.dto";
 
 export class GameDto {
   constructor (game: Game) {
@@ -11,6 +12,7 @@ export class GameDto {
     this.players = game.players.map(p => new PlayerDto(p));
     this.questions = game.questions;
     this.currentQuestionNo = game.currentQuestionNo;
+    this.playlist = new PlaylistDto(game.playlist);
   }
 
   readonly state: GameState;
@@ -20,6 +22,7 @@ export class GameDto {
   readonly players: PlayerDto[];
   readonly questions: string[];
   readonly currentQuestionNo: number;
+  readonly playlist: PlaylistDto;
 }
 
 export class HostDto {
