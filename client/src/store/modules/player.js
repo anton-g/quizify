@@ -90,8 +90,13 @@ const actions = {
     const toast = document.querySelector('.toast-reconnect')
 
     socketBus.$socket.emit('RECONN_P', socket, (data) => {
+      izitoast.hide({}, toast)
+
       if (!data) {
-        console.log('Could not reconnect.. :(')
+        izitoast.show({
+          title: 'Reconnect failed',
+          message: 'Could not reconnect to quiz..'
+        })
         return
       }
 
@@ -101,11 +106,6 @@ const actions = {
       commit(types.UPDATE_QUIZ, game)
 
       localStorage.setItem(PLAYER_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
-
-      izitoast.hide({}, toast)
-      izitoast.show({
-        title: 'Reconnected!'
-      })
 
       if (game.state === 'LOBBY') {
         router.push({ name: 'player-lobby' })

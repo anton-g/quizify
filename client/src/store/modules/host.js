@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import izitoast from 'izitoast'
 import router from '@/router'
 
 import * as types from '../mutation-types'
@@ -132,13 +133,25 @@ const actions = {
     })
   },
   async reconnectHost ({ commit, state }, socket) {
+    izitoast.show({
+      class: 'toast-reconnect',
+      title: 'Reconnecting!',
+      message: `Trying to reconnect to previous quiz..`
+    })
+
+    const toast = document.querySelector('.toast-reconnect')
+
     socketBus.$socket.emit('RECONN_H', socket, (quiz) => {
+      izitoast.hide({}, toast)
+
       if (!quiz) {
-        console.log('Could not reconnect.. :(')
+        izitoast.show({
+          title: 'Reconnect failed',
+          message: 'Could not reconnect to quiz..'
+        })
         return
       }
 
-      console.log('Successfully reconnected! Restoring game state..')
       commit(types.SET_QUIZ, quiz)
 
       if (quiz.state === 'LOBBY') {
