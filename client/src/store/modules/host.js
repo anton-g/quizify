@@ -97,8 +97,7 @@ const mutations = {
 
 const actions = {
   login () {
-    // todo lot of spotify stuff
-    router.push({ name: 'host-create' })
+    window.location = `http://192.168.1.5:3000/auth/login`
   },
   async create ({ commit }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {

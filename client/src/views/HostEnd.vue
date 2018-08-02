@@ -1,7 +1,7 @@
 <template lang="pug">
   card.host-end
     h2.title Result
-    player-result-list(:results="result")
+    player-result-list.result-list(:results="result")
     .field
       .control
         button.button.is-dark.is-pulled-right(@click="home") Home
@@ -33,4 +33,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@design';
 
+.result-list {
+  margin-bottom: $size-2;
+}
 </style>
