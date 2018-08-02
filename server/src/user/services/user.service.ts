@@ -9,6 +9,17 @@ export class UserService {
     @InjectModel('User') private readonly userModel: Model<User>,
   ) { }
 
+  async create(name: string, accessToken: string, refreshToken: string): Promise<User> {
+    const user = new this.userModel({
+      name: name,
+      spotifyAccessToken: accessToken,
+      spotifyRefreshToken: refreshToken
+    })
+    await user.save()
+
+    return this.getById(user._id)
+  }
+
   async get(): Promise<User[]> {
     return await this.userModel.find()
   }
