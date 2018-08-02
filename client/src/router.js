@@ -10,8 +10,6 @@ import HostLobby from './views/HostLobby.vue'
 import HostPlay from './views/HostPlay.vue'
 import HostEnd from './views/HostEnd.vue'
 
-import Auth from './components/Auth.vue'
-
 Vue.use(Router)
 
 const checkIsConnectedToQuiz = (to, from, next) => {
@@ -78,11 +76,6 @@ export default new Router({
       name: 'host-end',
       component: HostEnd,
       beforeEnter: checkHasQuiz
-    },
-    {
-      path: '/auth',
-      name: 'host-auth',
-      component: Auth
     }
   ]
 })
