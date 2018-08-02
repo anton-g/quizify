@@ -15,32 +15,7 @@ const state = {
   buzzedPlayer: undefined,
   result: [],
   featuredPlaylists: [],
-  playlists: [
-    {
-      name: 'Julquiz',
-      length: 10
-    },
-    {
-      name: 'Amanda 25',
-      length: 18
-    },
-    {
-      name: 'Lajvet',
-      length: 22
-    },
-    {
-      name: 'Always bushes of seagulls',
-      length: 10
-    },
-    {
-      name: 'Sümmer',
-      length: 199
-    },
-    {
-      name: 'Och vi ska också glömmas bort',
-      length: 98
-    }
-  ]
+  playlists: []
 }
 
 const getters = {
@@ -96,12 +71,15 @@ const mutations = {
   },
   [types.SET_FEATURED_PLAYLISTS] (state, featuredPlaylists) {
     state.featuredPlaylists = featuredPlaylists
+  },
+  [types.SET_USER_PLAYLISTS] (state, playlists) {
+    state.playlists = playlists
   }
 }
 
 const actions = {
   login () {
-    window.location = `http://192.168.1.5:3000/auth/login`
+    window.location = `http://localhost:3000/auth/login`
   },
   successfulLogin ({ commit }, jwt) {
     commit(types.SET_JWT, jwt)
@@ -228,6 +206,20 @@ const actions = {
     }
 
     commit(types.SET_FEATURED_PLAYLISTS, featuredPlaylists)
+  },
+  async loadUserPlaylists ({ commit, state }) {
+    const { status, data: userPlaylists } = await axios.get(`${API_URL}/playlist/`, {
+      headers: {
+        Authorization: `Bearer ${state.jwt}`
+      }
+    })
+
+    if (status !== 200) {
+      console.log('Could not load user playlists')
+      return
+    }
+
+    commit(types.SET_USER_PLAYLISTS, userPlaylists)
   },
   socket_update: ({ commit }, update) => {
     commit(types.UPDATE_QUIZ, update)

@@ -40,6 +40,7 @@ export default {
     if (key === 'jwt') {
       this.$store.dispatch('successfulLogin', jwt)
       this.$store.dispatch('loadFeaturedPlaylists')
+      this.$store.dispatch('loadUserPlaylists')
     }
   },
   computed: {
