@@ -11,13 +11,17 @@ import { HostGateway } from "./gateways/host.gateway";
 import { PlaylistSchema } from "./schemas/playlist.schema";
 import { PlaylistController } from "./playlist.controller";
 import { PlaylistService } from "./services/playlist.service";
+import { SpotifyModule } from "../spotify/spotify.module";
 
 @Module({
-    imports: [MongooseModule.forFeature([
-      { name: 'Game', schema: GameSchema },
-      { name: 'Player', schema: PlayerSchema },
-      { name: 'Playlist', schema: PlaylistSchema }
-    ])],
+    imports: [
+      MongooseModule.forFeature([
+        { name: 'Game', schema: GameSchema },
+        { name: 'Player', schema: PlayerSchema },
+        { name: 'Playlist', schema: PlaylistSchema }
+      ]),
+      SpotifyModule
+    ],
     controllers: [
       GameController,
       PlaylistController

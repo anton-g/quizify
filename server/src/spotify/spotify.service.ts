@@ -1,5 +1,6 @@
 import { Injectable, HttpService } from "@nestjs/common";
 import { ConfigService } from "../config/config.service";
+import { User } from "../user/interfaces/user.interface";
 
 @Injectable()
 export class SpotifyService {
@@ -28,5 +29,15 @@ export class SpotifyService {
     }).toPromise()
 
     return result.data
+  }
+
+  async getUserPlaylists(user: User): Promise<any> {
+    const { status, data } = await this.httpService.get(`https://api.spotify.com/v1/users/${user.name}/playlists`, {
+      headers: {
+        Authorization: `Bearer ${user.spotifyAccessToken}`
+      }
+    }).toPromise()
+
+    return data.items
   }
 }

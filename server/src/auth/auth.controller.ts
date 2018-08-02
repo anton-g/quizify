@@ -1,5 +1,5 @@
 import { Controller, Get, Res, Query } from "@nestjs/common";
-import { SpotifyService } from "../common/spotify.service";
+import { SpotifyService } from "../spotify/spotify.service";
 import { UserService } from "../user/services/user.service";
 import { AuthService } from "./auth.service";
 

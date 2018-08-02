@@ -36,7 +36,11 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('loadFeaturedPlaylists')
+    const [key, jwt] = this.$route.hash.slice(1).split('=')
+    if (key === 'jwt') {
+      this.$store.dispatch('successfulLogin', jwt)
+      this.$store.dispatch('loadFeaturedPlaylists')
+    }
   },
   computed: {
     featuredPlaylists () {

@@ -1,22 +1,22 @@
 import { Module, HttpModule } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { MongooseModule } from "@nestjs/mongoose";
-import { SpotifyService } from "../common/spotify.service";
 import { UserModule } from "../user/user.module";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "../common/jwt.strategy";
+import { SpotifyModule } from "../spotify/spotify.module";
 
 @Module({
     imports: [
       MongooseModule.forFeature([]),
       HttpModule,
-      UserModule
+      UserModule,
+      SpotifyModule
     ],
     controllers: [
       AuthController
     ],
     providers: [
-      SpotifyService,
       AuthService,
       JwtStrategy
     ]

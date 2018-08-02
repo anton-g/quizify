@@ -1,7 +1,7 @@
 import { Playlist } from "../interfaces/playlist.interface";
 
 export class PlaylistDto {
-  constructor (playlist: Playlist) {
+  constructor (playlist?: Playlist) {
     this.id = playlist._id;
     this.name = playlist.name;
     this.description = playlist.description;
@@ -9,6 +9,20 @@ export class PlaylistDto {
     this.img = playlist.img;
     this.color = playlist.color;
     this.featured = playlist.featured;
+  }
+
+  static fromSpotifyPlaylist(playlist: any): any {
+    const dto: PlaylistDto = {
+      id: playlist.id,
+      name: playlist.name,
+      description: '',
+      length: 0,
+      img: '',
+      color: '',
+      featured: false
+    }
+
+    return dto;
   }
 
   readonly id: string;

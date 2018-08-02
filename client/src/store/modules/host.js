@@ -10,6 +10,7 @@ import { HOST_SOCKET_STORAGE_ITEM, API_URL } from '../../common/constants'
 const socketBus = new Vue()
 
 const state = {
+  jwt: undefined,
   quiz: undefined,
   buzzedPlayer: undefined,
   result: [],
@@ -63,6 +64,9 @@ const getters = {
 }
 
 const mutations = {
+  [types.SET_JWT] (state, jwt) {
+    state.jwt = jwt
+  },
   [types.SET_QUIZ] (state, quiz) {
     state.quiz = quiz
   },
@@ -98,6 +102,9 @@ const mutations = {
 const actions = {
   login () {
     window.location = `http://192.168.1.5:3000/auth/login`
+  },
+  successfulLogin ({ commit }, jwt) {
+    commit(types.SET_JWT, jwt)
   },
   async create ({ commit }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {

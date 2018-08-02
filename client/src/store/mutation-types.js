@@ -6,6 +6,7 @@ export const CLEANUP_PLAYER = 'CLEANUP_PLAYER'
 export const SCORED = 'SCORED'
 
 export const CLEANUP_HOST = 'CLEANUP_HOST'
+export const SET_JWT = 'SET_JWT'
 export const SET_QUIZ = 'SET_QUIZ'
 export const SET_BUZZED_PLAYER = 'SET_BUZZED_PLAYER'
 export const SET_RESULT = 'SET_RESULT'
