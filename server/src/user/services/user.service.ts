@@ -10,6 +10,11 @@ export class UserService {
   ) { }
 
   async create(name: string, accessToken: string, refreshToken: string): Promise<User> {
+    // Remove users previous data to ensure tokens are newest, we should probably update it in the future
+    await this.userModel.remove({
+      'name': name
+    }).exec()
+
     const user = new this.userModel({
       name: name,
       spotifyAccessToken: accessToken,
