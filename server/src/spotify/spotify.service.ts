@@ -1,43 +1,47 @@
 import { Injectable, HttpService } from "@nestjs/common";
 import { ConfigService } from "../config/config.service";
 import { User } from "../user/interfaces/user.interface";
+import * as SpotifyWebApi from 'spotify-web-api-node'
+import { access } from "fs";
 
 @Injectable()
 export class SpotifyService {
+  private readonly spotify: any;
+
   constructor(
     private readonly httpService: HttpService,
-    private readonly config: ConfigService) {}
+    private readonly config: ConfigService) {
+      this.spotify = new SpotifyWebApi({
+        clientId: config.spotifyClientId,
+        clientSecret: config.spotifyClientSecret,
+        redirectUri: config.spotifyRedirectUri
+      })
+    }
 
   get authorizeUrl(): string {
-    return `https://accounts.spotify.com/authorize?response_type=code&client_id=${this.config.spotifyClientId}&scope=${this.config.spotifyScope}&redirect_uri=${this.config.spotifyRedirectUri}`
+    const state = 'state' // TODO: randomize state, verify
+    const scopes = this.config.spotifyScope.split(' ')
+    return this.spotify.createAuthorizeURL(scopes, state)
   }
 
   async login(authorizationCode: string): Promise<any> {
-    const data = `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${this.config.spotifyRedirectUri}&client_id=${this.config.spotifyClientId}&client_secret=${this.config.spotifyClientSecret}`
-    const result = await this.httpService.post('https://accounts.spotify.com/api/token', data).toPromise()
-
-    console.log(result.data)
-
-    return result.data
+    const result = await this.spotify.authorizationCodeGrant(authorizationCode)
+    return result.body
   }
 
   async me(accessToken: string): Promise<any> {
-    const result = await this.httpService.get('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
-    }).toPromise()
+    this.spotify.setAccessToken(accessToken)
+    const result = await this.spotify.getMe()
+    this.spotify.resetAccessToken()
 
-    return result.data
+    return result.body
   }
 
   async getUserPlaylists(user: User): Promise<any> {
-    const { status, data } = await this.httpService.get(`https://api.spotify.com/v1/users/${user.name}/playlists`, {
-      headers: {
-        Authorization: `Bearer ${user.spotifyAccessToken}`
-      }
-    }).toPromise()
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    const { statusCode, body } = await this.spotify.getUserPlaylists(user.name)
+    this.spotify.resetAccessToken()
 
-    return data.items
+    return body.items
   }
 }
