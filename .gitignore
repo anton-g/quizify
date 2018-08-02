@@ -7,5 +7,7 @@
 *.ntvs*
 *.njsproj
 *.sln
+*.env
+!template.env
 
 dist/

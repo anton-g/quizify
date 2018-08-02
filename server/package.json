@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon",
+    "start:dev": "NODE_ENV=development nodemon",
     "prestart:prod": "rm -rf dist && tsc",
-    "start:prod": "node dist/main.js",
+    "start:prod": "NODE_ENV=production node dist/main.js",
     "test": "jest",
     "test:cov": "jest --coverage"
   },
@@ -21,6 +21,8 @@
     "@nestjs/websockets": "^5.0.0",
     "@types/socket.io": "^1.4.33",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "joi": "^13.5.2",
     "mongoose": "^5.0.9",
     "nanoid": "^1.0.2",
     "reflect-metadata": "^0.1.12",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^22.2.2",
+    "@types/joi": "^13.4.0",
     "@types/mongoose": "^5.0.10",
     "@types/node": "^9.4.7",
     "jest": "^22.4.3",
