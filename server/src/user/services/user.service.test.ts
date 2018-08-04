@@ -34,7 +34,7 @@ describe('UserService', () => {
     it('should create a user', async () => {
       const user = await userService.create('user-name', 'access-token', 'refresh-token')
 
-      expect(user.name).toBe('user-name')
+      expect(user.id).toBe('user-name')
       expect(user.spotifyAccessToken).toBe('access-token')
       expect(user.spotifyRefreshToken).toBe('refresh-token')
     })

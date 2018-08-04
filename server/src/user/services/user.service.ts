@@ -9,14 +9,14 @@ export class UserService {
     @InjectModel('User') private readonly userModel: Model<User>,
   ) { }
 
-  async create(name: string, accessToken: string, refreshToken: string): Promise<User> {
+  async create(id: string, accessToken: string, refreshToken: string): Promise<User> {
     // Remove users previous data to ensure tokens are newest, we should probably update it in the future
     await this.userModel.remove({
-      'name': name
+      '_id': id
     }).exec()
 
     const user = new this.userModel({
-      name: name,
+      _id: id,
       spotifyAccessToken: accessToken,
       spotifyRefreshToken: refreshToken
     })
