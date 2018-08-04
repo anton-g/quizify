@@ -2,6 +2,10 @@ import { Playlist } from "../interfaces/playlist.interface";
 
 export class PlaylistDto {
   constructor (playlist?: Playlist) {
+    if (!playlist) {
+      return
+    }
+
     this.id = playlist._id;
     this.name = playlist.name;
     this.description = playlist.description;
@@ -15,9 +19,9 @@ export class PlaylistDto {
     const dto: PlaylistDto = {
       id: playlist.id,
       name: playlist.name,
-      description: '',
-      length: 0,
-      img: '',
+      description: playlist.description,
+      length: playlist.tracks.total,
+      img: playlist.images[0].url,
       color: '',
       featured: false
     }
