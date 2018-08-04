@@ -104,6 +104,7 @@ const actions = {
     // TODO maybe have a timeout here to check if something goes wrong with socket?
 
     socketBus.$socket.emit('HOST', {
+      authorization: state.jwt,
       key: data.key,
       secret: data.secret
     }, (res) => {
@@ -115,6 +116,7 @@ const actions = {
   },
   async updatePlaylist ({ commit, state }, playlist) {
     socketBus.$socket.emit('CHANGE_PLAYLIST', {
+      authorization: state.jwt,
       key: state.quiz.key,
       playlist: playlist.id
     }, quiz => {
@@ -130,7 +132,10 @@ const actions = {
 
     const toast = document.querySelector('.toast-reconnect')
 
-    socketBus.$socket.emit('RECONN_H', socket, (quiz) => {
+    socketBus.$socket.emit('RECONN_H', {
+      authorization: state.jwt,
+      socketId: socket
+    }, (quiz) => {
       izitoast.hide({}, toast)
 
       if (!quiz) {
@@ -156,43 +161,64 @@ const actions = {
     })
   },
   async start ({ state, commit }) {
-    socketBus.$socket.emit('START', state.quiz.key, (quiz) => {
+    socketBus.$socket.emit('START', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, (quiz) => {
       commit(types.SET_QUIZ, quiz)
       router.push({ name: 'host-play' })
     })
   },
-  resetBuzz ({ commit }) {
+  resetBuzz ({ dispatch, commit }) {
     commit(types.SET_BUZZED_PLAYER, undefined)
-    socketBus.$socket.emit('RESUME', state.quiz.key)
+    dispatch('resume')
   },
-  score ({ state, commit }) {
-    socketBus.$socket.emit('SCORE', state.buzzedPlayer.id, (player) => {
+  score ({ dispatch, state, commit }) {
+    socketBus.$socket.emit('SCORE', {
+      authorization: state.jwt,
+      userId: state.buzzedPlayer.id
+    }, (player) => {
       commit(types.UPDATE_PLAYER, player)
-      socketBus.$socket.emit('RESUME', state.quiz.key)
+      dispatch('resume')
     })
   },
   pause ({ state, commit }) {
-    socketBus.$socket.emit('PAUSE', state.quiz.key, (quiz) => {
+    socketBus.$socket.emit('PAUSE', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, (quiz) => {
       commit(types.UPDATE_QUIZ, quiz)
     })
   },
   resume ({ state, commit }) {
-    socketBus.$socket.emit('RESUME', state.quiz.key, (quiz) => {
+    socketBus.$socket.emit('RESUME', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, (quiz) => {
       commit(types.UPDATE_QUIZ, quiz)
     })
   },
   prevQuestion ({ state, commit }) {
-    socketBus.$socket.emit('PREV_QUESTION', state.quiz.key, quiz => {
+    socketBus.$socket.emit('PREV_QUESTION', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, quiz => {
       commit(types.UPDATE_QUIZ, quiz)
     })
   },
   nextQuestion ({ state, commit }) {
-    socketBus.$socket.emit('NEXT_QUESTION', state.quiz.key, quiz => {
+    socketBus.$socket.emit('NEXT_QUESTION', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, quiz => {
       commit(types.UPDATE_QUIZ, quiz)
     })
   },
   endQuiz ({ state, commit }) {
-    socketBus.$socket.emit('END_GAME', state.quiz.key, response => {
+    socketBus.$socket.emit('END_GAME', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, response => {
       commit(types.SET_RESULT, response.results)
       router.push({ name: 'host-end' })
     })

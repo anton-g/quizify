@@ -31,6 +31,7 @@ export class HostGateway {
     private readonly gameService: GameService
   ) {}
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Host)
   async onHost(client: Socket, { data: keys, ack }) {
     await this.gameService.setHost(keys.key, keys.secret, client.id)
@@ -51,33 +52,39 @@ export class HostGateway {
     this.server.to(game.key).emit(GameEvents.ChangePlaylist, new PlayerGameInfoDto(game))
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Start)
-  async onStart(client: Socket, { data: key, ack }) {
+  async onStart(client: Socket, { data, ack }) {
+    const key = data.key
     let game = await this.gameService.get(key)
     game = await this.gameService.setState(game.key, GameState.Playing)
 
     const gameUpdate: Partial<PlayerGameInfoDto> = {
       state: game.state
     }
-    this.server.to(key).emit(GameEvents.Start, gameUpdate)
+    this.server.to(data.key).emit(GameEvents.Start, gameUpdate)
 
     ack(new GameDto(game))
 
     console.log(`[${key}] Start game`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Resume)
-  async onResume(client: Socket, { data: key, ack }) {
+  async onResume(client: Socket, { data, ack }) {
+    const key = data.key
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
 
-    ack(new GameDto(game))
+    req.ack(new GameDto(game))
 
     console.log(`[${key}] Resume game`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Pause)
-  async onPause(client: Socket, { data: key, ack }) {
+  async onPause(client: Socket, { data, ack }) {
+    const key = data.key
     this.server.to(key).emit(GameEvents.Pause)
     const game = await this.gameService.setState(key, GameState.Paused)
 
@@ -86,8 +93,10 @@ export class HostGateway {
     console.log(`[${key}] Paused game`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Score)
-  async onScore(client: Socket, { data: userId, ack }) {
+  async onScore(client: Socket, { data, ack }) {
+    const userId = data.userId
     const score: number = 1
     const player: Player = await this.playerService.score(userId, score)
     this.server.to(player.socketId).emit(GameEvents.Scored, score)
@@ -97,8 +106,10 @@ export class HostGateway {
     console.log(`[?] Player ${player.name} (${userId}) scored ${score}`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.NextQuestion)
-  async onNextQuestion(client: Socket, { data: key, ack }) {
+  async onNextQuestion(client: Socket, { data, ack }) {
+    const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.questions.length) {
       return
@@ -118,8 +129,10 @@ export class HostGateway {
     console.log(`[${game.key}] Next question (${game.currentQuestionNo}/${game.questions.length})`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.PrevQuestion)
-  async onPrevQuestion(client: Socket, { data: key, ack }) {
+  async onPrevQuestion(client: Socket, { data, ack }) {
+    const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo <= 1) {
       return
@@ -139,8 +152,10 @@ export class HostGateway {
     console.log(`[${game.key}] Previous question (${game.currentQuestionNo}/${game.questions.length})`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.EndGame)
-  async onEndGame(client: Socket, { data: key, ack }) {
+  async onEndGame(client: Socket, { data, ack }) {
+    const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id) {
       return
@@ -156,15 +171,17 @@ export class HostGateway {
     console.log(`[${game.key}] Game ended`)
   }
 
+  @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.ReconnectHost)
-  async onReconnect(client: Socket, { data: oldSocketId, ack }) {
-    const game: Game = await this.gameService.reconnectHost(oldSocketId, client.id)
+  async onReconnect(client: Socket, { data, ack }) {
+    const socketId = data.socketId
+    const game: Game = await this.gameService.reconnectHost(socketId, client.id)
 
     if (!game) return // could not find game to reconnect to
     // should probably do some error handling here
 
     ack(new GameDto(game))
 
-    console.log(`[${game.key}] Host with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
+    console.log(`[${game.key}] Host with socket ${client.id} reconnected. Replaced old socket ${socketId}`)
   }
 }
