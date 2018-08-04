@@ -7,7 +7,7 @@ import { Player } from '../interfaces/player.interface';
 import * as mongoose from "mongoose";
 import { UserException } from '../../common/user.exception';
 import { GameState } from '../game.state';
-import { Playlist } from '../interfaces/playlist.interface';
+import { Playlist } from '../../playlist/interfaces/playlist.interface';
 
 @Injectable()
 export class PlayerService {
