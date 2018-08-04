@@ -41,6 +41,9 @@ export default {
       this.$store.dispatch('successfulLogin', jwt)
       this.$store.dispatch('loadFeaturedPlaylists')
       this.$store.dispatch('loadUserPlaylists')
+      this.$router.replace({ name: 'host-create' })
+    } else {
+      console.log('failed login?')
     }
   },
   computed: {
