@@ -82,16 +82,14 @@ const actions = {
     window.location = `http://localhost:3000/auth/login`
   },
   successfulLogin ({ commit }, jwt) {
+    axios.defaults.headers = {
+      Authorization: `Bearer ${jwt}`
+    }
     commit(types.SET_JWT, jwt)
   },
   async create ({ commit, state }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {
       playlist: options.playlist.id
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${state.jwt}`
-      }
     })
 
     if (status !== 201 || data.error) {

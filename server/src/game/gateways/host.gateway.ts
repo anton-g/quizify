@@ -76,7 +76,7 @@ export class HostGateway {
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
 
-    req.ack(new GameDto(game))
+    ack(new GameDto(game))
 
     console.log(`[${key}] Resume game`)
   }
