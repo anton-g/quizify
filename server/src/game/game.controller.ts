@@ -1,23 +1,23 @@
-import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus, UseFilters } from "@nestjs/common";
+import { Controller, Get, Post, Param, HttpCode, Body, HttpException, HttpStatus, UseFilters, UseGuards, Req } from "@nestjs/common";
 import { GameService } from "./services/game.service";
 import { Game } from "./interfaces/game.interface";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { GameDto } from "./dtos/game.dto";
-import { PlayerDto } from "./dtos/player.dto";
 import { UserExceptionFilter } from "../common/user-exception.filter";
 import { JoinedGameDto } from "./dtos/joined-game.dto";
-import { PlayerGameInfoDto } from "./dtos/player-game-info.dto";
 import { CreateQuizOptionsDto } from "./dtos/create-quiz-options.dto";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('game')
 @UseFilters(new UserExceptionFilter())
 export class GameController {
     constructor(private readonly gameService: GameService) {}
 
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(201)
     @Post()
-    async create (@Body() options: CreateQuizOptionsDto): Promise<GameDto> {
-      const game: Game = await this.gameService.create(options)
+    async create (@Body() options: CreateQuizOptionsDto, @Req() req): Promise<GameDto> {
+      const game: Game = await this.gameService.create(req.user, options)
       return new GameDto(game)
     }
 

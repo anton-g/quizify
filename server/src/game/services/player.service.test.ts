@@ -11,13 +11,17 @@ import { GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { Player } from '../interfaces/player.interface';
 import { UserException } from '../../common/user.exception';
-import { PlaylistSchema } from '../schemas/playlist.schema';
+import { PlaylistSchema } from '../../playlist/schemas/playlist.schema';
+import { PlaylistService } from '../../playlist/services/playlist.service';
+import { UserSchema } from '../../user/schemas/user.schema';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
 describe('PlayerService', () => {
   let playerService: PlayerService;
   let gameService: GameService;
+  let userMock;
+  let playlistMock;
 
   const gameProvider = {
     provide: getModelToken('Game'),
@@ -31,9 +35,15 @@ describe('PlayerService', () => {
     inject: [mockgooseProvider.provide],
   } as any;
 
-  const PlaylistProvider = {
+  const playlistProvider = {
     provide: getModelToken('Playlist'),
     useFactory: async connection => connection.model('Playlist', PlaylistSchema),
+    inject: [mockgooseProvider.provide],
+  } as any;
+
+  const userProvider = {
+    provide: getModelToken('User'),
+    useFactory: async connection => connection.model('user', UserSchema),
     inject: [mockgooseProvider.provide],
   } as any;
 
@@ -43,19 +53,48 @@ describe('PlayerService', () => {
         mockgooseProvider,
         gameProvider,
         playerProvider,
-        PlaylistProvider,
+        playlistProvider,
+        userProvider,
         PlayerService,
-        GameService
+        GameService,
+        PlaylistService,
+        {
+          provide: 'SpotifyService',
+          useValue: {
+            getUserPlaylist (user, playlistId) { return playlistMock }
+          }
+        }
       ]
     }).compile()
 
     playerService = module.get<PlayerService>(PlayerService)
     gameService = module.get<GameService>(GameService)
+
+    userMock = {
+      _id: 'user-id',
+      spotifyAccessToken: '',
+      spotifyRefreshToken: ''
+    }
+
+    playlistMock = {
+      id: 'abc',
+      name: 'playlist-name',
+      description: '',
+      images: [{ url: '' }],
+      tracks: { items: [{
+        track: {
+          id: 'xyz',
+          name: 'track-name',
+          album: { images: [{ url: '' }]},
+          artists: [{ name: 'artist-name' }]
+        }
+      }]}
+    }
   })
 
   describe('connect', () => {
     it('should set socket id', async () => {
-      let game = await gameService.create({ playlist: null })
+      let game = await gameService.create(userMock, { playlist: playlistMock.id })
       await gameService.setState(game.key, GameState.Lobby)
       const player = await gameService.join(game.key, { name: 'Nisse' })
       const socketId = '123'
@@ -88,7 +127,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create({ playlist: null })
+      game = await gameService.create(userMock, { playlist: playlistMock.id })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
     })
@@ -112,7 +151,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create({ playlist: null })
+      game = await gameService.create(userMock, { playlist: playlistMock.id })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, '123')
@@ -152,7 +191,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create({ playlist: null })
+      game = await gameService.create(userMock, { playlist: playlistMock.id })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, 'disconnect_123')
@@ -176,7 +215,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create({ playlist: null })
+      game = await gameService.create(userMock, { playlist: playlistMock.id })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, 'reconnect_123')

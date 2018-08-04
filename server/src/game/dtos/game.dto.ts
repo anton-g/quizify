@@ -1,7 +1,7 @@
 import { Game } from "../interfaces/game.interface";
 import { PlayerDto } from "./player.dto";
 import { GameState } from "../game.state";
-import { PlaylistDto } from "./playlist.dto";
+import { PlaylistDto } from "../../playlist/dtos/playlist.dto";
 
 export class GameDto {
   constructor (game: Game) {

@@ -1,14 +1,18 @@
 import * as mongoose from 'mongoose'
 import { PlayerSchema } from './player.schema';
-import { Schema } from 'mongoose';
 
 export const GameSchema = new mongoose.Schema({
   state: String,
   key: String,
   secret: String,
-  host: { socket: String, connected: Boolean },
+  host: {
+    socket: String,
+    connected: Boolean,
+    user: { type: mongoose.Schema.Types.String, ref: 'User' }
+  },
   players: [PlayerSchema],
   questions: Array,
   currentQuestionNo: Number,
-  playlist: { type: Schema.Types.ObjectId, ref: 'Playlist' }
+  playlistId: String,
+  playlist: { type: mongoose.Schema.Types.String, ref: 'Playlist' }
 });

@@ -9,6 +9,7 @@ import { PlayerGateway } from "./gateways/player.gateway";
 import { CommonGateway } from "./gateways/common.gateway";
 import { HostGateway } from "./gateways/host.gateway";
 import { SpotifyModule } from "../spotify/spotify.module";
+import { UserModule } from "../user/user.module";
 import { PlaylistModule } from "../playlist/playlist.module";
 
 @Module({
@@ -18,6 +19,7 @@ import { PlaylistModule } from "../playlist/playlist.module";
         { name: 'Player', schema: PlayerSchema }
       ]),
       SpotifyModule,
+      UserModule,
       PlaylistModule
     ],
     controllers: [

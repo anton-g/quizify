@@ -1,7 +1,8 @@
 import { Player } from "./player.interface";
 import { GameState } from "../game.state";
 import { Document } from 'mongoose';
-import { Playlist } from "./playlist.interface";
+import { Playlist } from "../../playlist/interfaces/playlist.interface";
+import { User } from "../../user/interfaces/user.interface";
 
 export interface Game extends Document {
   readonly state: GameState;
@@ -11,10 +12,11 @@ export interface Game extends Document {
   readonly players: Player[];
   readonly questions: string[];
   readonly currentQuestionNo: number;
-  readonly playlist: Playlist;
+  playlist: Playlist;
 }
 
 export interface Host extends Document {
   readonly socket: string;
   readonly connected: boolean;
+  readonly user: User;
 }

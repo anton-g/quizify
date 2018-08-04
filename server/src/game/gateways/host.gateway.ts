@@ -44,12 +44,8 @@ export class HostGateway {
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.ChangePlaylist)
-  async onChangePlaylist(client: Socket, { data, ack }) {
-    const gameUpdate: Partial<Game> = {
-      playlist: data.playlist
-    }
-
-    const game = await this.gameService.update(data.key, gameUpdate)
+  async onChangePlaylist(client: Socket, { data, user, ack }) {
+    const game = await this.gameService.setPlaylist(user, data.playlist)
     ack(new GameDto(game))
 
     this.server.to(game.key).emit(GameEvents.ChangePlaylist, new PlayerGameInfoDto(game))

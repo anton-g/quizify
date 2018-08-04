@@ -1,27 +1,33 @@
 import { Model, Mongoose } from 'mongoose';
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
-import { GameSchema } from '../schemas/game.schema';
 import { Game } from '../interfaces/game.interface';
 import * as nanoid from 'nanoid';
 import * as generate from 'nanoid/generate';
 import { JoinGameDto } from '../dtos/join-game.dto';
-import { PlayerSchema } from '../schemas/player.schema';
 import { Player } from '../interfaces/player.interface';
 import { GameState } from '../game.state';
 import { UserException } from '../../common/user.exception';
-import { Playlist } from '../interfaces/playlist.interface';
+import { Playlist } from '../../playlist/interfaces/playlist.interface';
 import { CreateQuizOptionsDto } from '../dtos/create-quiz-options.dto';
+import { SpotifyService } from '../../spotify/spotify.service';
+import { User } from '../../user/interfaces/user.interface';
+import { PlaylistService } from '../../playlist/services/playlist.service';
 
 @Injectable()
 export class GameService {
   constructor(
     @InjectModel('Game') private readonly gameModel: Model<Game>,
     @InjectModel('Player') private readonly playerModel: Model<Player>,
-    @InjectModel('Playlist') private readonly playlistModel: Model<Playlist>
+    @InjectModel('Playlist') private readonly playlistModel: Model<Playlist>,
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private readonly spotifyService: SpotifyService,
+    private readonly playlistService: PlaylistService
   ) { }
 
-  async create(options: CreateQuizOptionsDto): Promise<Game> {
+  async create(user: User, options: CreateQuizOptionsDto): Promise<Game> {
+    const playlist = await this._getPlaylist(user, options.playlist)
+
     const secret: string = nanoid()
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
@@ -61,11 +67,12 @@ export class GameService {
       key: key,
       host: {
         socket: undefined,
-        connected: false
+        connected: false,
+        user: user.id
       },
       questions: questions,
       currentQuestionNo: 1,
-      playlist: options.playlist
+      playlist: playlist.id
     })
     await game.save()
 
@@ -97,6 +104,22 @@ export class GameService {
     )
   }
 
+  async setPlaylist(user: User, playlistId: string) {
+    if (!user) return Promise.reject(new UserException('Missing user'))
+    if (!playlistId) return Promise.reject(new UserException('Missing playlist id'))
+
+    const playlist = await this._getPlaylist(user, playlistId)
+
+    return await this._findOneAndUpdate(
+      { "host.user": user.id },
+      { $set:
+        {
+          "playlist": playlist.id
+        }
+      }
+    )
+  }
+
   async join(key: string, joinGameDto: JoinGameDto): Promise<Player> {
     const game = await this.get(key)
     if (!game) return Promise.reject(new UserException('Invalid key'))
@@ -116,13 +139,7 @@ export class GameService {
   }
 
   async get(key: string): Promise<Game> {
-    return await this.gameModel
-                      .findOne({ key: key.toUpperCase() })
-                      .populate({
-                        path: 'playlist',
-                        model: this.playlistModel
-                      })
-                      .exec()
+    return await this._findOne({ key: key.toUpperCase() })
   }
 
   async update(key: string, game: Partial<Game>): Promise<Game> {
@@ -130,13 +147,7 @@ export class GameService {
   }
 
   async getByPlayerId(playerId: string): Promise<Game> {
-    return await this.gameModel
-                      .findOne({ "players._id": playerId })
-                      .populate({
-                        path: 'playlist',
-                        model: this.playlistModel
-                      })
-                      .exec()
+    return await this._findOne({ "players._id": playerId })
   }
 
   async disconnectHost(hostSocketId: string): Promise<Game> {
@@ -168,12 +179,35 @@ export class GameService {
     return result
   }
 
-  async _findOneAndUpdate(conditions, update) {
+  private async _getPlaylist(user: User, playlistId: string): Promise<Playlist> {
+    const spotifyPlaylist = await this.spotifyService.getUserPlaylist(user, playlistId)
+    return await this.playlistService.create(spotifyPlaylist)
+  }
+
+  private async _findOneAndUpdate(conditions, update) {
     return await this.gameModel
                     .findOneAndUpdate(
                       conditions,
                       update,
                     { new: true })
+                    .populate({
+                      path: 'host.user',
+                      model: this.userModel
+                    })
+                    .populate({
+                      path: 'playlist',
+                      model: this.playlistModel
+                    })
+                    .exec()
+  }
+
+  private async _findOne(conditions: any) {
+    return await this.gameModel
+                    .findOne(conditions)
+                    .populate({
+                      path: 'host.user',
+                      model: this.userModel
+                    })
                     .populate({
                       path: 'playlist',
                       model: this.playlistModel
