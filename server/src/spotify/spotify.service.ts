@@ -44,4 +44,12 @@ export class SpotifyService {
 
     return body.items
   }
+
+  async getUserPlaylist(user: User, playlistId: string): Promise<any> {
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    const { statusCode, body } = await this.spotify.getPlaylist(user.id, playlistId)
+    this.spotify.resetAccessToken()
+
+    return body
+  }
 }
