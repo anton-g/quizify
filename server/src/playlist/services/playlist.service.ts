@@ -21,6 +21,7 @@ export class PlaylistService {
       tracks: spotifyPlaylist.tracks.items.map(t => {
         return {
           _id: t.track.id,
+          uri: t.track.uri,
           name: t.track.name,
           imageUrl: t.track.album.images[0].url,
           artist: t.track.artists.reduce((tot, cur) => tot + cur.name, ''),

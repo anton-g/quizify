@@ -20,6 +20,7 @@ import { UseGuards, UsePipes } from '@nestjs/common';
 import { EventAuthGuard } from '../../common/EventAuth.guard';
 import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
 import { SocketAuthPipe } from '../../common/socket-auth.pipe';
+import { SpotifyService } from '../../spotify/spotify.service';
 
 @UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
@@ -28,7 +29,8 @@ export class HostGateway {
 
   constructor (
     private readonly playerService: PlayerService,
-    private readonly gameService: GameService
+    private readonly gameService: GameService,
+    private readonly spotify: SpotifyService
   ) {}
 
   @UseGuards(EventAuthGuard)
@@ -53,11 +55,16 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Start)
-  async onStart(client: Socket, { data, ack }) {
+  async onStart(client: Socket, { data, user, ack }) {
     const key = data.key
     let game = await this.gameService.get(key)
-    game = await this.gameService.setState(game.key, GameState.Playing)
+    game = await this.gameService.setState(game.key, GameState.Paused)
+
+    const trackUri = game.playlist.tracks[0].uri
+    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<PlayerGameInfoDto> = {
       state: game.state
@@ -70,11 +77,13 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Resume)
-  async onResume(client: Socket, { data, ack }) {
+  async onResume(client: Socket, { data, user, ack }) {
     const key = data.key
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
+    this.spotify.resumePlayback(user)
 
     ack(new GameDto(game))
 
@@ -82,11 +91,13 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Pause)
-  async onPause(client: Socket, { data, ack }) {
+  async onPause(client: Socket, { data, user, ack }) {
     const key = data.key
     this.server.to(key).emit(GameEvents.Pause)
     const game = await this.gameService.setState(key, GameState.Paused)
+    this.spotify.pausePlayback(user)
 
     ack(new GameDto(game))
 

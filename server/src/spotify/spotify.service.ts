@@ -52,4 +52,25 @@ export class SpotifyService {
 
     return body
   }
+
+  async playTrack(user: User, trackId: string) {
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    await this.spotify.play({
+      uris: [trackId]
+    })
+    this.spotify.resetAccessToken()
+  }
+
+  async pausePlayback(user: User) {
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    await this.spotify.pause()
+    this.spotify.resetAccessToken()
+  }
+
+  async resumePlayback(user: User) {
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    const r = await this.spotify.play()
+    console.log(r)
+    this.spotify.resetAccessToken()
+  }
 }
