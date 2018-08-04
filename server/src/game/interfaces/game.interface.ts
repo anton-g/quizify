@@ -10,7 +10,6 @@ export interface Game extends Document {
   readonly key: string;
   readonly host: Host;
   readonly players: Player[];
-  readonly questions: string[];
   readonly currentQuestionNo: number;
   playlist: Playlist;
 }

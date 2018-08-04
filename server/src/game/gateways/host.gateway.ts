@@ -111,7 +111,7 @@ export class HostGateway {
   async onNextQuestion(client: Socket, { data, ack }) {
     const key = data.key
     let game = await this.gameService.get(key)
-    if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.questions.length) {
+    if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.playlist.tracks.length) {
       return
     }
 
@@ -126,7 +126,7 @@ export class HostGateway {
 
     ack(gameUpdate)
 
-    console.log(`[${game.key}] Next question (${game.currentQuestionNo}/${game.questions.length})`)
+    console.log(`[${game.key}] Next question (${game.currentQuestionNo}/${game.playlist.tracks.length})`)
   }
 
   @UseGuards(EventAuthGuard)
@@ -149,7 +149,7 @@ export class HostGateway {
 
     ack(gameUpdate)
 
-    console.log(`[${game.key}] Previous question (${game.currentQuestionNo}/${game.questions.length})`)
+    console.log(`[${game.key}] Previous question (${game.currentQuestionNo}/${game.playlist.tracks.length})`)
   }
 
   @UseGuards(EventAuthGuard)

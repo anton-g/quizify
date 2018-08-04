@@ -31,36 +31,6 @@ export class GameService {
     const secret: string = nanoid()
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
 
-    const questions = [
-      {
-        question: 'What is the name of the artist?',
-        track: {
-          artist: 'Haddaway',
-          song: 'What is love?',
-          length: 232,
-          img: 'https://picsum.photos/200/200/?image=11'
-        }
-      },
-      {
-        question: 'What is the name of the song?',
-        track: {
-          artist: 'Glennmark Eriksson Strömstedt',
-          song: 'När vi gräver guld i USA',
-          length: 232,
-          img: 'https://picsum.photos/200/200/?image=23'
-        }
-      },
-      {
-        question: 'What is the name of the artist?',
-        track: {
-          artist: 'Bleachers',
-          song: 'Dont Take The Money',
-          length: 232,
-          img: 'https://picsum.photos/200/200/?image=55'
-        }
-      }
-    ]
-
     const game = new this.gameModel({
       state: GameState.Created,
       secret: secret,
@@ -70,7 +40,6 @@ export class GameService {
         connected: false,
         user: user.id
       },
-      questions: questions,
       currentQuestionNo: 1,
       playlist: playlist.id
     })

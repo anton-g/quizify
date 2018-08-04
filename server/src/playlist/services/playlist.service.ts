@@ -23,7 +23,8 @@ export class PlaylistService {
           _id: t.track.id,
           name: t.track.name,
           imageUrl: t.track.album.images[0].url,
-          artist: t.track.artists.reduce((tot, cur) => tot + cur.name, '')
+          artist: t.track.artists.reduce((tot, cur) => tot + cur.name, ''),
+          question: Math.random() > 0.49 ? `What's the name of the artist?` : `What's the name of the song?`
         }
       })
     }, {

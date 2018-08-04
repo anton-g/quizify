@@ -2,6 +2,7 @@ import { Game } from "../interfaces/game.interface";
 import { PlayerDto } from "./player.dto";
 import { GameState } from "../game.state";
 import { PlaylistDto } from "../../playlist/dtos/playlist.dto";
+import { GameQuestionDto } from "./game-question.dto";
 
 export class GameDto {
   constructor (game: Game) {
@@ -10,7 +11,7 @@ export class GameDto {
     this.secret = game.secret;
     this.host = new HostDto(game.host);
     this.players = game.players.map(p => new PlayerDto(p));
-    this.questions = game.questions;
+    this.questions = game.playlist.tracks.map(t => new GameQuestionDto(t))
     this.currentQuestionNo = game.currentQuestionNo;
     this.playlist = new PlaylistDto(game.playlist);
   }
@@ -20,7 +21,7 @@ export class GameDto {
   readonly secret: string;
   readonly host: HostDto;
   readonly players: PlayerDto[];
-  readonly questions: string[];
+  readonly questions: GameQuestionDto[];
   readonly currentQuestionNo: number;
   readonly playlist: PlaylistDto;
 }

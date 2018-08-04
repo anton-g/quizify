@@ -11,7 +11,6 @@ export const GameSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.String, ref: 'User' }
   },
   players: [PlayerSchema],
-  questions: Array,
   currentQuestionNo: Number,
   playlistId: String,
   playlist: { type: mongoose.Schema.Types.String, ref: 'Playlist' }

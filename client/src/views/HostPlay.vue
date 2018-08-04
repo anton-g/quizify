@@ -3,9 +3,9 @@
     .info
       span.questionNo {{ currentQuestionNo }} / {{ questionCount }}
       h2.question {{ currentQuestion.question }}
-      img.image(:src="currentQuestion.track.img")
+      img.image(:src="currentQuestion.track.imageUrl")
       p.artist {{ currentQuestion.track.artist }}
-      p.song {{ currentQuestion.track.song }}
+      p.song {{ currentQuestion.track.name }}
     .actions
       button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestionNo === 1")
         .q-icon
