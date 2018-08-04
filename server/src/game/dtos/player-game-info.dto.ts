@@ -4,7 +4,7 @@ import { GameState } from "../game.state";
 export class PlayerGameInfoDto {
   constructor (game: Game) {
     this.playlist = game.playlist.name;
-    this.questionCount = game.questions.length;
+    this.questionCount = game.playlist.tracks.length;
     this.currentQuestionNo = game.currentQuestionNo;
     this.state = game.state;
   }

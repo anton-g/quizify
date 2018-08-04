@@ -17,6 +17,7 @@ import { JoinedGameDto } from '../dtos/joined-game.dto';
 import { Player } from '../interfaces/player.interface';
 import { UsePipes } from '../../../node_modules/@nestjs/common';
 import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
+import { SpotifyService } from '../../spotify/spotify.service';
 
 @UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
@@ -25,7 +26,8 @@ export class PlayerGateway {
 
   constructor (
     private readonly playerService: PlayerService,
-    private readonly gameService: GameService
+    private readonly gameService: GameService,
+    private readonly spotify: SpotifyService
   ) {}
 
   @SubscribeMessage(GameEvents.Join)
@@ -47,6 +49,8 @@ export class PlayerGateway {
     this.server.to(game.key).emit(GameEvents.Pause)
     this.gameService.setState(game.key, GameState.Paused)
     this.server.to(game.host.socket).emit(GameEvents.Buzzed, userId)
+
+    this.spotify.pausePlayback(game.host.user)
 
     ack()
 
