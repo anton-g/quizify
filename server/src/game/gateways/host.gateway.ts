@@ -12,12 +12,16 @@ import { GameService } from '../services/game.service';
 import { GameEvents, GameState } from '../game.state';
 import { Player } from '../interfaces/player.interface';
 import { GameDto } from '../dtos/game.dto';
-import { extractRequest } from '../../common/GatewayHelpers';
 import { PlayerDto } from '../dtos/player.dto';
 import { Game } from '../interfaces/game.interface';
 import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 import { GameEndedDto } from '../dtos/game-ended.dto';
+import { UseGuards, UsePipes } from '@nestjs/common';
+import { EventAuthGuard } from '../../common/EventAuth.guard';
+import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
+import { SocketAuthPipe } from '../../common/socket-auth.pipe';
 
+@UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
 export class HostGateway {
   @WebSocketServer() server: Server;
@@ -28,9 +32,7 @@ export class HostGateway {
   ) {}
 
   @SubscribeMessage(GameEvents.Host)
-  async onHost(client: Socket, req) {
-    let { data: keys, ack } = extractRequest(req)
-
+  async onHost(client: Socket, { data: keys, ack }) {
     await this.gameService.setHost(keys.key, keys.secret, client.id)
     const game = await this.gameService.setState(keys.key, GameState.Lobby)
 
@@ -39,10 +41,10 @@ export class HostGateway {
     console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
   }
 
+  @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.ChangePlaylist)
-  async onChangePlaylist(client: Socket, req) {
-    let { data: data, ack } = extractRequest(req)
-
+  async onChangePlaylist(client: Socket, { data, ack }) {
     const gameUpdate: Partial<Game> = {
       playlist: data.playlist
     }
@@ -54,9 +56,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Start)
-  async onStart(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onStart(client: Socket, { data: key, ack }) {
     let game = await this.gameService.get(key)
     game = await this.gameService.setState(game.key, GameState.Playing)
 
@@ -71,9 +71,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Resume)
-  async onResume(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onResume(client: Socket, { data: key, ack }) {
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
 
@@ -83,9 +81,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Pause)
-  async onPause(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onPause(client: Socket, { data: key, ack }) {
     this.server.to(key).emit(GameEvents.Pause)
     const game = await this.gameService.setState(key, GameState.Paused)
 
@@ -95,9 +91,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.Score)
-  async onScore(client: Socket, req) {
-    let { data: userId, ack } = extractRequest(req)
-
+  async onScore(client: Socket, { data: userId, ack }) {
     const score: number = 1
     const player: Player = await this.playerService.score(userId, score)
     this.server.to(player.socketId).emit(GameEvents.Scored, score)
@@ -108,9 +102,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.NextQuestion)
-  async onNextQuestion(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onNextQuestion(client: Socket, { data: key, ack }) {
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.questions.length) {
       return
@@ -131,9 +123,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.PrevQuestion)
-  async onPrevQuestion(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onPrevQuestion(client: Socket, { data: key, ack }) {
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo <= 1) {
       return
@@ -154,9 +144,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.EndGame)
-  async onEndGame(client: Socket, req) {
-    let { data: key, ack } = extractRequest(req)
-
+  async onEndGame(client: Socket, { data: key, ack }) {
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id) {
       return
@@ -173,9 +161,7 @@ export class HostGateway {
   }
 
   @SubscribeMessage(GameEvents.ReconnectHost)
-  async onReconnect(client: Socket, req) {
-    let { data: oldSocketId, ack } = extractRequest(req)
-
+  async onReconnect(client: Socket, { data: oldSocketId, ack }) {
     const game: Game = await this.gameService.reconnectHost(oldSocketId, client.id)
 
     if (!game) return // could not find game to reconnect to

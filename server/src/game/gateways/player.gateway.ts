@@ -12,11 +12,13 @@ import { GameService } from '../services/game.service';
 import { GameEvents, GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { GameDto } from '../dtos/game.dto';
-import { extractRequest } from '../../common/GatewayHelpers';
 import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 import { JoinedGameDto } from '../dtos/joined-game.dto';
 import { Player } from '../interfaces/player.interface';
+import { UsePipes } from '../../../node_modules/@nestjs/common';
+import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
 
+@UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
 export class PlayerGateway {
   @WebSocketServer() server: Server;
@@ -27,9 +29,7 @@ export class PlayerGateway {
   ) {}
 
   @SubscribeMessage(GameEvents.Join)
-  async onJoin(client: Socket, req) {
-    let { data: userId, ack } = extractRequest(req)
-
+  async onJoin(client: Socket, { data: userId, ack }) {
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
     this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
@@ -40,9 +40,7 @@ export class PlayerGateway {
   }
 
   @SubscribeMessage(GameEvents.Buzz)
-  async onBuzz(client: Socket, req) {
-    let { data: userId, ack } = extractRequest(req)
-
+  async onBuzz(client: Socket, { data: userId, ack }) {
     const game: Game = await this.gameService.getByPlayerId(userId)
     if (game.state !== GameState.Playing) return
 
@@ -56,9 +54,7 @@ export class PlayerGateway {
   }
 
   @SubscribeMessage(GameEvents.ReconnectPlayer)
-  async onReconnect(client: Socket, req) {
-    let { data: oldSocketId, ack } = extractRequest(req)
-
+  async onReconnect(client: Socket, { data: oldSocketId, ack }) {
     const game: Game = await this.playerService.reconnect(oldSocketId, client.id)
 
     if (!game) return // could not find game to reconnect to
