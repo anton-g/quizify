@@ -37,6 +37,14 @@ export class SpotifyService {
     return result.body
   }
 
+  async getUserDevices(user: User): Promise<any> {
+    this.spotify.setAccessToken(user.spotifyAccessToken)
+    const result = await this.spotify.getMyDevices()
+    this.spotify.resetAccessToken()
+
+    return result.body.devices
+  }
+
   async getUserPlaylists(user: User): Promise<any> {
     this.spotify.setAccessToken(user.spotifyAccessToken)
     const { statusCode, body } = await this.spotify.getUserPlaylists(user.id)
