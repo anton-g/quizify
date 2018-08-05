@@ -81,7 +81,6 @@ export default {
     },
     correct () {
       this.$store.dispatch('score')
-      this.$store.dispatch('resetBuzz')
     },
     togglePlayState () {
       if (this.isPaused) {
