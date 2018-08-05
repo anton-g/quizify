@@ -15,7 +15,8 @@ const state = {
   buzzedPlayer: undefined,
   result: [],
   featuredPlaylists: [],
-  playlists: []
+  playlists: [],
+  devices: []
 }
 
 const getters = {
@@ -74,6 +75,9 @@ const mutations = {
   },
   [types.SET_USER_PLAYLISTS] (state, playlists) {
     state.playlists = playlists
+  },
+  [types.SET_USER_DEVICES] (state, devices) {
+    state.devices = devices
   }
 }
 
@@ -89,7 +93,8 @@ const actions = {
   },
   async create ({ commit, state }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {
-      playlist: options.playlist.id
+      playlist: options.playlist.id,
+      deviceId: options.device.id
     })
 
     if (status !== 201 || data.error) {
@@ -236,12 +241,8 @@ const actions = {
 
     commit(types.SET_FEATURED_PLAYLISTS, featuredPlaylists)
   },
-  async loadUserPlaylists ({ commit, state }) {
-    const { status, data: userPlaylists } = await axios.get(`${API_URL}/playlist/`, {
-      headers: {
-        Authorization: `Bearer ${state.jwt}`
-      }
-    })
+  async loadUserPlaylists ({ commit }) {
+    const { status, data: userPlaylists } = await axios.get(`${API_URL}/playlist/`)
 
     if (status !== 200) {
       console.log('Could not load user playlists')
@@ -249,6 +250,16 @@ const actions = {
     }
 
     commit(types.SET_USER_PLAYLISTS, userPlaylists)
+  },
+  async loadUserDevices ({ commit }) {
+    const { status, data: devices } = await axios.get(`${API_URL}/user/devices`)
+
+    if (status !== 200) {
+      console.log('Could not load user devices')
+      return
+    }
+
+    commit(types.SET_USER_DEVICES, devices)
   },
   socket_update: ({ commit }, update) => {
     commit(types.UPDATE_QUIZ, update)

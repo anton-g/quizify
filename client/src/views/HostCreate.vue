@@ -5,6 +5,12 @@
     .field
       .control
         button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
+    .field
+      .control
+        .select.is-fullwidth
+          select(v-model="selectedDevice")
+            option(disabled value="") Select device
+            option(v-for="device in devices", :value="device") {{ device.name }}
     .field.is-grouped
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
@@ -32,7 +38,8 @@ export default {
   data () {
     return {
       showPlaylistSelection: false,
-      selectedPlaylist: undefined
+      selectedPlaylist: undefined,
+      selectedDevice: undefined
     }
   },
   created () {
@@ -41,6 +48,7 @@ export default {
       this.$store.dispatch('successfulLogin', jwt)
       this.$store.dispatch('loadFeaturedPlaylists')
       this.$store.dispatch('loadUserPlaylists')
+      this.$store.dispatch('loadUserDevices')
       this.$router.replace({ name: 'host-create' })
     } else {
       console.log('failed login?')
@@ -52,6 +60,9 @@ export default {
     },
     userPlaylists () {
       return this.$store.state.host.playlists
+    },
+    devices () {
+      return this.$store.state.host.devices
     }
   },
   methods: {
@@ -63,9 +74,10 @@ export default {
       this.$router.push({ name: 'home' })
     },
     create () {
-      if (this.selectedPlaylist) {
+      if (this.selectedPlaylist && this.selectedDevice) {
         const options = {
-          playlist: this.selectedPlaylist
+          playlist: this.selectedPlaylist,
+          device: this.selectedDevice
         }
         this.$store.dispatch('create', options)
       }

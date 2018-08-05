@@ -41,7 +41,8 @@ export class GameService {
         user: user.id
       },
       currentQuestionNo: 1,
-      playlist: playlist.id
+      playlist: playlist.id,
+      deviceId: options.deviceId
     })
     await game.save()
 

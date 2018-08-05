@@ -63,7 +63,7 @@ export class HostGateway {
     game = await this.gameService.setState(game.key, GameState.Paused)
 
     const trackUri = game.playlist.tracks[0].uri
-    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.playTrack(user, trackUri, game.deviceId)
     await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<PlayerGameInfoDto> = {
@@ -133,7 +133,7 @@ export class HostGateway {
     })
 
     const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
-    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.playTrack(user, trackUri, game.deviceId)
     await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<GameDto> = {
@@ -163,7 +163,7 @@ export class HostGateway {
     })
 
     const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
-    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.playTrack(user, trackUri, game.deviceId)
     await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<GameDto> = {
