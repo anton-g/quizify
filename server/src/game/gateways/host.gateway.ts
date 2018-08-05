@@ -118,8 +118,9 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.NextQuestion)
-  async onNextQuestion(client: Socket, { data, ack }) {
+  async onNextQuestion(client: Socket, { data, user, ack }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.playlist.tracks.length) {
@@ -128,10 +129,16 @@ export class HostGateway {
 
     game = await this.gameService.update(game.key, {
       currentQuestionNo: game.currentQuestionNo + 1,
+      state: GameState.Paused
     })
 
+    const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
+    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.pausePlayback(user)
+
     const gameUpdate: Partial<GameDto> = {
-      currentQuestionNo: game.currentQuestionNo
+      currentQuestionNo: game.currentQuestionNo,
+      state: GameState.Paused
     }
     this.server.to(game.key).emit(GameEvents.NextQuestion, gameUpdate)
 
@@ -141,8 +148,9 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.PrevQuestion)
-  async onPrevQuestion(client: Socket, { data, ack }) {
+  async onPrevQuestion(client: Socket, { data, user, ack }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo <= 1) {
@@ -151,10 +159,16 @@ export class HostGateway {
 
     game = await this.gameService.update(game.key, {
       currentQuestionNo: game.currentQuestionNo - 1,
+      state: GameState.Paused
     })
 
+    const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
+    await this.spotify.playTrack(user, trackUri)
+    await this.spotify.pausePlayback(user)
+
     const gameUpdate: Partial<GameDto> = {
-      currentQuestionNo: game.currentQuestionNo
+      currentQuestionNo: game.currentQuestionNo,
+      state: GameState.Paused
     }
     this.server.to(game.key).emit(GameEvents.PrevQuestion, gameUpdate)
 
@@ -164,8 +178,9 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.EndGame)
-  async onEndGame(client: Socket, { data, ack }) {
+  async onEndGame(client: Socket, { data, user, ack }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id) {
@@ -173,6 +188,8 @@ export class HostGateway {
     }
 
     game = await this.gameService.setState(game.key, GameState.Ended)
+
+    await this.spotify.pausePlayback(user)
 
     const gameEnded = new GameEndedDto(game)
     this.server.to(game.key).emit(GameEvents.EndGame, gameEnded)
