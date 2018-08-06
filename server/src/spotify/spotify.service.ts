@@ -76,15 +76,16 @@ export class SpotifyService {
     this.spotify.resetAccessToken()
   }
 
-  async pausePlayback(user: User) {
+  async pausePlayback(user: User): Promise<boolean> {
+    let result = true
     this.spotify.setAccessToken(user.spotifyAccessToken)
     try {
       await this.spotify.pause()
     } catch (err) {
-      console.log(err)
-      console.log(user)
+      result = false
     }
     this.spotify.resetAccessToken()
+    return result
   }
 
   async resumePlayback(user: User) {

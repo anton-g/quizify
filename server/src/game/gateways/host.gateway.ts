@@ -21,6 +21,7 @@ import { EventAuthGuard } from '../../common/EventAuth.guard';
 import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
 import { SocketAuthPipe } from '../../common/socket-auth.pipe';
 import { SpotifyService } from '../../spotify/spotify.service';
+import { User } from '../../user/interfaces/user.interface';
 
 @UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
@@ -64,7 +65,7 @@ export class HostGateway {
 
     const trackUri = game.playlist.tracks[0].uri
     await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this.spotify.pausePlayback(user)
+    await this._pauseWithRetry(user)
 
     const gameUpdate: Partial<PlayerGameInfoDto> = {
       state: game.state
@@ -134,7 +135,7 @@ export class HostGateway {
 
     const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
     await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this.spotify.pausePlayback(user)
+    await this._pauseWithRetry(user)
 
     const gameUpdate: Partial<GameDto> = {
       currentQuestionNo: game.currentQuestionNo,
@@ -164,7 +165,7 @@ export class HostGateway {
 
     const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
     await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this.spotify.pausePlayback(user)
+    await this._pauseWithRetry(user)
 
     const gameUpdate: Partial<GameDto> = {
       currentQuestionNo: game.currentQuestionNo,
@@ -211,5 +212,15 @@ export class HostGateway {
     ack(new GameDto(game))
 
     console.log(`[${game.key}] Host with socket ${client.id} reconnected. Replaced old socket ${socketId}`)
+  }
+
+  // This is a workaround for immediately pausing after issuing a play request.
+  // Since requests are async the first command might not have completed, which means the pause command might fail.
+  // GitHub issue:
+  private async _pauseWithRetry(user: User) {
+    const success = await this.spotify.pausePlayback(user)
+    if (!success) {
+      await this.spotify.pausePlayback(user)
+    }
   }
 }
