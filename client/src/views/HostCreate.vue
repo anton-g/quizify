@@ -5,12 +5,15 @@
     .field
       .control
         button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
-    .field
-      .control
+    .field.has-addons
+      .control.is-expanded
         .select.is-fullwidth
-          select(v-model="selectedDevice")
-            option(disabled value="") Select device
+          select(v-model="selectedDevice", required)
+            option(value="", disabled, selected) Select device
             option(v-for="device in devices", :value="device") {{ device.name }}
+      .control
+        button.button(@click="refreshDevices")
+          FontAwesomeIcon(:icon="loadDevicesIcon", :class="{ 'fa-spin': isLoadingDevices }")
     .field.is-grouped
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
@@ -28,18 +31,22 @@
 import Card from '../components/Card.vue'
 import PlaylistPicker from '../components/PlaylistPicker.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import { faSyncAlt } from '@fortawesome/fontawesome-free-solid'
 
 export default {
   mixins: [reconnectOnCreation],
   components: {
     Card,
-    PlaylistPicker
+    PlaylistPicker,
+    FontAwesomeIcon
   },
   data () {
     return {
       showPlaylistSelection: false,
       selectedPlaylist: undefined,
-      selectedDevice: undefined
+      selectedDevice: undefined,
+      isLoadingDevices: false
     }
   },
   created () {
@@ -63,6 +70,9 @@ export default {
     },
     devices () {
       return this.$store.state.host.devices
+    },
+    loadDevicesIcon () {
+      return faSyncAlt
     }
   },
   methods: {
@@ -81,6 +91,14 @@ export default {
         }
         this.$store.dispatch('create', options)
       }
+    },
+    async refreshDevices () {
+      this.isLoadingDevices = true
+      await this.$store.dispatch('loadUserDevices')
+      setTimeout(() => {
+        // Spin for atleast 500 ms
+        this.isLoadingDevices = false
+      }, 500)
     }
   }
 }

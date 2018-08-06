@@ -252,14 +252,17 @@ const actions = {
     commit(types.SET_USER_PLAYLISTS, userPlaylists)
   },
   async loadUserDevices ({ commit }) {
-    const { status, data: devices } = await axios.get(`${API_URL}/user/devices`)
+    return new Promise(async (resolve, reject) => {
+      const { status, data: devices } = await axios.get(`${API_URL}/user/devices`)
 
-    if (status !== 200) {
-      console.log('Could not load user devices')
-      return
-    }
-
-    commit(types.SET_USER_DEVICES, devices)
+      if (status !== 200) {
+        console.log('Could not load user devices')
+        reject(new Error('error'))
+        return
+      }
+      commit(types.SET_USER_DEVICES, devices)
+      resolve()
+    })
   },
   socket_update: ({ commit }, update) => {
     commit(types.UPDATE_QUIZ, update)
