@@ -70,8 +70,6 @@ export class SpotifyService {
       })
     } catch (err) {
       console.log(err)
-      console.log(user)
-      console.log(trackId)
     }
     this.spotify.resetAccessToken()
   }
@@ -94,7 +92,6 @@ export class SpotifyService {
       await this.spotify.play()
     } catch (err) {
       console.log(err)
-      console.log(user)
     }
     this.spotify.resetAccessToken()
   }

@@ -25,7 +25,7 @@
       h2.title {{ playerName }} buzzed
       .question {{ currentQuestion.question }}
       .artist {{ currentQuestion.track.artist }}
-      .song {{ currentQuestion.track.song }}
+      .song {{ currentQuestion.track.name }}
       .actions
         button.button.is-danger.is-fullwidth(@click="incorrect") Incorrect
         button.button.is-outlined.is-dark.is-fullwidth(@click="correct") Correct
