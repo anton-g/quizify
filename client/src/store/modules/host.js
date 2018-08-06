@@ -231,6 +231,16 @@ const actions = {
   cleanupHost ({ commit }) {
     commit(types.CLEANUP_HOST)
   },
+  hostLeave ({ dispatch, state }) {
+    socketBus.$socket.emit('END_GAME', {
+      authorization: state.jwt,
+      key: state.quiz.key
+    }, () => {
+      dispatch('cleanupHost')
+      router.push({ name: 'home' })
+      localStorage.removeItem(HOST_RECONNECT_ID)
+    })
+  },
   async loadFeaturedPlaylists ({ commit }) {
     const { status, data: featuredPlaylists } = await axios.get(`${API_URL}/playlist/featured`)
 

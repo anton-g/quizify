@@ -19,6 +19,8 @@
         | {{ lastQuestion ? 'End' : 'Next' }}
         .q-icon(v-if="!lastQuestion")
           FontAwesomeIcon(:icon="nextIcon")
+    .foot
+      a.button.is-text(@click="showHelp = true") Help
     modal.buzz-info(:active="buzzed", v-if="buzzed")
       h2.title {{ playerName }} buzzed
       .question {{ currentQuestion.question }}
@@ -28,6 +30,13 @@
         button.button.is-danger.is-fullwidth(@click="incorrect") Incorrect
         button.button.is-outlined.is-dark.is-fullwidth(@click="correct") Correct
       span(slot="close")
+    modal.help-modal(:active="showHelp", @close="showHelp = false")
+      h2.title Help
+      p Id minim tempor eu nisi anim ad ex labore proident anim.
+      p Fugiat ullamco sit ut elit et amet eu cupidatat sunt cillum aliqua. Qui sunt esse voluptate ad ut duis mollit ea Lorem. Qui laborum deserunt culpa laborum ex aliquip commodo reprehenderit ex adipisicing. Aliquip enim irure incididunt eiusmod. Exercitation eu cillum exercitation esse duis enim sunt. Velit et sunt exercitation tempor occaecat nisi voluptate enim. Est sit tempor nisi aute in ut Lorem.
+      p.has-text-danger Leaving will end the quiz and all progress will be lost!
+      .leave
+        button.button.is-danger(@click="leave") Leave quiz
 </template>
 
 <script>
@@ -42,6 +51,11 @@ export default {
     Card,
     Modal,
     FontAwesomeIcon
+  },
+  data () {
+    return {
+      showHelp: true
+    }
   },
   computed: {
     buzzed () {
@@ -100,6 +114,9 @@ export default {
     },
     end () {
       this.$store.dispatch('endQuiz')
+    },
+    leave () {
+      this.$store.dispatch('hostLeave')
     }
   }
 }
@@ -157,6 +174,11 @@ export default {
   }
 }
 
+.foot {
+  text-align: right;
+  margin-top: $size-2;
+}
+
 .buzz-info {
   .title {
     margin-bottom: $size-1;
@@ -188,6 +210,16 @@ export default {
     :last-child {
       margin-left: $size-1;
     }
+  }
+}
+
+.help-modal {
+  p {
+    margin-bottom: $size-1;
+  }
+
+  .leave {
+    text-align: right;
   }
 }
 </style>
