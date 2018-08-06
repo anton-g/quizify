@@ -1,4 +1,4 @@
-import { Model, Mongoose } from 'mongoose';
+import { Model } from 'mongoose';
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { WebSocketServer } from '@nestjs/websockets';
@@ -7,7 +7,7 @@ import * as nanoid from 'nanoid';
 import * as generate from 'nanoid/generate';
 import { JoinGameDto } from '../dtos/join-game.dto';
 import { Player } from '../interfaces/player.interface';
-import { GameState, GameEvents } from '../game.state';
+import { GameState } from '../game.state';
 import { UserException } from '../../common/user.exception';
 import { Playlist } from '../../playlist/interfaces/playlist.interface';
 import { CreateQuizOptionsDto } from '../dtos/create-quiz-options.dto';

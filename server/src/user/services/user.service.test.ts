@@ -3,7 +3,6 @@ import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { Mockgoose } from "mockgoose-fix";
 import * as mongoose from "mongoose";
 import { getModelToken } from '@nestjs/mongoose';
-import { UserException } from '../../common/user.exception';
 import { UserService } from './user.service';
 import { UserSchema } from '../schemas/user.schema';
 

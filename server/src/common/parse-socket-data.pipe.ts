@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, ArgumentMetadata, HttpStatus, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 
 @Injectable()
 export class ParseSocketDataPipe implements PipeTransform<any, any> {
