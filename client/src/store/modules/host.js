@@ -42,6 +42,9 @@ const getters = {
 const mutations = {
   [types.SET_JWT] (state, jwt) {
     state.jwt = jwt
+    axios.defaults.headers = {
+      Authorization: `Bearer ${jwt}`
+    }
   },
   [types.SET_QUIZ] (state, quiz) {
     state.quiz = quiz
@@ -86,9 +89,6 @@ const actions = {
     window.location = `http://localhost:3000/auth/login`
   },
   successfulLogin ({ commit }, jwt) {
-    axios.defaults.headers = {
-      Authorization: `Bearer ${jwt}`
-    }
     commit(types.SET_JWT, jwt)
   },
   async create ({ commit, state }, options) {
@@ -149,7 +149,7 @@ const actions = {
 
       commit(types.SET_QUIZ, quiz)
       commit(types.SET_JWT, jwt)
-      console.log(quiz)
+
       if (quiz.state === 'LOBBY') {
         router.push({ name: 'host-lobby' })
       } else if (quiz.state === 'PLAYING' || quiz.state === 'PAUSED') {

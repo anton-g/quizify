@@ -41,6 +41,14 @@ export default {
       showPlaylistPicker: false
     }
   },
+  created () {
+    if (this.userPlaylists.length < 1) {
+      this.$store.dispatch('loadUserPlaylists')
+    }
+    if (this.featuredPlaylists.length < 1) {
+      this.$store.dispatch('loadFeaturedPlaylists')
+    }
+  },
   computed: {
     featuredPlaylists () {
       return this.$store.state.host.featuredPlaylists.slice(0, 3)
