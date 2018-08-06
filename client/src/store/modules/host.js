@@ -58,7 +58,7 @@ const mutations = {
   [types.UPDATE_PLAYER] (state, player) {
     const idx = state.quiz.players.findIndex(p => p.id === player.id)
     if (idx > -1) {
-      state.quiz.players[idx] = player
+      Vue.set(state.quiz.players, idx, player)
     }
   },
   [types.SET_BUZZED_PLAYER] (state, player) {

@@ -1,7 +1,7 @@
 <template lang="pug">
   .player-result-list
     ul.result-list
-      li.player(v-for="(player, idx) in results")
+      li.player(v-for="(player, idx) in sortedResults", :key="player.id")
         .fill(:style="{ width: fillWidth(player) + '%' }")
         .icon-wrapper(:style="{ visibility: idx > 0 ? 'hidden' : 'visible' }")
           FontAwesomeIcon(:icon="trophyIcon")
@@ -21,8 +21,11 @@ export default {
   },
   props: ['results'],
   computed: {
+    sortedResults () {
+      return this.results.slice().sort((a, b) => b.score - a.score)
+    },
     maxScore () {
-      return this.results[0].score
+      return this.sortedResults[0].score
     },
     trophyIcon () {
       return faTrophy
