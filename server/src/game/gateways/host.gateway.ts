@@ -201,17 +201,17 @@ export class HostGateway {
   }
 
   @UseGuards(EventAuthGuard)
+  @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.ReconnectHost)
-  async onReconnect(client: Socket, { data, ack }) {
-    const socketId = data.socketId
-    const game: Game = await this.gameService.reconnectHost(socketId, client.id)
+  async onReconnect(client: Socket, { user, ack }) {
+    const game: Game = await this.gameService.reconnectHost(user.id, client.id)
 
     if (!game) return // could not find game to reconnect to
     // should probably do some error handling here
 
     ack(new GameDto(game))
 
-    console.log(`[${game.key}] Host with socket ${client.id} reconnected. Replaced old socket ${socketId}`)
+    console.log(`[${game.key}] Host with socket ${client.id} reconnected.`)
   }
 
   // This is a workaround for immediately pausing after issuing a play request.

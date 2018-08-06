@@ -1,21 +1,25 @@
 import { Model, Mongoose } from 'mongoose';
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
+import { WebSocketServer } from '@nestjs/websockets';
 import { Game } from '../interfaces/game.interface';
 import * as nanoid from 'nanoid';
 import * as generate from 'nanoid/generate';
 import { JoinGameDto } from '../dtos/join-game.dto';
 import { Player } from '../interfaces/player.interface';
-import { GameState } from '../game.state';
+import { GameState, GameEvents } from '../game.state';
 import { UserException } from '../../common/user.exception';
 import { Playlist } from '../../playlist/interfaces/playlist.interface';
 import { CreateQuizOptionsDto } from '../dtos/create-quiz-options.dto';
 import { SpotifyService } from '../../spotify/spotify.service';
 import { User } from '../../user/interfaces/user.interface';
 import { PlaylistService } from '../../playlist/services/playlist.service';
+import { Server } from 'socket.io';
 
 @Injectable()
 export class GameService {
+  @WebSocketServer() server: Server;
+
   constructor(
     @InjectModel('Game') private readonly gameModel: Model<Game>,
     @InjectModel('Player') private readonly playerModel: Model<Player>,
@@ -27,6 +31,7 @@ export class GameService {
 
   async create(user: User, options: CreateQuizOptionsDto): Promise<Game> {
     const playlist = await this._getPlaylist(user, options.playlist)
+    await this._endQuizes(user)
 
     const secret: string = nanoid()
     const key: string = generate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ', 6)
@@ -51,7 +56,6 @@ export class GameService {
 
   async setState(key: string, state: GameState): Promise<Game> {
     if (!key) return Promise.reject(new UserException('Missing key'))
-
     return await this._findOneAndUpdate(
       { "key": key.toUpperCase() },
       { $set: { "state": state } }
@@ -131,13 +135,12 @@ export class GameService {
     return result
   }
 
-  async reconnectHost(oldSocketId: string, newSocketId: string): Promise<Game> {
-    if (!oldSocketId) return Promise.reject(new UserException('Invalid old socket id'))
+  async reconnectHost(hostUserId: string, newSocketId: string): Promise<Game> {
     if (!newSocketId) return Promise.reject(new UserException('Invalid new socket id'))
 
     const result: Game = await this._findOneAndUpdate(
       {
-        "host.socket": oldSocketId,
+        "host.user": hostUserId,
         "state": { $ne: GameState.Ended }
       },
       { $set: {
@@ -152,6 +155,18 @@ export class GameService {
   private async _getPlaylist(user: User, playlistId: string): Promise<Playlist> {
     const spotifyPlaylist = await this.spotifyService.getUserPlaylist(user, playlistId)
     return await this.playlistService.create(spotifyPlaylist)
+  }
+
+  private async _endQuizes(user: User) {
+    await this.gameModel.updateMany({
+      "host.user": user.id,
+      "state": { $ne: GameState.Ended }
+    }, { $set: {
+      "host.user": undefined,
+      "state": GameState.Ended
+    } }, {
+      multi: true
+    }).exec()
   }
 
   private async _findOneAndUpdate(conditions, update) {

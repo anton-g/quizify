@@ -5,7 +5,7 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
-import { HOST_SOCKET_STORAGE_ITEM, API_URL } from '../../common/constants'
+import { HOST_RECONNECT_ID, API_URL } from '../../common/constants'
 
 const socketBus = new Vue()
 
@@ -114,7 +114,7 @@ const actions = {
       commit(types.SET_QUIZ, res)
       router.push({ name: 'host-lobby' })
 
-      localStorage.setItem(HOST_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
+      localStorage.setItem(HOST_RECONNECT_ID, state.jwt)
     })
   },
   async updatePlaylist ({ commit, state }, playlist) {
@@ -126,7 +126,7 @@ const actions = {
       commit(types.UPDATE_QUIZ, quiz)
     })
   },
-  async reconnectHost ({ commit, state }, socket) {
+  async reconnectHost ({ commit, state }, jwt) {
     izitoast.show({
       class: 'toast-reconnect',
       title: 'Reconnecting!',
@@ -134,10 +134,8 @@ const actions = {
     })
 
     const toast = document.querySelector('.toast-reconnect')
-
     socketBus.$socket.emit('RECONN_H', {
-      authorization: state.jwt,
-      socketId: socket
+      authorization: jwt
     }, (quiz) => {
       izitoast.hide({}, toast)
 
@@ -150,7 +148,8 @@ const actions = {
       }
 
       commit(types.SET_QUIZ, quiz)
-
+      commit(types.SET_JWT, jwt)
+      console.log(quiz)
       if (quiz.state === 'LOBBY') {
         router.push({ name: 'host-lobby' })
       } else if (quiz.state === 'PLAYING' || quiz.state === 'PAUSED') {
@@ -159,8 +158,6 @@ const actions = {
         // TODO handle other states
         console.log('-unknown state-')
       }
-
-      localStorage.setItem(HOST_SOCKET_STORAGE_ITEM, socketBus.$socket.id)
     })
   },
   async start ({ state, commit }) {
@@ -226,7 +223,7 @@ const actions = {
       router.push({ name: 'host-end' })
     })
 
-    localStorage.removeItem(HOST_SOCKET_STORAGE_ITEM)
+    localStorage.removeItem(HOST_RECONNECT_ID)
   },
   cleanupHost ({ commit }) {
     commit(types.CLEANUP_HOST)
