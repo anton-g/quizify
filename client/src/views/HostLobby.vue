@@ -2,7 +2,7 @@
   card.lobby
     h2.selection-none.title
       | Lobby
-      span.key {{ key }}
+      span.key Key: {{ key }}
     ImageButton(
       :img="selectedPlaylist.img",
       :text="selectedPlaylist.name",
@@ -14,6 +14,7 @@
     )
     button.button.is-dark.is-fullwidth.start-button(@click="start") Start
     h3.title.is-4 Players
+    p.subtitle(v-show="players.length < 1") Tell your friends to join!
     player-list(:players="players")
     playlist-picker(
       :active="showPlaylistPicker",

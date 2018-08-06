@@ -54,7 +54,7 @@ export default {
   },
   data () {
     return {
-      showHelp: true
+      showHelp: false
     }
   },
   computed: {
