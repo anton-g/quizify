@@ -86,7 +86,7 @@ const mutations = {
 
 const actions = {
   login () {
-    window.location = `http://localhost:3000/auth/login`
+    window.location = `${API_URL}/auth/login`
   },
   successfulLogin ({ commit }, jwt) {
     commit(types.SET_JWT, jwt)

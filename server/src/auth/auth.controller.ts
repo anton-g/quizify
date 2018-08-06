@@ -2,10 +2,12 @@ import { Controller, Get, Res, Query } from "@nestjs/common";
 import { SpotifyService } from "../spotify/spotify.service";
 import { UserService } from "../user/services/user.service";
 import { AuthService } from "./auth.service";
+import { ConfigService } from "../config/config.service";
 
 @Controller('auth')
 export class AuthController {
   constructor(
+    private readonly config: ConfigService,
     private readonly authService: AuthService,
     private readonly spotifyService: SpotifyService,
     private readonly userService: UserService) {}
@@ -27,6 +29,6 @@ export class AuthController {
     const user = await this.userService.create(userInfo.id, result.access_token, result.refresh_token)
     const jwt = await this.authService.createToken(user)
 
-    return res.redirect(`http://localhost:8080/create#jwt=${jwt}`)
+    return res.redirect(`${this.config.clientUrl}/create#jwt=${jwt}`)
   }
 }

@@ -19,6 +19,7 @@ export class ConfigService {
       NODE_ENV: Joi.string()
         .valid(['development', 'production'])
         .default('development'),
+      CLIENT_URL: Joi.string().required(),
       SPOTIFY_CLIENT_ID: Joi.string().required(),
       SPOTIFY_CLIENT_SECRET: Joi.string().required(),
       SPOTIFY_REDIRECT_URI: Joi.string().required(),
@@ -40,6 +41,10 @@ export class ConfigService {
 
   get nodeEnv(): string {
     return String(this.envConfig.NODE_ENV)
+  }
+
+  get clientUrl(): string {
+    return String(this.envConfig.CLIENT_URL)
   }
 
   get spotifyClientId(): string {
