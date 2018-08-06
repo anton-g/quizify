@@ -78,9 +78,11 @@ export default {
   methods: {
     incorrect () {
       this.$store.dispatch('resetBuzz')
+      this.$store.dispatch('resume')
     },
     correct () {
       this.$store.dispatch('score')
+      this.$store.dispatch('resetBuzz')
     },
     togglePlayState () {
       if (this.isPaused) {

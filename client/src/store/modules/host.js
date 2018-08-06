@@ -169,9 +169,8 @@ const actions = {
       router.push({ name: 'host-play' })
     })
   },
-  resetBuzz ({ dispatch, commit }) {
+  resetBuzz ({ commit }) {
     commit(types.SET_BUZZED_PLAYER, undefined)
-    dispatch('resume')
   },
   score ({ dispatch, state, commit }) {
     socketBus.$socket.emit('SCORE', {
@@ -179,7 +178,11 @@ const actions = {
       userId: state.buzzedPlayer.id
     }, (player) => {
       commit(types.UPDATE_PLAYER, player)
-      dispatch('resume')
+
+      // TODO workaround; this should be updated from the server
+      commit(types.UPDATE_QUIZ, {
+        state: 'PAUSED'
+      })
     })
   },
   pause ({ state, commit }) {
