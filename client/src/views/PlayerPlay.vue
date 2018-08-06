@@ -44,13 +44,11 @@ export default {
 @import '~@design';
 
 .play {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 1fr 150px;
-  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .buzzer {
-    margin-bottom: auto;
+    margin-bottom: $size-2;
 
     a {
       cursor: pointer;
