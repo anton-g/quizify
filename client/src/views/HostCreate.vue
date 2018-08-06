@@ -58,7 +58,7 @@ export default {
       this.$store.dispatch('loadUserDevices')
       this.$router.replace({ name: 'host-create' })
     } else {
-      console.log('failed login?')
+      this.$router.push({ name: 'home' })
     }
   },
   computed: {
