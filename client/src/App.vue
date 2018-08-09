@@ -1,8 +1,8 @@
 <template lang="pug">
   #app
-    section.header
+    header.header
       h1.title.has-text-centered Quizify
-    section.main
+    main.main
       router-view
 </template>
 
@@ -47,6 +47,19 @@ h1, h2, h3, h4, h5 {
       font-size: 3.5rem;
     }
   }
+}
+
+// Remove when bulma 0.7.2 is released https://github.com/jgthms/bulma/issues/150
+.is-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
 }
 
 .selection-none {

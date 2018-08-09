@@ -1,6 +1,8 @@
 <template lang="pug">
   a.image-button(
+    href="javascript:void(0);",
     @click="$emit('click')",
+    @keydown.enter="$emit('click')",
     :style="style"
   )
     .img(:style="imageStyle")

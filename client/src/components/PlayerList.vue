@@ -6,7 +6,7 @@
       .name
         | {{ player.name }}
       .actions
-        a.action(@click="kick(idx)")
+        a.action(href="javascript:void(0);", @click="kick(idx)", @keydown.enter="kick(idx)")
           FontAwesomeIcon(:icon="kickIcon", transform="grow-3")
 </template>
 

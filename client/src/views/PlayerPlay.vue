@@ -2,11 +2,14 @@
   .play
     card.buzzer
       h2.title Buzzer
-      a(@click="buzz", :class="{ disabled: paused }")
+      a(href="javascript:void(0);",
+        @click="buzz",
+        @keydown.enter="buzz",
+        :class="{ disabled: paused }")
         span Buzz!
     card.stats
       h2.title {{ playerScore }} points
-      p Question {{ currentQuestionNo }} of {{ questionCount }}
+      p.subtitle Question {{ currentQuestionNo }} of {{ questionCount }}
 </template>
 
 <script>

@@ -21,7 +21,7 @@
           .q-icon(v-if="!lastQuestion")
             FontAwesomeIcon(:icon="nextIcon")
       .foot
-        a.button.is-text(@click="showHelp = true") Help
+        a.button.is-text(href="javascript:void(0);", @click="showHelp = true", @keydown.enter="showHelp = true") Help
       modal.buzz-info(:active="buzzed", v-if="buzzed")
         h2.title {{ playerName }} buzzed
         .question {{ currentQuestion.question }}

@@ -2,18 +2,22 @@
   .home
     card.join
       h2.title Join quiz
+      label.is-sr-only(for="join-name-input") Your name
       .field
         .control.has-icons-left
           input.input(
+            id="join-name-input",
             type="text",
             placeholder="Your name",
             v-model="name",
             @keydown.enter="join")
           span.icon.is-small.is-left
             FontAwesomeIcon(:icon="userIcon")
+      label.is-sr-only(for="join-key-input") Quiz key
       .field
         .control.has-icons-left
           input.input.key-input(
+            id="join-key-input",
             type="text",
             placeholder="Input quiz key",
             maxlength="6",

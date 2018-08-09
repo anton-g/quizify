@@ -11,17 +11,18 @@
           :color="featureColor(idx)"
           :height="$mq | mq({ tablet: '120px', desktop: '190px' })"
           :width="$mq | mq({ tablet: '100%', desktop: '190px' })"
-          @click="select(playlist)")
-      a.more-link.button.is-text See more
+          @click="select(playlist)",
+          @keydown.enter="select(playlist)")
+      a.more-link.button.is-text(href="javascript:void(0);") See more
     .user-playlists-wrapper
       h2.title Your playlists
       .user-playlists
         ul
           li.user-playlist(v-for="playlist in playlists")
-            a(@click="select(playlist)")
+            a(href="javascript:void(0);", @click="select(playlist)", @keydown.enter="select(playlist)")
               span.name {{ playlist.name }}
               span.info {{ playlist.length }} tracks
-      a.more-link.button.is-text See more
+      a.more-link.button.is-text(href="javascript:void(0);") See more
 </template>
 
 <script>

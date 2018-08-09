@@ -6,7 +6,7 @@
         card
           slot
     slot(name="close")
-      button.modal-close.is-large(aria-label="close", @click="$emit('close')")
+      button.modal-close.is-large(aria-label="close", @click="$emit('close')", @keydown.enter="$emit('close')")
 </template>
 
 <script>
