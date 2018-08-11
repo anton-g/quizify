@@ -5,7 +5,7 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
-import { PLAYER_SOCKET_STORAGE_ITEM, API_URL } from '../../common/constants'
+import { PLAYER_SOCKET_STORAGE_ITEM } from '../../common/constants'
 
 const socketBus = new Vue()
 
@@ -57,7 +57,7 @@ const mutations = {
 
 const actions = {
   async joinQuiz ({ commit }, { key, name }) {
-    const { status, data } = await axios.post(`${API_URL}/game/${key}/join`, {
+    const { status, data } = await axios.post(`${process.env.VUE_APP_API_URL}/game/${key}/join`, {
       name: name
     })
 

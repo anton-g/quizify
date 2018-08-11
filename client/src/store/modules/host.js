@@ -5,7 +5,8 @@ import router from '@/router'
 
 import * as types from '../mutation-types'
 
-import { HOST_RECONNECT_ID, API_URL } from '../../common/constants'
+import { HOST_RECONNECT_ID } from '../../common/constants'
+const API_URL = process.env.VUE_APP_API_URL
 
 const socketBus = new Vue()
 

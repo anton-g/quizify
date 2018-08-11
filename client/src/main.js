@@ -6,7 +6,6 @@ import VueMq from 'vue-mq'
 import VueSocketio from 'vue-socket.io-extended'
 import io from 'socket.io-client'
 import izitoast from 'izitoast'
-import { API_URL } from './common/constants'
 
 import 'izitoast/dist/css/iziToast.min.css'
 
@@ -29,7 +28,7 @@ Vue.use(VueMq, {
     fullhd: Infinity
   }
 })
-Vue.use(VueSocketio, io(API_URL), store)
+Vue.use(VueSocketio, io(process.env.VUE_APP_API_URL), store)
 
 new Vue({
   router,
