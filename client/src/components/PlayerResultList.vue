@@ -76,7 +76,7 @@ export default {
     span {
       margin-left: 2px;
       font-size: $size-2;
-      color: rgba(0, 0, 0, 0.5)
+      color: rgba(0, 0, 0, 0.6)
     }
   }
 

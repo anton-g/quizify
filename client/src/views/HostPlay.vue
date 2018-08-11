@@ -4,7 +4,7 @@
       .info
         span.questionNo {{ currentQuestionNo }} / {{ questionCount }}
         h2.question {{ currentQuestion.question }}
-        img.image(:src="currentQuestion.track.imageUrl")
+        img.image(:src="currentQuestion.track.imageUrl", :alt="'Album art for ' + currentQuestion.track.name + ' by ' + currentQuestion.track.artist")
         p.artist {{ currentQuestion.track.artist }}
         p.song {{ currentQuestion.track.name }}
       .actions
@@ -139,7 +139,7 @@ export default {
   align-items: center;
 
   .questionNo {
-    color: gray;
+    color: rgba(0, 0, 0, 0.6);
     font-size: 14px;
     line-height: 14px;
     margin-bottom: $size-1;

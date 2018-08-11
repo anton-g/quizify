@@ -5,15 +5,18 @@
     .field
       .control
         button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
+    label.is-sr-only(for="select-device") Select device
     .field.has-addons
       .control.is-expanded
         .select.is-fullwidth
-          select(v-model="selectedDevice", required)
+          select(v-model="selectedDevice", id="select-device", required)
             option(value="", disabled, selected) Select device
             option(v-for="device in devices", :value="device") {{ device.name }}
       .control
-        button.button(@click="refreshDevices")
-          FontAwesomeIcon(:icon="loadDevicesIcon", :class="{ 'fa-spin': isLoadingDevices }")
+        button.button(@click="refreshDevices", aria-label="Refresh device list")
+          FontAwesomeIcon(
+            :icon="loadDevicesIcon",
+            :class="{ 'fa-spin': isLoadingDevices }")
     .field.is-grouped
       .control
         button.button.is-danger.is-outlined(@click="cancel") Cancel
