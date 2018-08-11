@@ -1,6 +1,6 @@
 <template lang="pug">
   ul.player-list
-    li.player(v-for="(player, idx) in players", :class="{ connected: player.connected }")
+    li.player(v-for="(player, idx) in players", :key="player.id", :class="{ connected: player.connected }")
       .connectivity
         FontAwesomeIcon(:icon="connectivityIcon", transform="shrink-6")
       .name
@@ -19,7 +19,7 @@ export default {
     'players'
   ],
   components: {
-    FontAwesomeIcon,
+    FontAwesomeIcon
   },
   computed: {
     connectivityIcon () {

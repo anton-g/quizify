@@ -4,7 +4,8 @@
     .featured-playlists-wrapper
       .featured-playlists
         image-button(
-          v-for="(playlist, idx) in featuredPlaylists"
+          v-for="(playlist, idx) in featuredPlaylists",
+          :key="playlist.id",
           :text="playlist.name",
           :subtext="playlist.length + ' tracks'",
           :img="playlist.img",
@@ -18,7 +19,7 @@
       h2.title Your playlists
       .user-playlists
         ul
-          li.user-playlist(v-for="playlist in playlists")
+          li.user-playlist(v-for="playlist in playlists", :key="playlist.id")
             a(href="javascript:void(0);", @click="select(playlist)", @keydown.enter="select(playlist)")
               span.name {{ playlist.name }}
               span.info {{ playlist.length }} tracks

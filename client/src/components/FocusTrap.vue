@@ -17,8 +17,9 @@ export default {
   },
   mounted () {
     this.focusTrap = createFocusTrap(this.$refs.element)
-    if(this.active)
+    if (this.active) {
       this.focusTrap.activate()
+    }
   },
   updated () {
     if (this.active) {

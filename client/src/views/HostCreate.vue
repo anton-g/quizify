@@ -11,7 +11,7 @@
         .select.is-fullwidth
           select(v-model="selectedDevice", id="select-device", required)
             option(value="", disabled, selected) Select device
-            option(v-for="device in devices", :value="device") {{ device.name }}
+            option(v-for="device in devices", :key="device.id", :value="device") {{ device.name }}
       .control
         button.button(@click="refreshDevices", aria-label="Refresh device list")
           FontAwesomeIcon(
