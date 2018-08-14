@@ -9,6 +9,8 @@ import izitoast from 'izitoast'
 
 import 'izitoast/dist/css/iziToast.min.css'
 
+require('./design/bulma.scss')
+
 Vue.config.productionTip = false
 
 izitoast.settings({

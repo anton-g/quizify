@@ -6,7 +6,6 @@
       router-view
 </template>
 
-<style lang="sass" src="bulma"></style>
 <style lang="scss">
 @import '~@design';
 
