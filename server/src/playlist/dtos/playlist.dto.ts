@@ -21,7 +21,7 @@ export class PlaylistDto {
       name: playlist.name,
       description: playlist.description,
       length: playlist.tracks.total,
-      img: playlist.images[0].url,
+      img: playlist.images.length > 1 ? playlist.images[0].url : '',
       color: '',
       featured: false
     }
