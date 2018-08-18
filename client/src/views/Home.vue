@@ -1,25 +1,25 @@
 <template lang="pug">
   .home
     card.join
-      h2.title Join quiz
-      label.is-sr-only(for="join-name-input") Your name
+      h2.title {{ $t('join:title') }}
+      label.is-sr-only(for="join-name-input") {{ $t('join:input:name:sr') }}
       .field
         .control.has-icons-left
           input.input(
             id="join-name-input",
             type="text",
-            placeholder="Your name",
+            :placeholder="$t('join:input:name:placeholder')",
             v-model="name",
             @keydown.enter="join")
           span.icon.is-small.is-left
             FontAwesomeIcon(:icon="userIcon")
-      label.is-sr-only(for="join-key-input") Quiz key
+      label.is-sr-only(for="join-key-input") {{ $t('join:input:key:sr') }}
       .field
         .control.has-icons-left
           input.input.key-input(
             id="join-key-input",
             type="text",
-            placeholder="Input quiz key",
+            :placeholder="$t('join:input:key:placeholder')",
             maxlength="6",
             v-model="key",
             @keydown.enter="join")
@@ -27,16 +27,16 @@
             FontAwesomeIcon(:icon="keyIcon")
       .field
         .control
-          button.button.is-dark.is-fullwidth(@click="join") Join
+          button.button.is-dark.is-fullwidth(@click="join") {{ $t('join:button') }}
     card.create
-      h2.title Create quiz
-      p.subtitle Get started by logging in with Spotify
+      h2.title {{ $t('create:title') }}
+      p.subtitle {{ $t('create:subtitle' )}}
       button.button.is-fullwidth(@click="create")
-        | Log in with Spotify
+        | {{ $t('create:button:login') }}
         FontAwesomeIcon(:icon="spotifyIcon", size="lg")
       p
-        strong Why do I have to log in?
-      p Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok.
+        strong {{ $t('create:title:login') }}
+      p {{ $t('create:text:login') }}
 </template>
 
 <script>
@@ -143,3 +143,21 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "join:title": "Join Quiz",
+    "join:input:name:placeholder": "Your name",
+    "join:input:name:sr": "Your name",
+    "join:input:key:placeholder": "Input quiz key",
+    "join:input:key:sr": "Quiz key",
+    "join:button": "Join",
+    "create:title": "Create Quiz",
+    "create:subtitle": "Get started by logging in with Spotify",
+    "create:button:login": "Log in with Spotify",
+    "create:title:login": "Why do I have to log in?",
+    "create:text:login": "Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok."
+  }
+}
+</i18n>

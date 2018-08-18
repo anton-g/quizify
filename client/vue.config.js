@@ -10,6 +10,17 @@ module.exports = {
       alias: {
         '@design': resolveSrc('src/design/index.scss')
       }
+    },
+    module: {
+      rules: [
+        { resourceQuery: /blocktype=i18n/, loader: '@kazupon/vue-i18n-loader' }
+      ]
+    }
+  },
+  pluginOptions: {
+    i18n: {
+      fallbackLocale: 'en',
+      enableInSFC: true
     }
   }
 }
