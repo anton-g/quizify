@@ -6,6 +6,17 @@
       router-view
 </template>
 
+<script>
+export default {
+  created () {
+    const lang = localStorage.getItem('lang')
+    if (lang) {
+      this.$store.dispatch('changeLocale', lang)
+    }
+  }
+}
+</script>
+
 <style lang="scss">
 @import '~@design';
 

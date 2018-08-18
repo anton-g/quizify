@@ -37,6 +37,8 @@
       p
         strong {{ $t('create:title:login') }}
       p {{ $t('create:text:login') }}
+    card.settings
+      locale-switcher
 </template>
 
 <script>
@@ -45,6 +47,7 @@ import { faKey, faUser } from '@fortawesome/fontawesome-free-solid'
 import { faSpotify } from '@fortawesome/fontawesome-free-brands'
 import Card from '../components/Card.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
+import LocaleSwitcher from '../components/LocaleSwitcher.vue'
 
 export default {
   name: 'home',
@@ -57,7 +60,8 @@ export default {
   },
   components: {
     FontAwesomeIcon,
-    Card
+    Card,
+    LocaleSwitcher
   },
   computed: {
     keyIcon () {
@@ -125,6 +129,8 @@ export default {
   }
 
   .create {
+    margin-bottom: $size-3;
+
     .subtitle {
       margin-bottom: $size-2;
     }
@@ -157,6 +163,19 @@ export default {
     "create:subtitle": "Get started by logging in with Spotify",
     "create:button:login": "Log in with Spotify",
     "create:title:login": "Why do I have to log in?",
+    "create:text:login": "Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok."
+  },
+  "sv": {
+    "join:title": "Gå med",
+    "join:input:name:placeholder": "Ditt namn",
+    "join:input:name:sr": "Fyll i ditt namn",
+    "join:input:key:placeholder": "Nyckel",
+    "join:input:key:sr": "Fyll i nyckeln till quizet",
+    "join:button": "Gå med",
+    "create:title": "Skapa Quiz",
+    "create:subtitle": "Kom igång genom att logga in med Spotify",
+    "create:button:login": "Logga in med Spotify",
+    "create:title:login": "Varför måste jag logga in?",
     "create:text:login": "Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok."
   }
 }
