@@ -2,9 +2,9 @@ import * as types from '../mutation-types'
 import i18n from '../../i18n'
 
 const state = {
-  loading: {},
   connected: false,
-  currentLocale: 'en'
+  currentLocale: 'en',
+  enableFeaturedPlaylists: false
 }
 
 const mutations = {

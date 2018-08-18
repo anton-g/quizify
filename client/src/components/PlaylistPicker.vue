@@ -1,7 +1,7 @@
 <template lang="pug">
   modal(:active="active", @close="close")
-    h2.title {{ $t('title:featured-playlists') }}
-    .featured-playlists-wrapper
+    .featured-playlists-wrapper(v-if="enableFeaturedPlaylists")
+      h2.title {{ $t('title:featured-playlists') }}
       .featured-playlists
         image-button(
           v-for="(playlist, idx) in featuredPlaylists",
@@ -60,6 +60,11 @@ export default {
       ]
 
       return colors[idx]
+    }
+  },
+  computed: {
+    enableFeaturedPlaylists () {
+      return this.$store.state.common.enableFeaturedPlaylists
     }
   }
 }
