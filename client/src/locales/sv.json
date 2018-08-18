@@ -1,0 +1,8 @@
+{
+  "toast:reconnect:title": "Återansluter..",
+  "toast:reconnect:text": "Försöker återansluta till tidigare quiz..",
+  "toast:reconnect-failed:title": "Misslyckad återanslutning..",
+  "toast:reconnect-failed:text": "Kunde tyvärr inte återansluta till tidigare quiz..",
+  "toast:scored:title": "Rätt svar!",
+  "toast:scored:text": "Du fick {points} poäng!"
+}

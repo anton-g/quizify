@@ -2,6 +2,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import izitoast from 'izitoast'
 import router from '@/router'
+import i18n from '../../i18n'
 
 import * as types from '../mutation-types'
 
@@ -83,8 +84,8 @@ const actions = {
   async reconnectPlayer ({ commit }, socket) {
     izitoast.show({
       class: 'toast-reconnect',
-      title: 'Reconnecting!',
-      message: `Trying to reconnect to previous quiz..`
+      title: i18n.t('toast:reconnect:title'),
+      message: i18n.t('toast:reconnect:text')
     })
 
     const toast = document.querySelector('.toast-reconnect')
@@ -94,8 +95,8 @@ const actions = {
 
       if (!data) {
         izitoast.show({
-          title: 'Reconnect failed',
-          message: 'Could not reconnect to quiz..'
+          title: i18n.t('toast:reconnect-failed:title'),
+          message: i18n.t('toast:reconnect-failed:text')
         })
         return
       }
@@ -137,8 +138,8 @@ const actions = {
     commit(types.SCORED, score)
 
     izitoast.show({
-      title: 'Correct!',
-      message: `You scored ${score} point!`
+      title: i18n.t('toast:scored:title'),
+      message: i18n.t('toast:scored:text', { points: score })
     })
   },
   socket_endGame: ({ commit }, data) => {

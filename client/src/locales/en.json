@@ -1,0 +1,8 @@
+{
+  "toast:reconnect:title": "Reconnecting..",
+  "toast:reconnect:text": "Trying to reconnect to previous quiz..",
+  "toast:reconnect-failed:title": "Reconnect failed..",
+  "toast:reconnect-failed:text": "Could not reconnect to quiz..",
+  "toast:scored:title": "Correct!",
+  "toast:scored:text": "You scored {points} point!"
+}

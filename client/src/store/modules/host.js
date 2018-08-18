@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import izitoast from 'izitoast'
 import router from '@/router'
+import i18n from '../../i18n'
 
 import * as types from '../mutation-types'
 
@@ -130,8 +131,8 @@ const actions = {
   async reconnectHost ({ commit, state }, jwt) {
     izitoast.show({
       class: 'toast-reconnect',
-      title: 'Reconnecting!',
-      message: `Trying to reconnect to previous quiz..`
+      title: i18n.t('toast:reconnect:title'),
+      message: i18n.t('toast:reconnect:text')
     })
 
     const toast = document.querySelector('.toast-reconnect')
@@ -142,8 +143,8 @@ const actions = {
 
       if (!quiz) {
         izitoast.show({
-          title: 'Reconnect failed',
-          message: 'Could not reconnect to quiz..'
+          title: i18n.t('toast:reconnect-failed:title'),
+          message: i18n.t('toast:reconnect-failed:text')
         })
         return
       }
