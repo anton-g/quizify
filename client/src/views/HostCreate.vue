@@ -1,16 +1,16 @@
 <template lang="pug">
   card.create
-    h2.title Create quiz
-    p.intro Laboris in consequat aliquip consectetur laborum in cillum nisi ex officia.
+    h2.title {{ $t('title') }}
+    p.intro {{ $t('text:intro') }}
     .field
       .control
-        button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : 'Select playlist' }}
-    label.is-sr-only(for="select-device") Select device
+        button.button.is-dark.is-fullwidth(@click="showPlaylistSelection = true") {{ selectedPlaylist ? selectedPlaylist.name : $t('button:playlist') }}
+    label.is-sr-only(for="select-device") {{ $t('select:device:sr') }}
     .field.has-addons
       .control.is-expanded
         .select.is-fullwidth
           select(v-model="selectedDevice", id="select-device", required)
-            option(value="", disabled, selected) Select device
+            option(value="", disabled, selected) {{ $t('select:device') }}
             option(v-for="device in devices", :key="device.id", :value="device") {{ device.name }}
       .control
         button.button(@click="refreshDevices", aria-label="Refresh device list")
@@ -19,9 +19,9 @@
             :class="{ 'fa-spin': isLoadingDevices }")
     .field.is-grouped
       .control
-        button.button.is-danger.is-outlined(@click="cancel") Cancel
+        button.button.is-danger.is-outlined(@click="cancel") {{ $t('button:cancel') }}
       .control
-        button.button.is-dark.is-fullwidth(@click="create") Create
+        button.button.is-dark.is-fullwidth(@click="create") {{ $t('button:create') }}
     playlist-picker(
       :active="showPlaylistSelection",
       :featuredPlaylists="featuredPlaylists",
@@ -118,3 +118,17 @@ export default {
   margin-bottom: $size-1;
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "title": "Create Quiz",
+    "text:intro": "Lorem ipsum dolor sit amet",
+    "button:playlist": "Select playlist",
+    "select:device": "Select device",
+    "select:device:sr": "Select device",
+    "button:cancel": "Cancel",
+    "button:create": "Create"
+  }
+}
+</i18n>

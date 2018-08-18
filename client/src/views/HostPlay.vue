@@ -4,42 +4,41 @@
       .info
         span.questionNo {{ currentQuestionNo }} / {{ questionCount }}
         h2.question {{ currentQuestion.question }}
-        img.image(:src="currentQuestion.track.imageUrl", :alt="'Album art for ' + currentQuestion.track.name + ' by ' + currentQuestion.track.artist")
+        img.image(:src="currentQuestion.track.imageUrl", :alt="$t('alt:album-art', { trackName: currentQuestion.track.name, artistName: currentQuestion.track.artist })")
         p.artist {{ currentQuestion.track.artist }}
         p.song {{ currentQuestion.track.name }}
       .actions
         button.button.is-dark.is-outlined.is-fullwidth(@click="prev", :disabled="currentQuestionNo === 1")
           .q-icon
             FontAwesomeIcon(:icon="prevIcon")
-          | Prev
+          | {{ $t('button:prev') }}
         button.button.is-dark.is-fullwidth(@click="togglePlayState")
-          | {{ isPaused ? 'Resume' : 'Pause' }}
+          | {{ isPaused ? $t('button:resume') : $t('button:pause') }}
           .q-icon
             FontAwesomeIcon(:icon="togglePlayIcon")
         button.button.is-dark.is-fullwidth(@click="next", :class="{ 'is-danger': lastQuestion }")
-          | {{ lastQuestion ? 'End' : 'Next' }}
+          | {{ lastQuestion ? $t('button:end') : $t('button:next') }}
           .q-icon(v-if="!lastQuestion")
             FontAwesomeIcon(:icon="nextIcon")
       .foot
-        a.button.is-text(href="javascript:void(0);", @click="showHelp = true", @keydown.enter="showHelp = true") Help
+        a.button.is-text(href="javascript:void(0);", @click="showHelp = true", @keydown.enter="showHelp = true") {{ $t('button:help') }}
       modal.buzz-info(:active="buzzed", v-if="buzzed")
-        h2.title {{ playerName }} buzzed
+        h2.title {{ $t('text:buzzed', { name: playerName }) }}
         .question {{ currentQuestion.question }}
         .artist {{ currentQuestion.track.artist }}
         .song {{ currentQuestion.track.name }}
         .actions
-          button.button.is-danger.is-fullwidth(@click="incorrect") Incorrect
-          button.button.is-outlined.is-dark.is-fullwidth(@click="correct") Correct
+          button.button.is-danger.is-fullwidth(@click="incorrect") {{ $t('button:incorrect') }}
+          button.button.is-outlined.is-dark.is-fullwidth(@click="correct") {{ $t('button:correct') }}
         span(slot="close")
       modal.help-modal(:active="showHelp", @close="showHelp = false")
-        h2.title Help
-        p Id minim tempor eu nisi anim ad ex labore proident anim.
-        p Fugiat ullamco sit ut elit et amet eu cupidatat sunt cillum aliqua. Qui sunt esse voluptate ad ut duis mollit ea Lorem. Qui laborum deserunt culpa laborum ex aliquip commodo reprehenderit ex adipisicing. Aliquip enim irure incididunt eiusmod. Exercitation eu cillum exercitation esse duis enim sunt. Velit et sunt exercitation tempor occaecat nisi voluptate enim. Est sit tempor nisi aute in ut Lorem.
-        p.has-text-danger Leaving will end the quiz and all progress will be lost!
+        h2.title {{ $t('title:help') }}
+        p {{ $t('text:help' )}}
+        p.has-text-danger {{ $t('text:leave-warning') }}
         .leave
-          button.button.is-danger(@click="leave") Leave quiz
+          button.button.is-danger(@click="leave") {{ $t('button:leave') }}
     card.players
-      h2.title Players
+      h2.title {{ $t('title:players') }}
       player-result-list(:results="players")
 </template>
 
@@ -235,3 +234,25 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "alt:album-art": "Album art for {trackName} by {artistName}",
+    "button:prev": "Prev",
+    "button:next": "Next",
+    "button:pause": "Pause",
+    "button:resume": "Resume",
+    "button:end": "End",
+    "text:buzzed": "{name} buzzed!",
+    "button:incorrect": "Incorrect",
+    "button:correct": "Correct",
+    "button:help": "Help",
+    "title:help": "Help",
+    "text:help": "Fugiat ullamco sit ut elit et amet eu cupidatat sunt cillum aliqua. Qui sunt esse voluptate ad ut duis mollit ea Lorem. Qui laborum deserunt culpa laborum ex aliquip commodo reprehenderit ex adipisicing. Aliquip enim irure incididunt eiusmod. Exercitation eu cillum exercitation esse duis enim sunt. Velit et sunt exercitation tempor occaecat nisi voluptate enim. Est sit tempor nisi aute in ut Lorem.",
+    "text:leave-warning": "Leaving will end the quiz and all progress will be lost!",
+    "button:leave": "Leave quiz",
+    "title:players": "Players"
+  }
+}
+</i18n>

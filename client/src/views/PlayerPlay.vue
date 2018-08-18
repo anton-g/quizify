@@ -1,15 +1,15 @@
 <template lang="pug">
   .play
     card.buzzer
-      h2.title Buzzer
+      h2.title {{ $t('title') }}
       a(href="javascript:void(0);",
         @click="buzz",
         @keydown.enter="buzz",
         :class="{ disabled: paused }")
-        span Buzz!
+        span {{ $t('button:buzz') }}
     card.stats
-      h2.title {{ playerScore }} points
-      p.subtitle Question {{ currentQuestionNo }} of {{ questionCount }}
+      h2.title {{ $t('text:points', { points: playerScore }) }}
+      p.subtitle {{ $t('text:currentquestion', { number: currentQuestionNo, total: questionCount }) }}
 </template>
 
 <script>
@@ -116,3 +116,14 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "title": "Buzzer",
+    "button:buzz": "Buzz!",
+    "text:points": "{points} points",
+    "text:currentquestion": "Question {number} of {total}"
+  }
+}
+</i18n>

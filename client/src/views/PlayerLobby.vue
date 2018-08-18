@@ -1,9 +1,9 @@
 <template lang="pug">
   card.lobby
-    h2.title Lobby
+    h2.title {{ $t('title') }}
     p.subtitle.is-spaced {{ status }}
     .settings(v-if="quizInfo")
-      h3.title.is-5 Settings
+      h3.title.is-5 {{ $t('title:settings') }}
       p Selected playlist: {{ quizInfo.playlist }}
       p Number of questions: {{ quizInfo.questionCount }}
 </template>
@@ -18,7 +18,7 @@ export default {
   },
   data () {
     return {
-      status: 'Waiting for quiz to start..'
+      status: this.$t('text:status')
     }
   },
   computed: {
@@ -39,3 +39,13 @@ export default {
 }
 
 </style>
+
+<i18n>
+{
+  "en": {
+    "title": "Lobby",
+    "text:status": "Waiting for quiz to start..",
+    "title:settings": "Settings"
+  }
+}
+</i18n>

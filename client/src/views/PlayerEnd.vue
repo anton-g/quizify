@@ -4,7 +4,7 @@
     player-result-list.result-list(:results="results")
     .field
       .control
-        button.button.is-dark.is-pulled-right(@click="home") Home
+        button.button.is-dark.is-pulled-right(@click="home") {{ $t('button:home') }}
 </template>
 
 <script>
@@ -25,7 +25,7 @@ export default {
       return this.results[0].id === this.$store.state.player.me.id
     },
     title () {
-      return this.won ? 'You won!' : 'Game ended'
+      return this.won ? this.$t('title:win') : this.$t('title:loss')
     }
   },
   methods: {
@@ -44,3 +44,13 @@ export default {
   margin-bottom: $size-2;
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "title:win": "You won!",
+    "title:loss": "Game ended",
+    "button:home": "Home"
+  }
+}
+</i18n>

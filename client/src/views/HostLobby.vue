@@ -1,20 +1,20 @@
 <template lang="pug">
   card.lobby
     h2.selection-none.title
-      | Lobby
-      span.key Key: {{ key }}
+      | {{ $t('title') }}
+      span.key {{ $t('text:key') }}: {{ key }}
     ImageButton(
       :img="selectedPlaylist.img",
       :text="selectedPlaylist.name",
-      subtext="Click to change playlist"
+      :subtext="$t('button:playlist')"
       height="70px",
       width="100%",
       color="#237032",
       @click="showPlaylistPicker = true"
     )
-    button.button.is-dark.is-fullwidth.start-button(@click="start") Start
-    h3.title.is-4 Players
-    p.subtitle(v-show="players.length < 1") Tell your friends to join!
+    button.button.is-dark.is-fullwidth.start-button(@click="start") {{ $t('button:start') }}
+    h3.title.is-4 {{ $t('title:players') }}
+    p.subtitle(v-show="players.length < 1") {{ $t('text:no-players') }}
     player-list(:players="players")
     playlist-picker(
       :active="showPlaylistPicker",
@@ -97,3 +97,16 @@ export default {
   margin-left: $size-1;
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "title": "Lobby",
+    "text:key": "Key",
+    "button:playlist": "Click to change playlist",
+    "button:start": "Start",
+    "title:players": "Players",
+    "text:no-players": "Tell your friends to join!"
+  }
+}
+</i18n>
