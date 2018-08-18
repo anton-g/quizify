@@ -7,7 +7,7 @@
           FontAwesomeIcon(:icon="trophyIcon")
         .name {{ player.name }}
         .score {{ player.score }}
-          span pts
+          span {{ $t('text:points') }}
 </template>
 
 <script>
@@ -86,3 +86,11 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "text:points": "pts"
+  }
+}
+</i18n>

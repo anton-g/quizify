@@ -1,6 +1,6 @@
 <template lang="pug">
   modal(:active="active", @close="close")
-    h2.title Featured playlists
+    h2.title {{ $t('title:featured-playlists') }}
     .featured-playlists-wrapper
       .featured-playlists
         image-button(
@@ -14,16 +14,16 @@
           :width="$mq | mq({ tablet: '100%', desktop: '190px' })"
           @click="select(playlist)",
           @keydown.enter="select(playlist)")
-      a.more-link.button.is-text(href="javascript:void(0);") See more
+      a.more-link.button.is-text(href="javascript:void(0);") {{ $t('button:see-more') }}
     .user-playlists-wrapper
-      h2.title Your playlists
+      h2.title {{ $t('title:user-playlists') }}
       .user-playlists
         ul
           li.user-playlist(v-for="playlist in playlists", :key="playlist.id")
             a(href="javascript:void(0);", @click="select(playlist)", @keydown.enter="select(playlist)")
               span.name {{ playlist.name }}
-              span.info {{ playlist.length }} tracks
-      a.more-link.button.is-text(href="javascript:void(0);") See more
+              span.info {{ $t('text:playlist-tracks', { count: playlist.length }) }}
+      a.more-link.button.is-text(href="javascript:void(0);") {{ $t('button:see-more') }}
 </template>
 
 <script>
@@ -123,3 +123,14 @@ export default {
   margin: $size-2 0 0 auto;
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "title:featured-playlists": "Featured playlists",
+    "title:user-playlists": "Your playlists",
+    "text:playlist-tracks": "{count} tracks",
+    "button:see-more": "See more"
+  }
+}
+</i18n>
