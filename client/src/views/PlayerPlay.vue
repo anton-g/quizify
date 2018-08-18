@@ -124,6 +124,12 @@ export default {
     "button:buzz": "Buzz!",
     "text:points": "{points} points",
     "text:currentquestion": "Question {number} of {total}"
+  },
+  "sv": {
+    "title": "Buzzer",
+    "button:buzz": "Buzz!",
+    "text:points": "{points} poäng",
+    "text:currentquestion": "Fråga {number} av {total}"
   }
 }
 </i18n>

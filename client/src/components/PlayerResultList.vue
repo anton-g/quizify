@@ -91,6 +91,9 @@ export default {
 {
   "en": {
     "text:points": "pts"
+  },
+  "sv": {
+    "text:points": "poäng"
   }
 }
 </i18n>

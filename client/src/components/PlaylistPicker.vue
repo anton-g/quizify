@@ -131,6 +131,12 @@ export default {
     "title:user-playlists": "Your playlists",
     "text:playlist-tracks": "{count} tracks",
     "button:see-more": "See more"
+  },
+  "sv": {
+    "title:featured-playlists": "Utvalda spellistor",
+    "title:user-playlists": "Dina spellistor",
+    "text:playlist-tracks": "{count} låtar",
+    "button:see-more": "Visa fler"
   }
 }
 </i18n>

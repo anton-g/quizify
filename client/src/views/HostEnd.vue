@@ -43,6 +43,10 @@ export default {
   "en": {
     "title": "Result",
     "button:home": "Home"
+  },
+  "en": {
+    "title": "Resultat",
+    "button:home": "Tillbaka"
   }
 }
 </i18n>

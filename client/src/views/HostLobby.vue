@@ -107,6 +107,14 @@ export default {
     "button:start": "Start",
     "title:players": "Players",
     "text:no-players": "Tell your friends to join!"
+  },
+  "sv": {
+    "title": "Lobby",
+    "text:key": "Nyckel",
+    "button:playlist": "Klicka för att byta spellista",
+    "button:start": "Starta",
+    "title:players": "Spelare",
+    "text:no-players": "Säg åt dina vänner att gå med!"
   }
 }
 </i18n>

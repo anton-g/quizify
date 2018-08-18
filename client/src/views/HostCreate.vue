@@ -129,6 +129,15 @@ export default {
     "select:device:sr": "Select device",
     "button:cancel": "Cancel",
     "button:create": "Create"
+  },
+  "sv": {
+    "title": "Skapa Quiz",
+    "text:intro": "Lorem ipsum dolor sit amet",
+    "button:playlist": "Välj spellista",
+    "select:device": "Välj enhet",
+    "select:device:sr": "Välj enhet",
+    "button:cancel": "Avbryt",
+    "button:create": "Skapa"
   }
 }
 </i18n>

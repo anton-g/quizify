@@ -51,6 +51,11 @@ export default {
     "title:win": "You won!",
     "title:loss": "Game ended",
     "button:home": "Home"
+  },
+  "sv": {
+    "title:win": "Du vann!",
+    "title:loss": "Slut",
+    "button:home": "Hem"
   }
 }
 </i18n>

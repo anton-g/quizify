@@ -46,6 +46,11 @@ export default {
     "title": "Lobby",
     "text:status": "Waiting for quiz to start..",
     "title:settings": "Settings"
+  },
+  "sv": {
+    "title": "Lobby",
+    "text:status": "Väntar på att quizet ska starta..",
+    "title:settings": "Inställningar"
   }
 }
 </i18n>
