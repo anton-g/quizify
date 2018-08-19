@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 import i18n from '../../i18n'
 import izitoast from 'izitoast'
+import { HOST_RECONNECT_ID, PLAYER_SOCKET_STORAGE_ITEM } from '../../common/constants'
 
 const state = {
   connected: false,
@@ -31,14 +32,29 @@ const actions = {
   socket_disconnect ({ commit }) {
     commit(types.DISCONNECT)
     izitoast.show({
+      class: 'toast-disconnect',
       title: i18n.t('toast:disconnect:title'),
       message: i18n.t('toast:disconnect:text'),
       color: 'red',
-      timeout: 0
+      timeout: 0,
+      close: false,
+      drag: false
     })
   },
-  socket_reconnect ({ commit, state }) {
-    console.log('reconnect?')
+  socket_reconnect ({ dispatch }) {
+    const playerSocket = localStorage.getItem(PLAYER_SOCKET_STORAGE_ITEM)
+    const hostReconnectId = localStorage.getItem(HOST_RECONNECT_ID)
+
+    if (playerSocket) {
+      dispatch('reconnectPlayer', playerSocket)
+    } else if (hostReconnectId) {
+      dispatch('reconnectHost', hostReconnectId)
+    }
+
+    const toast = document.querySelector('.toast-disconnect')
+    if (toast) {
+      izitoast.hide({}, toast)
+    }
   }
 }
 

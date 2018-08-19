@@ -1,4 +1,6 @@
 {
+  "toast:disconnect:title": "Tappade anslutningen",
+  "toast:disconnect:text": "Du har tappat anslutningen till quizet. Försöker återansluta..",
   "toast:reconnect:title": "Återansluter..",
   "toast:reconnect:text": "Försöker återansluta till tidigare quiz..",
   "toast:reconnect-failed:title": "Misslyckad återanslutning..",

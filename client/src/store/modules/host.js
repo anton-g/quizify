@@ -131,17 +131,13 @@ const actions = {
     })
   },
   async reconnectHost ({ commit, state }, jwt) {
-    izitoast.show({
-      class: 'toast-reconnect',
-      title: i18n.t('toast:reconnect:title'),
-      message: i18n.t('toast:reconnect:text')
-    })
-
-    const toast = document.querySelector('.toast-reconnect')
     socketBus.$socket.emit('RECONN_H', {
       authorization: jwt
     }, (quiz) => {
-      izitoast.hide({}, toast)
+      const toast = document.querySelector('.toast-reconnect')
+      if (toast) {
+        izitoast.hide({}, toast)
+      }
 
       if (!quiz) {
         izitoast.show({

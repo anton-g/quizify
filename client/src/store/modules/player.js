@@ -82,16 +82,11 @@ const actions = {
     })
   },
   async reconnectPlayer ({ commit }, socket) {
-    izitoast.show({
-      class: 'toast-reconnect',
-      title: i18n.t('toast:reconnect:title'),
-      message: i18n.t('toast:reconnect:text')
-    })
-
-    const toast = document.querySelector('.toast-reconnect')
-
     socketBus.$socket.emit('RECONN_P', socket, (data) => {
-      izitoast.hide({}, toast)
+      const toast = document.querySelector('.toast-reconnect')
+      if (toast) {
+        izitoast.hide({}, toast)
+      }
 
       if (!data) {
         izitoast.show({

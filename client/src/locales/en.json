@@ -1,6 +1,6 @@
 {
   "toast:disconnect:title": "Disconnected",
-  "toast:disconnect:text": "You were disconnected from the quiz. Try refreshing the page to reconnect.",
+  "toast:disconnect:text": "You were disconnected from the quiz. Trying to reconnect..",
   "toast:reconnect:title": "Reconnecting..",
   "toast:reconnect:text": "Trying to reconnect to previous quiz..",
   "toast:reconnect-failed:title": "Reconnect failed..",
