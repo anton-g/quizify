@@ -10,7 +10,7 @@ import { GameEvents, GameState } from '../game.state';
 import { Game } from '../interfaces/game.interface';
 import { GameDto } from '../dtos/game.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({ 'pingInterval': 2000, 'pingTimeout': 5000 })
 export class CommonGateway implements OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
