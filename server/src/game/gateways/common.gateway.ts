@@ -25,7 +25,7 @@ export class CommonGateway implements OnGatewayDisconnect {
     if (!game) {
       // Handle host disconnect
       game = await this.gameService.disconnectHost(client.id)
-      if (game.state === GameState.Playing) {
+      if (game && game.state === GameState.Playing) {
         this.server.to(game.key).emit(GameEvents.Pause)
         await this.gameService.setState(game.key, GameState.Paused)
       }
