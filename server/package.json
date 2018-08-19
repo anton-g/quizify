@@ -23,6 +23,7 @@
     "@types/socket.io": "^1.4.33",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
+    "i18n": "^0.8.3",
     "joi": "^13.5.2",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.0.9",

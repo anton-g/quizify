@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { mockgooseProvider } from '../../providers/mockgoose.provider';
 import { Mockgoose } from "mockgoose-fix";
 import * as mongoose from "mongoose";
+import * as i18n from 'i18n';
 import { getModelToken } from '@nestjs/mongoose';
 import { PlayerService } from './player.service';
 import { GameService } from './game.service';
@@ -90,11 +91,15 @@ describe('PlayerService', () => {
         }
       }]}
     }
+
+    i18n.configure({
+      locales: ['en']
+    })
   })
 
   describe('connect', () => {
     it('should set socket id', async () => {
-      let game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '' })
+      let game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
       await gameService.setState(game.key, GameState.Lobby)
       const player = await gameService.join(game.key, { name: 'Nisse' })
       const socketId = '123'
@@ -127,7 +132,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '' })
+      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
     })
@@ -151,7 +156,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '' })
+      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, '123')
@@ -191,7 +196,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '' })
+      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, 'disconnect_123')
@@ -215,7 +220,7 @@ describe('PlayerService', () => {
     let player: Player;
 
     beforeEach(async () => {
-      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '' })
+      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
       await gameService.setState(game.key, GameState.Lobby)
       player = await gameService.join(game.key, { name: 'Nisse' })
       game = await playerService.connect(player._id, 'reconnect_123')

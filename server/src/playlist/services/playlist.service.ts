@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Playlist } from "../interfaces/playlist.interface";
+import * as i18n from 'i18n';
 
 @Injectable()
 export class PlaylistService {
@@ -9,7 +10,7 @@ export class PlaylistService {
     @InjectModel('Playlist') private readonly playlistModel: Model<Playlist>,
   ) { }
 
-  async create(spotifyPlaylist: any): Promise<Playlist> {
+  async create(spotifyPlaylist: any, locale: string): Promise<Playlist> {
     return await this.playlistModel.findOneAndUpdate({
       '_id': spotifyPlaylist.id
     }, {
@@ -27,7 +28,7 @@ export class PlaylistService {
             if (idx < 1) return artist.name
             return `${sum}, ${artist.name}`
           }, ''),
-          question: Math.random() > 0.49 ? `What's the name of the artist?` : `What's the name of the song?`
+          question: Math.random() > 0.49 ? i18n.__({ phrase: 'question:artist', locale: locale }) : i18n.__({ phrase: 'question:track', locale: locale })
         }
       })
     }, {

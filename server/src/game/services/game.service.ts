@@ -30,7 +30,7 @@ export class GameService {
   ) { }
 
   async create(user: User, options: CreateQuizOptionsDto): Promise<Game> {
-    const playlist = await this._getPlaylist(user, options.playlist)
+    const playlist = await this._getPlaylist(user, options.playlist, options.language)
     await this._endQuizes(user)
 
     const secret: string = nanoid()
@@ -78,11 +78,11 @@ export class GameService {
     )
   }
 
-  async setPlaylist(user: User, playlistId: string) {
+  async setPlaylist(user: User, playlistId: string, lang: string) {
     if (!user) return Promise.reject(new UserException('Missing user'))
     if (!playlistId) return Promise.reject(new UserException('Missing playlist id'))
 
-    const playlist = await this._getPlaylist(user, playlistId)
+    const playlist = await this._getPlaylist(user, playlistId, lang)
 
     return await this._findOneAndUpdate(
       { "host.user": user.id },
@@ -152,9 +152,9 @@ export class GameService {
     return result
   }
 
-  private async _getPlaylist(user: User, playlistId: string): Promise<Playlist> {
+  private async _getPlaylist(user: User, playlistId: string, lang: string): Promise<Playlist> {
     const spotifyPlaylist = await this.spotifyService.getUserPlaylist(user, playlistId)
-    return await this.playlistService.create(spotifyPlaylist)
+    return await this.playlistService.create(spotifyPlaylist, lang)
   }
 
   private async _endQuizes(user: User) {

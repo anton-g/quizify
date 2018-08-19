@@ -93,10 +93,11 @@ const actions = {
   successfulLogin ({ commit }, jwt) {
     commit(types.SET_JWT, jwt)
   },
-  async create ({ commit, state }, options) {
+  async create ({ commit, state, rootState }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {
       playlist: options.playlist.id,
-      deviceId: options.device.id
+      deviceId: options.device.id,
+      language: rootState.common.currentLocale
     })
 
     if (status !== 201 || data.error) {
@@ -119,11 +120,12 @@ const actions = {
       localStorage.setItem(HOST_RECONNECT_ID, state.jwt)
     })
   },
-  async updatePlaylist ({ commit, state }, playlist) {
+  async updatePlaylist ({ commit, state, rootState }, playlist) {
     socketBus.$socket.emit('CHANGE_PLAYLIST', {
       authorization: state.jwt,
       key: state.quiz.key,
-      playlist: playlist.id
+      playlist: playlist.id,
+      lang: rootState.common.currentLocale
     }, quiz => {
       commit(types.UPDATE_QUIZ, quiz)
     })
