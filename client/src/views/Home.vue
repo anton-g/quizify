@@ -163,7 +163,7 @@ export default {
     "create:subtitle": "Get started by logging in with Spotify",
     "create:button:login": "Log in with Spotify",
     "create:title:login": "Why do I have to log in?",
-    "create:text:login": "Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok."
+    "create:text:login": "By logging in with Spotify you can use your playlists and control the music in Quizify."
   },
   "sv": {
     "join:title": "Gå med",
@@ -176,7 +176,7 @@ export default {
     "create:subtitle": "Kom igång genom att logga in med Spotify",
     "create:button:login": "Logga in med Spotify",
     "create:title:login": "Varför måste jag logga in?",
-    "create:text:login": "Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd boksättare tog att antal bokstäver och blandade dem för att göra ett provexemplar av en bok."
+    "create:text:login": "Genom att logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify."
   }
 }
 </i18n>

@@ -110,8 +110,10 @@ export default {
 <style lang="scss" scoped>
 @import '~@design';
 
-.title {
-  margin-bottom: $size-2;
+.create {
+  .title {
+    margin-bottom: $size-1;
+  }
 }
 
 .intro {
@@ -123,7 +125,7 @@ export default {
 {
   "en": {
     "title": "Create Quiz",
-    "text:intro": "Lorem ipsum dolor sit amet",
+    "text:intro": "Select which playlist and device you'd like to use in the quiz.",
     "button:playlist": "Select playlist",
     "select:device": "Select device",
     "select:device:sr": "Select device",
@@ -132,7 +134,7 @@ export default {
   },
   "sv": {
     "title": "Skapa Quiz",
-    "text:intro": "Lorem ipsum dolor sit amet",
+    "text:intro": "Välj vilken spellista och enhet du vill använda i quizet.",
     "button:playlist": "Välj spellista",
     "select:device": "Välj enhet",
     "select:device:sr": "Välj enhet",

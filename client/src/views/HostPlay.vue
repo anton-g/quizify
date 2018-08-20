@@ -249,7 +249,7 @@ export default {
     "button:correct": "Correct",
     "button:help": "Help",
     "title:help": "Help",
-    "text:help": "Fugiat ullamco sit ut elit et amet eu cupidatat sunt cillum aliqua. Qui sunt esse voluptate ad ut duis mollit ea Lorem. Qui laborum deserunt culpa laborum ex aliquip commodo reprehenderit ex adipisicing. Aliquip enim irure incididunt eiusmod. Exercitation eu cillum exercitation esse duis enim sunt. Velit et sunt exercitation tempor occaecat nisi voluptate enim. Est sit tempor nisi aute in ut Lorem.",
+    "text:help": "A help text.",
     "text:leave-warning": "Leaving will end the quiz and all progress will be lost!",
     "button:leave": "Leave quiz",
     "title:players": "Players"
@@ -266,7 +266,7 @@ export default {
     "button:correct": "Rätt svar",
     "button:help": "Hjälp",
     "title:help": "Hjälp",
-    "text:help": "Fugiat ullamco sit ut elit et amet eu cupidatat sunt cillum aliqua. Qui sunt esse voluptate ad ut duis mollit ea Lorem. Qui laborum deserunt culpa laborum ex aliquip commodo reprehenderit ex adipisicing. Aliquip enim irure incididunt eiusmod. Exercitation eu cillum exercitation esse duis enim sunt. Velit et sunt exercitation tempor occaecat nisi voluptate enim. Est sit tempor nisi aute in ut Lorem.",
+    "text:help": "En hjälptext.",
     "text:leave-warning": "Om du lämnar nu kommer quizet avslutas och du får ej se något resultat!",
     "button:leave": "Lämna quiz",
     "title:players": "Spelare"
