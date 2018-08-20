@@ -14,3 +14,5 @@ deploy:
   provider: azure_web_apps
   skip_cleanup: true
   verbose: true
+git:
+   depth: 9999999 # Azure doesn't seem to allow shallow copied repos, https://stackoverflow.com/questions/46869013/travis-ci-deployment-from-github-to-azure-returns-remote-rejected-head-ma
