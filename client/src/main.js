@@ -7,8 +7,10 @@ import VueMq from 'vue-mq'
 import VueSocketio from 'vue-socket.io-extended'
 import io from 'socket.io-client'
 import izitoast from 'izitoast'
+import nprogress from 'nprogress'
 
 import 'izitoast/dist/css/iziToast.min.css'
+import 'nprogress/nprogress.css'
 
 require('./design/bulma.scss')
 
@@ -22,6 +24,8 @@ izitoast.settings({
   transitionOutMobile: 'fadeOutUp',
   progressBar: false
 })
+
+nprogress.configure({ showSpinner: false })
 
 Vue.use(VueMq, {
   breakpoints: {

@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
+import nprogress from 'nprogress'
 const Home = () => import('./views/Home.vue')
-const PlayerLobby = () => import(/* webpackChunkName: "group-player" */'./views/PlayerLobby.vue')
-const PlayerPlay = () => import(/* webpackChunkName: "group-player" */'./views/PlayerPlay.vue')
-const PlayerEnd = () => import(/* webpackChunkName: "group-player" */'./views/PlayerEnd.vue')
-const HostCreate = () => import(/* webpackChunkName: "group-host" */'./views/HostCreate.vue')
-const HostLobby = () => import(/* webpackChunkName: "group-host" */'./views/HostLobby.vue')
-const HostPlay = () => import(/* webpackChunkName: "group-host" */'./views/HostPlay.vue')
-const HostEnd = () => import(/* webpackChunkName: "group-host" */'./views/HostEnd.vue')
+const PlayerLobby = () => import('./views/PlayerLobby.vue')
+const PlayerPlay = () => import('./views/PlayerPlay.vue')
+const PlayerEnd = () => import('./views/PlayerEnd.vue')
+const HostCreate = () => import('./views/HostCreate.vue')
+const HostLobby = () => import('./views/HostLobby.vue')
+const HostPlay = () => import('./views/HostPlay.vue')
+const HostEnd = () => import('./views/HostEnd.vue')
 
 Vue.use(Router)
 
@@ -28,7 +29,7 @@ const checkHasQuiz = (to, from, next) => {
   }
 }
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -79,3 +80,13 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  nprogress.start()
+  next()
+})
+router.afterEach(() => {
+  nprogress.done()
+})
+
+export default router
