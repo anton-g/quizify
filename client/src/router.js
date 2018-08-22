@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import Home from './views/Home.vue'
-import PlayerLobby from './views/PlayerLobby.vue'
-import PlayerPlay from './views/PlayerPlay.vue'
-import PlayerEnd from './views/PlayerEnd.vue'
-import HostCreate from './views/HostCreate.vue'
-import HostLobby from './views/HostLobby.vue'
-import HostPlay from './views/HostPlay.vue'
-import HostEnd from './views/HostEnd.vue'
+const Home = () => import('./views/Home.vue')
+const PlayerLobby = () => import(/* webpackChunkName: "group-player" */'./views/PlayerLobby.vue')
+const PlayerPlay = () => import(/* webpackChunkName: "group-player" */'./views/PlayerPlay.vue')
+const PlayerEnd = () => import(/* webpackChunkName: "group-player" */'./views/PlayerEnd.vue')
+const HostCreate = () => import(/* webpackChunkName: "group-host" */'./views/HostCreate.vue')
+const HostLobby = () => import(/* webpackChunkName: "group-host" */'./views/HostLobby.vue')
+const HostPlay = () => import(/* webpackChunkName: "group-host" */'./views/HostPlay.vue')
+const HostEnd = () => import(/* webpackChunkName: "group-host" */'./views/HostEnd.vue')
 
 Vue.use(Router)
 
