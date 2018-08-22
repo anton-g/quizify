@@ -6,10 +6,9 @@
   "author": "anton-g",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "NODE_ENV=development nodemon",
-    "prestart:prod": "rm -rf dist && tsc",
-    "start:prod": "NODE_ENV=production node dist/main.js",
+    "dev": "NODE_ENV=development nodemon",
+    "build": "rm -rf dist && tsc",
+    "start": "NODE_ENV=production node dist/main.js",
     "test": "jest",
     "test:cov": "jest --coverage"
   },
