@@ -1,7 +1,9 @@
 <template lang="pug">
   #app
     header.header
-      h1.title.has-text-centered Quizify
+      h1.title.has-text-centered
+        | Quizify
+        span.beta.tag.is-dark BETA
     main.main
       router-view
 </template>
@@ -49,12 +51,29 @@ h1, h2, h3, h4, h5 {
     grid-row: 1;
     padding: $size-1;
 
-    h1 {
+    .title {
       font-family: $font-family-heading-branded;
       font-weight: normal;
       color: white;
       text-shadow: 1px 1px black;
       font-size: 3.5rem;
+
+      .beta {
+        position: absolute;
+        font-size: .75rem;
+        height: 2em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.5;
+        padding: 0 .75em;
+        border-radius: 4px;
+        color: #4a4a4a;
+        background-color: #f5f5f5;
+        font-family: $font-family-default;
+        text-shadow: none;
+        box-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+      }
     }
   }
 }
