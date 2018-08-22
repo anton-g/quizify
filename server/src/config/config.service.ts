@@ -21,8 +21,6 @@ export class ConfigService {
         .default('development'),
       CLIENT_URL: Joi.string().required(),
       MONGODB_URL: Joi.string().required(),
-      MONGODB_USER: Joi.string().optional(),
-      MONGODB_PASS: Joi.string().optional(),
       SPOTIFY_CLIENT_ID: Joi.string().required(),
       SPOTIFY_CLIENT_SECRET: Joi.string().required(),
       SPOTIFY_REDIRECT_URI: Joi.string().required(),
@@ -52,14 +50,6 @@ export class ConfigService {
 
   get mongoDbUrl(): string {
     return String(this.envConfig.MONGODB_URL)
-  }
-
-  get mongoDbUser(): string {
-    return String(this.envConfig.MONGODB_USER)
-  }
-
-  get mongoDbPass(): string {
-    return String(this.envConfig.MONGODB_PASS)
   }
 
   get spotifyClientId(): string {
