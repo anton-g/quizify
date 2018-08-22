@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
+    "deploy": "now && now alias",
     "now-start": "serve --single ./dist"
   },
   "dependencies": {
