@@ -137,10 +137,14 @@ export default {
 
     button {
       margin-bottom: $size-2;
-      background-color: #1DB954;
+      background-color: #10893C;
       border-color: transparent;
       color: white;
       font-weight: 700;
+
+      &:hover {
+        background-color: #119240;
+      }
 
       svg {
         margin-left: $size-1;
