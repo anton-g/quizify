@@ -11,6 +11,7 @@ import nprogress from 'nprogress'
 
 import 'izitoast/dist/css/iziToast.min.css'
 import 'nprogress/nprogress.css'
+import './registerServiceWorker'
 
 require('./design/bulma.scss')
 
