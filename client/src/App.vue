@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5 {
       font-family: $font-family-heading-branded;
       font-weight: normal;
       color: white;
-      text-shadow: 1px 1px black;
+      text-shadow: 1px 1px rgba(0, 0, 0, 0.35);
       font-size: 3.5rem;
 
       .beta {
@@ -68,11 +68,11 @@ h1, h2, h3, h4, h5 {
         line-height: 1.5;
         padding: 0 .75em;
         border-radius: 4px;
-        color: #4a4a4a;
+        color: #555555;
         background-color: #f5f5f5;
         font-family: $font-family-default;
         text-shadow: none;
-        box-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+        box-shadow: 1px 1px rgba(0, 0, 0, 0.25);
       }
     }
   }
