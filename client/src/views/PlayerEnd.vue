@@ -1,21 +1,25 @@
 <template lang="pug">
-  card.results
-    h2.title {{ title }}
-    player-result-list.result-list(:results="results")
-    .field
-      .control
-        button.button.is-dark.is-pulled-right(@click="home") {{ $t('button:home') }}
+  .wrapper
+    confetti(:run="won", :width="width", :height="height")
+    card.results
+      h2.title {{ title }}
+      player-result-list.result-list(:results="results")
+      .field
+        .control
+          button.button.is-dark.is-pulled-right(@click="home") {{ $t('button:home') }}
 </template>
 
 <script>
 import Card from '@/components/Card.vue'
 import PlayerResultList from '@/components/PlayerResultList.vue'
+import Confetti from '@/components/confetti/Confetti.vue'
 
 export default {
   name: 'playerend',
   components: {
     Card,
-    PlayerResultList
+    PlayerResultList,
+    Confetti
   },
   computed: {
     results () {
@@ -26,6 +30,12 @@ export default {
     },
     title () {
       return this.won ? this.$t('title:win') : this.$t('title:loss')
+    },
+    height () {
+      return window.innerHeight
+    },
+    width () {
+      return window.innerWidth
     }
   },
   methods: {
@@ -39,6 +49,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@design';
+
+.results {
+  z-index: 3;
+  position: relative;
+}
 
 .result-list {
   margin-bottom: $size-2;
