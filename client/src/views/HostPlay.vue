@@ -46,8 +46,8 @@
 import Card from '../components/Card.vue'
 import Modal from '../components/Modal.vue'
 import PlayerResultList from '../components/PlayerResultList.vue'
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faBackward, faForward, faPlay, faPause } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBackward, faForward, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   components: {

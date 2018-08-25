@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faTrophy } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   name: 'playerresultlist',

@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faKey, faUser } from '@fortawesome/fontawesome-free-solid'
-import { faSpotify } from '@fortawesome/fontawesome-free-brands'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faKey, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 import Card from '../components/Card.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
 import LocaleSwitcher from '../components/LocaleSwitcher.vue'
