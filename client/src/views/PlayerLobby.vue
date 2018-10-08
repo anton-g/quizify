@@ -6,15 +6,18 @@
       h3.title.is-5 {{ $t('title:settings') }}
       p Selected playlist: {{ quizInfo.playlist }}
       p Number of questions: {{ quizInfo.questionCount }}
+      confirm-button.is-pulled-right(@click="leave", :text="$t('text:leave')", :confirmText="$t('text:leave-confirm')")
 </template>
 
 <script>
 import Card from '@/components/Card.vue'
+import ConfirmButton from '@/components/ConfirmButton.vue'
 
 export default {
   name: 'playerlobby',
   components: {
-    Card
+    Card,
+    ConfirmButton
   },
   data () {
     return {
@@ -24,6 +27,11 @@ export default {
   computed: {
     quizInfo () {
       return this.$store.state.player.quizInfo
+    }
+  },
+  methods: {
+    leave () {
+      this.$store.dispatch('leaveQuiz')
     }
   }
 }
@@ -45,12 +53,16 @@ export default {
   "en": {
     "title": "Lobby",
     "text:status": "Waiting for quiz to start..",
-    "title:settings": "Settings"
+    "title:settings": "Settings",
+    "text:leave": "Leave quiz",
+    "text:leave-confirm": "Are you sure?"
   },
   "sv": {
     "title": "Lobby",
     "text:status": "Väntar på att quizet ska starta..",
-    "title:settings": "Inställningar"
+    "title:settings": "Inställningar",
+    "text:leave": "Lämna quiz",
+    "text:leave-confirm": "Är du säker?"
   }
 }
 </i18n>

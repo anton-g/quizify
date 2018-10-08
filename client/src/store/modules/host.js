@@ -32,10 +32,10 @@ const getters = {
     return !!state.quiz && state.quiz.state === 'PAUSED'
   },
   finalQuestion (state) {
-    return !!state.quiz && state.quiz.currentQuestionNo === state.quiz.questions.length
+    return !!state.quiz && state.quiz.questions && (state.quiz.currentQuestionNo === state.quiz.questions.length)
   },
   currentQuestion (state) {
-    if (state.quiz) {
+    if (state.quiz && state.quiz.questions) {
       return state.quiz.questions[state.quiz.currentQuestionNo - 1]
     }
   }

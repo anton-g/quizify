@@ -116,6 +116,13 @@ const actions = {
   cleanupPlayer ({ commit }) {
     commit(types.CLEANUP_PLAYER)
   },
+  leaveQuiz ({ commit }) {
+    commit(types.CLEANUP_PLAYER)
+    localStorage.removeItem(PLAYER_SOCKET_STORAGE_ITEM)
+    socketBus.$socket.emit('LEAVE')
+
+    router.push({ name: 'home' })
+  },
   socket_changePlaylist: ({ commit }, data) => {
     commit(types.UPDATE_QUIZ, data)
   },
