@@ -34,8 +34,8 @@
 import Card from '../components/Card.vue'
 import PlaylistPicker from '../components/PlaylistPicker.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faSyncAlt } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   mixins: [reconnectOnCreation],

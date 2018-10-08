@@ -54,6 +54,15 @@ export class PlayerGateway {
     console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
+  @SubscribeMessage(GameEvents.Leave)
+  async onLeave(client: Socket, { data: userId, ack }) {
+    const game = await this.playerService.disconnect(client.id)
+
+    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
+
+    console.log(`[${game.key}] Player with socket ${client.id} left game`)
+  }
+
   @SubscribeMessage(GameEvents.ReconnectPlayer)
   async onReconnect(client: Socket, { data: oldSocketId, ack }) {
     const game: Game = await this.playerService.reconnect(oldSocketId, client.id)

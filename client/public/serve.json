@@ -4,14 +4,14 @@
       "source" : "**/*.@(jpg|jpeg|gif|png)",
       "headers" : [{
         "key" : "Cache-Control",
-        "value" : "max-age=86400"
+        "value" : "public, max-age=604800"
       }]
     },
     {
       "source": "**/*.@(js|css)",
       "headers": [{
         "key": "Cache-Control",
-        "value": "max-age=86400"
+        "value": "public, max-age=604800"
       }]
     }
   ]

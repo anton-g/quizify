@@ -5,14 +5,14 @@
         FontAwesomeIcon(:icon="connectivityIcon", transform="shrink-6")
       .name
         | {{ player.name }}
-      .actions
+      .actions(v-if="false")
         a.action(href="javascript:void(0);", @click="kick(idx)", @keydown.enter="kick(idx)")
           FontAwesomeIcon(:icon="kickIcon", transform="grow-3")
 </template>
 
 <script>
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faCircle, faTimesCircle } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   props: [

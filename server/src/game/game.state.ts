@@ -22,5 +22,6 @@ export enum GameEvents {
   ReconnectHost = "RECONN_H",
   NextQuestion = "NEXT_QUESTION",
   PrevQuestion = "PREV_QUESTION",
-  EndGame = "END_GAME"
+  EndGame = "END_GAME",
+  Leave = "LEAVE"
 }
