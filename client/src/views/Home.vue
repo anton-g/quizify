@@ -25,9 +25,9 @@
             @keydown.enter="join")
           span.icon.is-small.is-left
             FontAwesomeIcon(:icon="keyIcon")
-      .field
+      .field.join-button
         .control
-          button.button.is-dark.is-fullwidth(@click="join") {{ $t('join:button') }}
+          button.button.is-fullwidth.is-dark(@click="join") {{ $t('join:button') }}
     card.create
       h2.title {{ $t('create:title') }}
       p.subtitle {{ $t('create:subtitle' )}}
@@ -114,18 +114,20 @@ export default {
       }
     }
 
-    h2 {
-      padding: $size-2;
-      margin-bottom: 0;
-    }
-
-    button {
-      border: none;
-      border-radius: 0;
-    }
-
     .field:not(:last-child) {
       margin-bottom: $size-2;
+    }
+
+    .title {
+      margin: $size-2;
+    }
+
+    .join-button {
+      margin: $size-2;
+
+      button {
+        font-weight: 700;
+      }
     }
   }
 
