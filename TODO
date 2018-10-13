@@ -5,7 +5,7 @@ Now:
   - https://github.com/vue-a11y/vue-announcer
   - https://github.com/vue-a11y/vue-axe
 - [FEAT] Metadata
-- [FEAT] Cookie consent / privacy policy
+- [FEAT] Privacy policy
 - [FEAT] Update readme
 - [BUG] Update playlist in player lobby when host changes playlist
 - [BUG] Improve copy

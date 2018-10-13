@@ -6,10 +6,16 @@
         span.beta.tag.is-dark BETA
     main.main
       router-view
+    cookie-consent
 </template>
 
 <script>
+import CookieConsent from '@/components/CookieConsent.vue'
+
 export default {
+  components: {
+    CookieConsent
+  },
   created () {
     const lang = localStorage.getItem('lang')
     if (lang) {
