@@ -25,9 +25,9 @@
             @keydown.enter="join")
           span.icon.is-small.is-left
             FontAwesomeIcon(:icon="keyIcon")
-      .field
+      .field.join-button
         .control
-          button.button.is-dark.is-fullwidth(@click="join") {{ $t('join:button') }}
+          button.button.is-fullwidth.is-dark(@click="join") {{ $t('join:button') }}
     card.create
       h2.title {{ $t('create:title') }}
       p.subtitle {{ $t('create:subtitle' )}}
@@ -38,6 +38,7 @@
         strong {{ $t('create:title:login') }}
       p {{ $t('create:text:login') }}
     card.settings
+      h2.title {{ $t('settings:title') }}
       locale-switcher
 </template>
 
@@ -113,18 +114,20 @@ export default {
       }
     }
 
-    h2 {
-      padding: $size-2;
-      margin-bottom: 0;
-    }
-
-    button {
-      border: none;
-      border-radius: 0;
-    }
-
     .field:not(:last-child) {
       margin-bottom: $size-2;
+    }
+
+    .title {
+      margin: $size-2;
+    }
+
+    .join-button {
+      margin: $size-2;
+
+      button {
+        font-weight: 700;
+      }
     }
   }
 
@@ -167,7 +170,8 @@ export default {
     "create:subtitle": "Get started by logging in with Spotify",
     "create:button:login": "Log in with Spotify",
     "create:title:login": "Why do I have to log in?",
-    "create:text:login": "By logging in with Spotify we can access your playlists and help you control the music from Quizify."
+    "create:text:login": "By logging in with Spotify we can access your playlists and help you control the music from Quizify.",
+    "settings:title": "Settings"
   },
   "sv": {
     "join:title": "Gå med",
@@ -180,7 +184,8 @@ export default {
     "create:subtitle": "Kom igång genom att logga in med Spotify",
     "create:button:login": "Logga in med Spotify",
     "create:title:login": "Varför måste jag logga in?",
-    "create:text:login": "Genomatt logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify."
+    "create:text:login": "Genom att logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify.",
+    "settings:title": "Inställningar"
   }
 }
 </i18n>
