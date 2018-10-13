@@ -125,7 +125,7 @@ export default {
 {
   "en": {
     "title": "Create Quiz",
-    "text:intro": "Select which playlist and device you'd like to use in the quiz.",
+    "text:intro": "Select which playlist and Spotify connected device you'd like to use in the quiz.",
     "button:playlist": "Select playlist",
     "select:device": "Select device",
     "select:device:sr": "Select device",
