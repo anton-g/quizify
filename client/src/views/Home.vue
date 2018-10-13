@@ -167,7 +167,7 @@ export default {
     "create:subtitle": "Get started by logging in with Spotify",
     "create:button:login": "Log in with Spotify",
     "create:title:login": "Why do I have to log in?",
-    "create:text:login": "By logging in with Spotify you can use your playlists and control the music in Quizify."
+    "create:text:login": "By logging in with Spotify we can access your playlists and help you control the music from Quizify."
   },
   "sv": {
     "join:title": "Gå med",
@@ -180,7 +180,7 @@ export default {
     "create:subtitle": "Kom igång genom att logga in med Spotify",
     "create:button:login": "Logga in med Spotify",
     "create:title:login": "Varför måste jag logga in?",
-    "create:text:login": "Genom att logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify."
+    "create:text:login": "Genomatt logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify."
   }
 }
 </i18n>
