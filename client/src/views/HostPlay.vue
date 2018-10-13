@@ -249,8 +249,8 @@ export default {
     "button:correct": "Correct",
     "button:help": "Help",
     "title:help": "Help",
-    "text:help": "A help text.",
-    "text:leave-warning": "Leaving will end the quiz and all progress will be lost!",
+    "text:help": "If you lose the connection to Spotify try starting Spotify manually on the device you're playing music from. If something else isn't working as it should try refreshing the browser.",
+    "text:leave-warning": "If you leave the quiz will end and you will be returned to home!",
     "button:leave": "Leave quiz",
     "title:players": "Players"
   },
@@ -266,7 +266,7 @@ export default {
     "button:correct": "Rätt svar",
     "button:help": "Hjälp",
     "title:help": "Hjälp",
-    "text:help": "En hjälptext.",
+    "text:help": "Om du tappar kopplingen till Spotify så testa att starta Spotify på den enhet som spelar upp musiken, och försök sen styra den genom Quizify igen. Om något annat inte fungerar som det ska kan du alltid testa uppdatera sidan då det brukar lösa de flesta problem. ",
     "text:leave-warning": "Om du lämnar nu kommer quizet avslutas och du får ej se något resultat!",
     "button:leave": "Lämna quiz",
     "title:players": "Spelare"

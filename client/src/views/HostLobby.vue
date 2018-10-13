@@ -106,7 +106,7 @@ export default {
     "button:playlist": "Click to change playlist",
     "button:start": "Start",
     "title:players": "Players",
-    "text:no-players": "Tell your friends to join!"
+    "text:no-players": "Give your friends the key and tell them to join!"
   },
   "sv": {
     "title": "Lobby",
@@ -114,7 +114,7 @@ export default {
     "button:playlist": "Klicka för att byta spellista",
     "button:start": "Starta",
     "title:players": "Spelare",
-    "text:no-players": "Säg åt dina vänner att gå med!"
+    "text:no-players": "Säg åt dina vänner att gå med genom att använda nyckeln ovan!"
   }
 }
 </i18n>
