@@ -1,7 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ApplicationModule } from './app.module';
+import { ConfigService } from './config/config.service';
 import * as i18n from 'i18n';
 import * as cors from 'cors';
+import * as Sentry from '@sentry/node';
+
+const configService = new ConfigService(`${process.env.NODE_ENV}.env`)
+Sentry.init({ dsn: configService.sentryDsn });
 
 async function bootstrap() {
   i18n.configure({

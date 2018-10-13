@@ -8,6 +8,7 @@ import VueSocketio from 'vue-socket.io-extended'
 import io from 'socket.io-client'
 import izitoast from 'izitoast'
 import nprogress from 'nprogress'
+import * as Sentry from '@sentry/browser'
 
 import 'izitoast/dist/css/iziToast.min.css'
 import 'nprogress/nprogress.css'
@@ -37,6 +38,11 @@ Vue.use(VueMq, {
   }
 })
 Vue.use(VueSocketio, io(process.env.VUE_APP_API_URL), store)
+
+Sentry.init({
+  dsn: process.env.VUE_APP_SENTRY_DSN,
+  integrations: [new Sentry.Integrations.Vue({ Vue })]
+})
 
 new Vue({
   router,

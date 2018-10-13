@@ -26,8 +26,8 @@ export class ConfigService {
       SPOTIFY_REDIRECT_URI: Joi.string().required(),
       SPOTIFY_SCOPE: Joi.string().required(),
       JWT_SECRET: Joi.string().required(),
-      JWT_EXPIRES_IN: Joi.number()
-        .default(3600)
+      JWT_EXPIRES_IN: Joi.number().default(3600),
+      SENTRY_DSN: Joi.string().required()
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(
@@ -74,5 +74,9 @@ export class ConfigService {
 
   get jwtExpiresIn(): number {
     return Number(this.envConfig.JWT_EXPIRES_IN)
+  }
+
+  get sentryDsn(): string {
+    return String(this.envConfig.SENTRY_DSN)
   }
 }
