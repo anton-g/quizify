@@ -13,6 +13,7 @@ import * as Sentry from '@sentry/browser'
 import 'izitoast/dist/css/iziToast.min.css'
 import 'nprogress/nprogress.css'
 import './registerServiceWorker'
+import './devTools'
 
 require('./design/bulma.scss')
 
