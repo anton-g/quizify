@@ -44,7 +44,7 @@ export default {
     "title": "Result",
     "button:home": "Home"
   },
-  "en": {
+  "sv": {
     "title": "Resultat",
     "button:home": "Tillbaka"
   }

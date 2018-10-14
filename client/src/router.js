@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import nprogress from 'nprogress'
+import nprogress from 'accessible-nprogress'
 import Home from './views/Home.vue'
 const PlayerLobby = () => import('./views/PlayerLobby.vue')
 const PlayerPlay = () => import('./views/PlayerPlay.vue')

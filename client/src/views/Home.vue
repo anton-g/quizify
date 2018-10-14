@@ -42,6 +42,7 @@
       locale-switcher
     .social
       a(href="http://github.com/anton-g/quizify")
+        span.is-sr-only GitHub repository
         FontAwesomeIcon(:icon="githubIcon")
 </template>
 

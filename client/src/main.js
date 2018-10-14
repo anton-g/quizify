@@ -7,11 +7,11 @@ import VueMq from 'vue-mq'
 import VueSocketio from 'vue-socket.io-extended'
 import io from 'socket.io-client'
 import izitoast from 'izitoast'
-import nprogress from 'nprogress'
+import nprogress from 'accessible-nprogress'
 import * as Sentry from '@sentry/browser'
 
 import 'izitoast/dist/css/iziToast.min.css'
-import 'nprogress/nprogress.css'
+import 'accessible-nprogress/dist/accessible-nprogress.css'
 import './registerServiceWorker'
 import './devTools'
 
