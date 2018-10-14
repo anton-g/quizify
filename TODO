@@ -1,29 +1,28 @@
+- [BUG] Some playlists can't be selected
+- [BUG] Load more playlists
+- [BUG] Remove disconnected players on start
+- [BUG] Fetch more than 100 first songs from playlist
+- [BUG] Improve copy
 - [FEAT] Refresh Spotify access tokens on expiration
 - [FEAT] a11y
   - Interactivity
   - https://www.npmjs.com/package/eslint-plugin-vue-a11y
   - https://github.com/vue-a11y/vue-announcer
 - [FEAT] Metadata
-- [FEAT] Update readme
-- [BUG] Update playlist in player lobby when host changes playlist
-- [BUG] Improve copy
-- [BUG] Load more playlists
-- [BUG] Fetch more than 100 first songs from playlist
-- [PERF] Optimize bundle sizes
-  - Replace vue-mq with https://github.com/egoist/vue-media
-- [ADM] Add GA(?)
-- [BUG] Remove disconnected players on start
 - [FEAT] Kick players
 - [FEAT] Featured playlists
 - [FEAT] Customize quiz
   - Number of questions not tied to playlist length
   - Select playlist songs
   - Disable automatic spotify integration
-- [PERF] Lighthouse 100/100
-  - Probably requires move away from bulma
 - [FEAT] Add actual landing page
 - [FEAT] Statistics
   - Fastest buzz
   - Best/worst correct/incorrect buzz ratio
   - etc
+- [PERF] Optimize bundle sizes
+  - Replace vue-mq with https://github.com/egoist/vue-media
+- [PERF] Lighthouse 100/100
+  - Probably requires move away from bulma
 - [PERF] Tests
+- [ADM] Add GA(?)

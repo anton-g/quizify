@@ -21,6 +21,7 @@ export class EventAuthGuard implements CanActivate {
       const payload = jwt.verify(token, this.config.jwtSecret)
       return true
     } catch (err) {
+      console.log(err)
       return false
     }
   }

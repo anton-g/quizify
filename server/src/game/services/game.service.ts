@@ -86,7 +86,10 @@ export class GameService {
     const playlist = await this._getPlaylist(user, playlistId, lang)
 
     return await this._findOneAndUpdate(
-      { "host.user": user.id },
+      {
+        "host.user": user.id,
+        "state": { $ne: GameState.Ended }
+      },
       { $set:
         {
           "playlist": playlist.id

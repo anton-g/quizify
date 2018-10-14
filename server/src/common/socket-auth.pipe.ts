@@ -15,7 +15,7 @@ export class SocketAuthPipe implements PipeTransform<any, Promise<any>> {
       delete value.data.authorization
       value.user = await this.userService.getById(payload.id)
     } catch (err) {
-      // Handle error
+      console.log(err)
     }
 
     return value
