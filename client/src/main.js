@@ -40,10 +40,12 @@ Vue.use(VueMq, {
 })
 Vue.use(VueSocketio, io(process.env.VUE_APP_API_URL), store)
 
-Sentry.init({
-  dsn: process.env.VUE_APP_SENTRY_DSN,
-  integrations: [new Sentry.Integrations.Vue({ Vue })]
-})
+if (process.env.VUE_APP_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.VUE_APP_SENTRY_DSN,
+    integrations: [new Sentry.Integrations.Vue({ Vue })]
+  })
+}
 
 new Vue({
   router,

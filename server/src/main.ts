@@ -6,7 +6,9 @@ import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
 
 const configService = new ConfigService(`${process.env.NODE_ENV}.env`)
-Sentry.init({ dsn: configService.sentryDsn });
+if (configService.sentryDsn) {
+  Sentry.init({ dsn: configService.sentryDsn });
+}
 
 async function bootstrap() {
   i18n.configure({
