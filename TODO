@@ -1,15 +1,12 @@
-Now:
+- [FEAT] Refresh Spotify access tokens on expiration
 - [FEAT] a11y
   - Interactivity
   - https://www.npmjs.com/package/eslint-plugin-vue-a11y
   - https://github.com/vue-a11y/vue-announcer
 - [FEAT] Metadata
-- [FEAT] Privacy policy
 - [FEAT] Update readme
 - [BUG] Update playlist in player lobby when host changes playlist
 - [BUG] Improve copy
-
-Later:
 - [BUG] Load more playlists
 - [BUG] Fetch more than 100 first songs from playlist
 - [PERF] Optimize bundle sizes
@@ -24,7 +21,7 @@ Later:
   - Disable automatic spotify integration
 - [PERF] Lighthouse 100/100
   - Probably requires move away from bulma
-- [FEAT] Add intro text on Home
+- [FEAT] Add actual landing page
 - [FEAT] Statistics
   - Fastest buzz
   - Best/worst correct/incorrect buzz ratio

@@ -10,6 +10,7 @@ const HostCreate = () => import('./views/HostCreate.vue')
 const HostLobby = () => import('./views/HostLobby.vue')
 const HostPlay = () => import('./views/HostPlay.vue')
 const HostEnd = () => import('./views/HostEnd.vue')
+const Privacy = () => import('./views/Privacy.vue')
 
 Vue.use(Router)
 
@@ -77,6 +78,11 @@ const router = new Router({
       name: 'host-end',
       component: HostEnd,
       beforeEnter: checkHasQuiz
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: Privacy
     }
   ]
 })

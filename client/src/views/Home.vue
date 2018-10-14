@@ -40,10 +40,12 @@
     card.settings
       h2.title {{ $t('settings:title') }}
       locale-switcher
-    .social
-      a(href="http://github.com/anton-g/quizify")
-        span.is-sr-only GitHub repository
-        FontAwesomeIcon(:icon="githubIcon")
+    .foot
+      router-link(:to="{ name: 'privacy' }") {{ $t('privacy:link') }}
+      .social
+        a(href="http://github.com/anton-g/quizify")
+          span.is-sr-only GitHub repository
+          FontAwesomeIcon(:icon="githubIcon")
 </template>
 
 <script>
@@ -166,15 +168,21 @@ export default {
     margin-bottom: $size-3;
   }
 
-  .social {
+  .foot {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    :not(:last-child) {
+      margin-bottom: $size-1;
+    }
 
     a {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.95);
 
       &:hover {
         color: rgba(255, 255, 255, 1);
+        text-decoration: underline;
       }
     }
   }
@@ -195,7 +203,8 @@ export default {
     "create:button:login": "Log in with Spotify",
     "create:title:login": "Why do I have to log in?",
     "create:text:login": "By logging in with Spotify we can access your playlists and help you control the music from Quizify.",
-    "settings:title": "Settings"
+    "settings:title": "Settings",
+    "privacy:link": "Privacy"
   },
   "sv": {
     "join:title": "Gå med",
@@ -209,7 +218,8 @@ export default {
     "create:button:login": "Logga in med Spotify",
     "create:title:login": "Varför måste jag logga in?",
     "create:text:login": "Genom att logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify.",
-    "settings:title": "Inställningar"
+    "settings:title": "Inställningar",
+    "privacy:link": "Integritetspolicy"
   }
 }
 </i18n>
