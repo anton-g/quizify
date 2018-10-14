@@ -12,6 +12,7 @@ export const GameSchema = new mongoose.Schema({
   },
   players: [PlayerSchema],
   currentQuestionNo: Number,
+  activeTrackIdx: Number,
   playlistId: String,
   playlist: { type: mongoose.Schema.Types.String, ref: 'Playlist' },
   deviceId: String

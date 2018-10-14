@@ -46,6 +46,7 @@ export class GameService {
         user: user.id
       },
       currentQuestionNo: 1,
+      activeTrackIdx: -1,
       playlist: playlist.id,
       deviceId: options.deviceId
     })

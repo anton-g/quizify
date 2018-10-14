@@ -11,6 +11,7 @@ export interface Game extends Document {
   readonly host: Host;
   readonly players: Player[];
   readonly currentQuestionNo: number;
+  readonly activeTrackIdx: number;
   readonly deviceId: string;
   playlist: Playlist;
 }

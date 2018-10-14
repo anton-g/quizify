@@ -60,9 +60,7 @@ export class HostGateway {
     let game = await this.gameService.get(key)
     game = await this.gameService.setState(game.key, GameState.Paused)
 
-    const trackUri = game.playlist.tracks[0].uri
-    await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this._pauseWithRetry(user)
+    await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<PlayerGameInfoDto> = {
       state: game.state
@@ -81,7 +79,19 @@ export class HostGateway {
     const key = data.key
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
-    this.spotify.resumePlayback(user)
+
+    if ((game.currentQuestionNo - 1) !== game.activeTrackIdx) {
+      const newTrackIdx = game.currentQuestionNo - 1
+
+      const trackUri = game.playlist.tracks[newTrackIdx].uri
+      await this.spotify.playTrack(user, trackUri, game.deviceId)
+
+      this.gameService.update(game.key, {
+        activeTrackIdx: newTrackIdx
+      })
+    } else {
+      this.spotify.resumePlayback(user)
+    }
 
     ack(new GameDto(game))
 
@@ -130,9 +140,7 @@ export class HostGateway {
       state: GameState.Paused
     })
 
-    const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
-    await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this._pauseWithRetry(user)
+    await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<GameDto> = {
       currentQuestionNo: game.currentQuestionNo,
@@ -160,9 +168,7 @@ export class HostGateway {
       state: GameState.Paused
     })
 
-    const trackUri = game.playlist.tracks[game.currentQuestionNo - 1].uri
-    await this.spotify.playTrack(user, trackUri, game.deviceId)
-    await this._pauseWithRetry(user)
+    await this.spotify.pausePlayback(user)
 
     const gameUpdate: Partial<GameDto> = {
       currentQuestionNo: game.currentQuestionNo,
@@ -209,15 +215,5 @@ export class HostGateway {
     ack(new GameDto(game))
 
     console.log(`[${game.key}] Host with socket ${client.id} reconnected.`)
-  }
-
-  // This is a workaround for immediately pausing after issuing a play request.
-  // Since requests are async the first command might not have completed, which means the pause command might fail.
-  // GitHub issue:
-  private async _pauseWithRetry(user: User) {
-    const success = await this.spotify.pausePlayback(user)
-    if (!success) {
-      await this.spotify.pausePlayback(user)
-    }
   }
 }
