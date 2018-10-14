@@ -7,7 +7,6 @@ import izitoast from 'izitoast'
 
 export default {
   created () {
-    console.log('created')
     const cookieConsent = localStorage.getItem('cc')
     if (cookieConsent) return
 

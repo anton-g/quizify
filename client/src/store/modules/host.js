@@ -279,7 +279,6 @@ const actions = {
   },
   socket_buzzed: ({ state, commit }, playerId) => {
     const player = state.quiz.players.find(p => p.id === playerId)
-    console.log(`${player.name} buzzed`)
 
     commit(types.SET_BUZZED_PLAYER, player)
   }
