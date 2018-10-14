@@ -40,12 +40,15 @@
     card.settings
       h2.title {{ $t('settings:title') }}
       locale-switcher
+    .social
+      a(href="http://github.com/anton-g/quizify")
+        FontAwesomeIcon(:icon="githubIcon")
 </template>
 
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons'
-import { faSpotify } from '@fortawesome/free-brands-svg-icons'
+import { faSpotify, faGithub } from '@fortawesome/free-brands-svg-icons'
 import Card from '../components/Card.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
 import LocaleSwitcher from '../components/LocaleSwitcher.vue'
@@ -73,6 +76,9 @@ export default {
     },
     spotifyIcon () {
       return faSpotify
+    },
+    githubIcon () {
+      return faGithub
     }
   },
   methods: {
@@ -151,6 +157,23 @@ export default {
 
       svg {
         margin-left: $size-1;
+      }
+    }
+  }
+
+  .settings {
+    margin-bottom: $size-3;
+  }
+
+  .social {
+    display: flex;
+    justify-content: center;
+
+    a {
+      color: rgba(255, 255, 255, 0.8);
+
+      &:hover {
+        color: rgba(255, 255, 255, 1);
       }
     }
   }

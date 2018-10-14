@@ -1,10 +1,8 @@
 {
   "name": "quizify-server",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
   "author": "anton-g",
-  "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "NODE_ENV=development nodemon",
     "build": "rm -rf dist && tsc && copyfiles -u 1 src/locales/* dist",
