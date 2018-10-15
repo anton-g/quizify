@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Playlist } from "../interfaces/playlist.interface";
 import * as i18n from 'i18n';
+import { Track } from "../interfaces/track.interface";
 
 @Injectable()
 export class PlaylistService {
@@ -18,19 +19,7 @@ export class PlaylistService {
       name: spotifyPlaylist.name,
       description: spotifyPlaylist.description,
       img: spotifyPlaylist.images[0].url,
-      tracks: spotifyPlaylist.tracks.items.map(t => {
-        return {
-          _id: t.track.id,
-          uri: t.track.uri,
-          name: t.track.name,
-          imageUrl: t.track.album.images[0].url,
-          artist: t.track.artists.reduce((sum, artist, idx) => {
-            if (idx < 1) return artist.name
-            return `${sum}, ${artist.name}`
-          }, ''),
-          question: Math.random() > 0.49 ? i18n.__({ phrase: 'question:artist', locale: locale }) : i18n.__({ phrase: 'question:track', locale: locale })
-        }
-      })
+      tracks: this._tracksFromPlaylist(spotifyPlaylist, locale)
     }, {
       upsert: true,
       new: true
@@ -49,5 +38,27 @@ export class PlaylistService {
     return await this.playlistModel.find({
       "featured": true
     }).exec()
+  }
+
+  private _tracksFromPlaylist(playlist: any, locale: string): Track[] {
+    return playlist.tracks.items
+      .filter(t => t.track !== null)
+      .map(t => {
+        return {
+          _id: t.track.id,
+          uri: t.track.uri,
+          name: t.track.name,
+          imageUrl: t.track.album.images[0].url,
+          artist: this._concatArtistNames(t.track.artists),
+          question: Math.random() > 0.49 ? i18n.__({ phrase: 'question:artist', locale: locale }) : i18n.__({ phrase: 'question:track', locale: locale })
+        }
+      })
+  }
+
+  private _concatArtistNames(artists: any): string {
+    return artists.reduce((sum, artist, idx) => {
+      if (idx < 1) return artist.name
+      return `${sum}, ${artist.name}`
+    }, '')
   }
 }
