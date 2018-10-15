@@ -1,6 +1,6 @@
 <template lang="pug">
   a.charity-button(:href="link", target="_blank")
-    img(:alt="imgAlt", :src="img")
+    img(:alt="imgAlt", :src="img", style="max-height: 100px;")
     span.name Donate to {{ this.name }}
 </template>
 
@@ -34,6 +34,7 @@ export default {
     font-size: $size-2;
     color: black;
     font-weight: bold;
+    padding-top: $size-1;
   }
 
   &:hover .name {

@@ -6,6 +6,7 @@
       h2.title.is-4 {{ $t('charity:title') }}
       p {{ $t('charity:text') }}
       charity-button.charity(name="UNICEF", link="https://support.unicef.org/donate/now", logo="unicef.svg")
+      charity-button.charity(name="The Red Cross", link="https://www.icrc.org/en/donate", logo="icrc.svg")
     .field
       .control
         button.button.is-dark.is-pulled-right(@click="home") {{ $t('button:home') }}
