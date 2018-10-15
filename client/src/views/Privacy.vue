@@ -10,7 +10,8 @@
     p.paragraph If you <strong>create</strong> a quiz by logging in with Spotify we will save the following information:
     ul
       li Spotify username
-      li OAuth tokens
+      li Spotify OAuth tokens
+      li Spotify playlist information
     p.subtitle
       strong What do we do with your information?
     p.paragraph We don't use the information for anything else than providing and improving the service. We will <strong>never</strong> provide your information to third parties in promotional or advertising purposes.
