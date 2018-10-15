@@ -123,7 +123,7 @@ export default {
       this.$store.dispatch('endQuiz')
     },
     leave () {
-      this.$store.dispatch('hostLeave')
+      this.$store.dispatch('endQuiz')
     }
   }
 }
@@ -250,8 +250,8 @@ export default {
     "button:help": "Help",
     "title:help": "Help",
     "text:help": "If you lose the connection to Spotify try starting Spotify manually on the device you're playing music from. If something else isn't working as it should try refreshing the browser.",
-    "text:leave-warning": "If you leave the quiz will end and you will be returned to home!",
-    "button:leave": "Leave quiz",
+    "text:leave-warning": "If you end the quiz now you will be taken to the result screen immediately!",
+    "button:leave": "End quiz",
     "title:players": "Players"
   },
   "sv": {
@@ -267,8 +267,8 @@ export default {
     "button:help": "Hjälp",
     "title:help": "Hjälp",
     "text:help": "Om du tappar kopplingen till Spotify så testa att starta Spotify på den enhet som spelar upp musiken, och försök sen styra den genom Quizify igen. Om något annat inte fungerar som det ska kan du alltid testa uppdatera sidan då det brukar lösa de flesta problem. ",
-    "text:leave-warning": "Om du lämnar nu kommer quizet avslutas och du får ej se något resultat!",
-    "button:leave": "Lämna quiz",
+    "text:leave-warning": "Om du avslutar nu kommer du omedelbart till resultatet!",
+    "button:leave": "Avsluta quiz",
     "title:players": "Spelare"
   }
 }

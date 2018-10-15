@@ -45,6 +45,10 @@ h1, h2, h3, h4, h5 {
   min-height: 100%;
   background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%);
 
+  .title:not(:last-child), .subtitle:not(:last-child) {
+    margin-bottom: $size-2;
+  }
+
   .main {
     grid-column: 2;
     grid-row: 2;

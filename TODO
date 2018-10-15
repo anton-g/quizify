@@ -2,6 +2,7 @@
 - [BUG] Remove disconnected players on start
 - [BUG] Fetch more than 100 first songs from playlist
 - [BUG] Improve copy
+- [FEAT] Show players in player lobby
 - [FEAT] Refresh Spotify access tokens on expiration
 - [FEAT] a11y
   - Interactivity
