@@ -23,7 +23,11 @@
             a(href="javascript:void(0);", @click="select(playlist)", @keydown.enter="select(playlist)")
               span.name {{ playlist.name }}
               span.info {{ $t('text:playlist-tracks', { count: playlist.length }) }}
-      a.more-link.button.is-text(href="javascript:void(0);") {{ $t('button:see-more') }}
+      a.more-link.button.is-text(
+        href="javascript:void(0);",
+        @click="loadMore",
+        v-show="canLoadMorePlaylists",
+        :class="{ 'is-loading': isLoadingPlaylists }") {{ $t('button:see-more') }}
 </template>
 
 <script>
@@ -40,12 +44,24 @@ export default {
     'playlists',
     'active'
   ],
+  data () {
+    return {
+      isLoadingPlaylists: false
+    }
+  },
   methods: {
     select (playlist) {
       this.$emit('select', playlist)
     },
     close () {
       this.$emit('close')
+    },
+    loadMore () {
+      this.isLoadingPlaylists = true
+      this.$store.dispatch('loadMoreUserPlaylists')
+        .then(() => {
+          this.isLoadingPlaylists = false
+        })
     },
     featureColor (idx) {
       const colors = [
@@ -65,6 +81,9 @@ export default {
   computed: {
     enableFeaturedPlaylists () {
       return this.$store.state.common.enableFeaturedPlaylists
+    },
+    canLoadMorePlaylists () {
+      return this.$store.state.host.playlists.length % 50 === 0
     }
   }
 }

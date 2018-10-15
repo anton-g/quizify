@@ -251,6 +251,24 @@ const actions = {
 
     commit(types.SET_USER_PLAYLISTS, userPlaylists)
   },
+  async loadMoreUserPlaylists ({ commit, state }) {
+    return new Promise(async (resolve, reject) => {
+      const { status, data: userPlaylists } = await axios.get(`${API_URL}/playlist/`, {
+        params: {
+          offset: state.playlists.length
+        }
+      })
+
+      if (status !== 200) {
+        console.log('Could not load user playlists')
+        reject(new Error('error'))
+        return
+      }
+
+      commit(types.SET_USER_PLAYLISTS, [...state.playlists, ...userPlaylists])
+      resolve()
+    })
+  },
   async loadUserDevices ({ commit }) {
     return new Promise(async (resolve, reject) => {
       const { status, data: devices } = await axios.get(`${API_URL}/user/devices`)

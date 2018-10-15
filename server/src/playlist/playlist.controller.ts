@@ -1,4 +1,4 @@
-import { Controller, UseFilters, Get, HttpCode, UseGuards, Req } from "@nestjs/common";
+import { Controller, UseFilters, Get, HttpCode, UseGuards, Req, Query } from "@nestjs/common";
 import { UserExceptionFilter } from "../common/user-exception.filter";
 import { PlaylistService } from "./services/playlist.service";
 import { PlaylistDto } from "./dtos/playlist.dto";
@@ -15,8 +15,8 @@ export class PlaylistController {
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(200)
   @Get('')
-  async get (@Req() { user }): Promise<PlaylistDto> {
-    const userPlaylists = await this.spotifyService.getUserPlaylists(user)
+  async get (@Req() { user }, @Query('offset') offset: any): Promise<PlaylistDto> {
+    const userPlaylists = await this.spotifyService.getUserPlaylists(user, offset)
 
     return userPlaylists.map(p => PlaylistDto.fromSpotifyPlaylist(p))
   }
