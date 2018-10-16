@@ -1,14 +1,14 @@
-import { Injectable, HttpService } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "../config/config.service";
 import { User } from "../user/interfaces/user.interface";
 import * as SpotifyWebApi from 'spotify-web-api-node'
+import * as fetch from 'node-fetch'
 
 @Injectable()
 export class SpotifyService {
   private readonly spotify: any;
 
   constructor(
-    private readonly httpService: HttpService,
     private readonly config: ConfigService) {
       this.spotify = new SpotifyWebApi({
         clientId: config.spotifyClientId,
@@ -57,10 +57,21 @@ export class SpotifyService {
 
   async getUserPlaylist(user: User, playlistId: string): Promise<any> {
     this.spotify.setAccessToken(user.spotifyAccessToken)
-    const { statusCode, body } = await this.spotify.getPlaylist(user.id, playlistId)
+    const { statusCode, body: playlist } = await this.spotify.getPlaylist(user.id, playlistId)
+    let nextTrackUrl = playlist.tracks.next
+    while (nextTrackUrl) {
+      const newBodyRaw = await fetch(nextTrackUrl, {
+          headers: {
+            Authorization: `Bearer ${user.spotifyAccessToken}`
+          }
+        })
+      const newBody = await newBodyRaw.json()
+      playlist.tracks.items = [...playlist.tracks.items, ...newBody.items]
+      nextTrackUrl = newBody.next
+    }
     this.spotify.resetAccessToken()
 
-    return body
+    return playlist
   }
 
   async playTrack(user: User, trackId: string, deviceId: string) {
