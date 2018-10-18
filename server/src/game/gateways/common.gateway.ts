@@ -31,7 +31,10 @@ export class CommonGateway implements OnGatewayDisconnect {
       }
     } else {
       // Handle player disconnect
-      this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
+      const gameUpdate: Partial<Game> = {
+        players: game.players
+      }
+      this.server.to(game.key).emit(GameEvents.Update, gameUpdate)
 
       console.log(`[${game.key}] Player with socket ${client.id} disconnected`)
     }

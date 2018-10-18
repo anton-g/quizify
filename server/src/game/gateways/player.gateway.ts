@@ -31,9 +31,12 @@ export class PlayerGateway {
   async onJoin(client: Socket, { data: userId, ack }) {
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
-    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
-
     ack(new PlayerGameInfoDto(game))
+
+    const gameUpdate: Partial<Game> = {
+      players: game.players
+    }
+    this.server.to(game.key).emit(GameEvents.Update, gameUpdate)
 
     console.log(`[${game.key}] User ${userId} joined`)
   }
@@ -58,7 +61,10 @@ export class PlayerGateway {
   async onLeave(client: Socket, { data: userId, ack }) {
     const game = await this.playerService.disconnect(client.id)
 
-    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
+    const gameUpdate: Partial<Game> = {
+      players: game.players
+    }
+    this.server.to(game.key).emit(GameEvents.Update, gameUpdate)
 
     console.log(`[${game.key}] Player with socket ${client.id} left game`)
   }

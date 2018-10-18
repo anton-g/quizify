@@ -2,6 +2,9 @@
   card.lobby
     h2.title {{ $t('title') }}
     p.subtitle.is-spaced {{ status }}
+    .players
+      h3.title.is-5 Players
+      player-list(:players="quizInfo.players")
     .settings(v-if="quizInfo")
       h3.title.is-5 {{ $t('title:settings') }}
       p Selected playlist: {{ quizInfo.playlist }}
@@ -12,12 +15,14 @@
 <script>
 import Card from '@/components/Card.vue'
 import ConfirmButton from '@/components/ConfirmButton.vue'
+import PlayerList from '@/components/PlayerList.vue'
 
 export default {
   name: 'playerlobby',
   components: {
     Card,
-    ConfirmButton
+    ConfirmButton,
+    PlayerList
   },
   data () {
     return {
@@ -43,6 +48,10 @@ export default {
 .lobby {
   h3 {
     margin-bottom: $size-1;
+  }
+
+  .players {
+    margin-bottom: $size-2;
   }
 }
 
