@@ -1,5 +1,3 @@
-- [FEAT] Show players in player lobby
-- [BUG] Remove disconnected players on start
 - [BUG] Improve copy
 
 - [FEAT] Refresh Spotify access tokens on expiration

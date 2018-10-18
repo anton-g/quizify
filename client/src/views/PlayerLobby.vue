@@ -3,7 +3,7 @@
     h2.title {{ $t('title') }}
     p.subtitle.is-spaced {{ status }}
     .players
-      h3.title.is-5 Players
+      h3.title.is-5 {{ $t('title:players') }}
       player-list(:players="quizInfo.players")
     .settings(v-if="quizInfo")
       h3.title.is-5 {{ $t('title:settings') }}
@@ -63,6 +63,7 @@ export default {
     "title": "Lobby",
     "text:status": "Waiting for quiz to start..",
     "title:settings": "Settings",
+    "title:players": "Players",
     "text:leave": "Leave quiz",
     "text:leave-confirm": "Are you sure?"
   },
@@ -70,6 +71,7 @@ export default {
     "title": "Lobby",
     "text:status": "Väntar på att quizet ska starta..",
     "title:settings": "Inställningar",
+    "title:players": "Spelare",
     "text:leave": "Lämna quiz",
     "text:leave-confirm": "Är du säker?"
   }
