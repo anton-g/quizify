@@ -8,6 +8,9 @@
 *.njsproj
 *.sln
 *.env
+.env.local
+.env.*.local
+.env.production
 !template.env
 
 dist/
