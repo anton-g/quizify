@@ -57,7 +57,7 @@ export class SpotifyService {
 
   async getUserPlaylist(user: User, playlistId: string): Promise<any> {
     this.spotify.setAccessToken(user.spotifyAccessToken)
-    const { statusCode, body: playlist } = await this.spotify.getPlaylist(user.id, playlistId)
+    const { statusCode, body: playlist } = await this.spotify.getPlaylist(playlistId)
     let nextTrackUrl = playlist.tracks.next
     while (nextTrackUrl) {
       const newBodyRaw = await fetch(nextTrackUrl, {
