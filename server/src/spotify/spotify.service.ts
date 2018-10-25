@@ -1,111 +1,150 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpService } from "@nestjs/common";
 import { ConfigService } from "../config/config.service";
 import { User } from "../user/interfaces/user.interface";
-import * as SpotifyWebApi from 'spotify-web-api-node'
-import * as fetch from 'node-fetch'
+import * as querystring from 'querystring';
 
 @Injectable()
 export class SpotifyService {
   private readonly spotify: any;
+  private readonly apiUrl: string = 'https://api.spotify.com/v1';
 
   constructor(
-    private readonly config: ConfigService) {
-      this.spotify = new SpotifyWebApi({
-        clientId: config.spotifyClientId,
-        clientSecret: config.spotifyClientSecret,
-        redirectUri: config.spotifyRedirectUri
-      })
-    }
+    private readonly config: ConfigService,
+    private readonly httpService: HttpService
+  ) { }
 
   get authorizeUrl(): string {
-    const state = 'state' // TODO: randomize state, verify
-    const scopes = this.config.spotifyScope.split(' ')
-    return this.spotify.createAuthorizeURL(scopes, state)
+    const data = {
+      scope: this.config.spotifyScope,
+      client_id: this.config.spotifyClientId,
+      redirect_uri: this.config.spotifyRedirectUri,
+      response_type: 'code',
+      state: 'state' // TODO: randomize state, verify
+    }
+    return `https://accounts.spotify.com/authorize?${querystring.stringify(data)}`
   }
 
   async login(authorizationCode: string): Promise<any> {
-    const result = await this.spotify.authorizationCodeGrant(authorizationCode)
-    return result.body
+    const result = await this.httpService.request({
+      url: `https://accounts.spotify.com/api/token`,
+      method: 'POST',
+      data: querystring.stringify({
+        grant_type: 'authorization_code',
+        redirect_uri: this.config.spotifyRedirectUri,
+        code: authorizationCode,
+        client_id: this.config.spotifyClientId,
+        client_secret: this.config.spotifyClientSecret
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).toPromise()
+
+    return result.data
   }
 
   async me(accessToken: string): Promise<any> {
-    this.spotify.setAccessToken(accessToken)
-    const result = await this.spotify.getMe()
-    this.spotify.resetAccessToken()
+    const { data } = await this.httpService.get(`${this.apiUrl}/me`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }).toPromise()
 
-    return result.body
+    return data
   }
 
   async getUserDevices(user: User): Promise<any> {
-    this.spotify.setAccessToken(user.spotifyAccessToken)
-    const result = await this.spotify.getMyDevices()
-    this.spotify.resetAccessToken()
+    const result = await this.httpService.get(`${this.apiUrl}/me/player/devices`, {
+      headers: {
+        Authorization: `Bearer ${user.spotifyAccessToken}`
+      }
+    }).toPromise()
 
-    return result.body.devices
+    return result.data.devices
   }
 
   async getUserPlaylists(user: User, offset: number = 0): Promise<any> {
-    this.spotify.setAccessToken(user.spotifyAccessToken)
-    const { statusCode, body } = await this.spotify.getUserPlaylists(user.id, {
-      limit: 50,
-      offset: offset
-    })
-    this.spotify.resetAccessToken()
+    const { data } = await this.httpService.get(`${this.apiUrl}/me/playlists`, {
+      headers: {
+        Authorization: `Bearer ${user.spotifyAccessToken}`
+      },
+      params: {
+        limit: 50,
+        offset: offset
+      }
+    }).toPromise()
 
-    return body.items
+    return data.items
   }
 
   async getUserPlaylist(user: User, playlistId: string): Promise<any> {
-    this.spotify.setAccessToken(user.spotifyAccessToken)
-    const { statusCode, body: playlist } = await this.spotify.getPlaylist(playlistId)
+    const { data: playlist } = await this.httpService.get(`${this.apiUrl}/playlists/${playlistId}`, {
+      headers: {
+        Authorization: `Bearer ${user.spotifyAccessToken}`
+      }
+    }).toPromise()
     let nextTrackUrl = playlist.tracks.next
     while (nextTrackUrl) {
-      const newBodyRaw = await fetch(nextTrackUrl, {
-          headers: {
-            Authorization: `Bearer ${user.spotifyAccessToken}`
-          }
-        })
-      const newBody = await newBodyRaw.json()
-      playlist.tracks.items = [...playlist.tracks.items, ...newBody.items]
-      nextTrackUrl = newBody.next
+      const { data } = await this.httpService.get(nextTrackUrl, {
+        headers: {
+          Authorization: `Bearer ${user.spotifyAccessToken}`
+        }
+      }).toPromise()
+      playlist.tracks.items = [...playlist.tracks.items, ...data.items]
+      nextTrackUrl = data.next
     }
-    this.spotify.resetAccessToken()
 
     return playlist
   }
 
   async playTrack(user: User, trackId: string, deviceId: string) {
-    this.spotify.setAccessToken(user.spotifyAccessToken)
     try {
-      await this.spotify.play({
-        uris: [trackId],
-        device_id: deviceId
-      })
-    } catch (err) {
+      await this.httpService.request({
+        url: `${this.apiUrl}/me/player/play`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${user.spotifyAccessToken}`
+        },
+        data: {
+          uris: [trackId]
+        },
+        params: {
+          device_id: deviceId
+        }
+      }).toPromise()
+    }
+    catch (err) {
       console.log(err)
     }
-    this.spotify.resetAccessToken()
   }
 
-  async pausePlayback(user: User): Promise<boolean> {
-    let result = true
-    this.spotify.setAccessToken(user.spotifyAccessToken)
+  async pausePlayback(user: User) {
     try {
-      await this.spotify.pause()
-    } catch (err) {
-      result = false
+      await this.httpService.request({
+        url: `${this.apiUrl}/me/player/pause`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${user.spotifyAccessToken}`
+        }
+      })
     }
-    this.spotify.resetAccessToken()
-    return result
+    catch (err) {
+      console.log(err)
+    }
   }
 
   async resumePlayback(user: User) {
-    this.spotify.setAccessToken(user.spotifyAccessToken)
     try {
-      await this.spotify.play()
-    } catch (err) {
+      await this.httpService.request({
+        url: `${this.apiUrl}/me/player/play`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${user.spotifyAccessToken}`
+        }
+      }).toPromise()
+    }
+    catch (err) {
       console.log(err)
     }
-    this.spotify.resetAccessToken()
   }
 }
