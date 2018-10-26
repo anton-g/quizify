@@ -18,6 +18,7 @@ import { PlaylistService } from '../../playlist/services/playlist.service';
 import { UserService } from '../../user/services/user.service';
 import { UserSchema } from '../../user/schemas/user.schema';
 import { SpotifyService } from '../../spotify/spotify.service';
+import * as i18n from 'i18n';
 
 let mockgoose: Mockgoose = new Mockgoose(mongoose)
 
@@ -53,6 +54,11 @@ describe('GameService', () => {
   } as any;
 
   beforeAll(async () => {
+    i18n.configure({
+      locales:['en', 'sv'],
+      directory: '../../locales'
+    });
+
     const module = await Test.createTestingModule({
       providers: [
         mockgooseProvider,

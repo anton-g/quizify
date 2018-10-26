@@ -50,7 +50,7 @@ export class PlaylistService {
           name: t.track.name,
           imageUrl: t.track.album.images[0].url,
           artist: this._concatArtistNames(t.track.artists),
-          question: Math.random() > 0.49 ? i18n.__({ phrase: 'question:artist', locale: locale }) : i18n.__({ phrase: 'question:track', locale: locale })
+          question: i18n.__({ phrase: (Math.random() > 0.49 ? 'question:artist' : 'question:track'), locale: locale })
         }
       })
   }
