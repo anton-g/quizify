@@ -11,13 +11,17 @@ export class SocketAuthPipe implements PipeTransform<any, Promise<any>> {
 
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
     try {
-      const payload: any = jwt.verify(value.data.authorization, this.config.jwtSecret)
-      delete value.data.authorization
-      value.user = await this.userService.getById(payload.id)
+      const payload: any = jwt.verify(value.authorization, this.config.jwtSecret)
+      delete value.authorization
+      const user = await this.userService.getById(payload.id)
+
+      return {
+        data: value,
+        user: user
+      }
     } catch (err) {
       console.log(err)
+      return null
     }
-
-    return value
   }
 }

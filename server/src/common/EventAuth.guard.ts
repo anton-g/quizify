@@ -10,7 +10,7 @@ export class EventAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const [ data ] = context.switchToWs().getData()
+    const data = context.switchToWs().getData()
     const token = data.authorization
 
     if (!token) {

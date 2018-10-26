@@ -12,12 +12,12 @@
     "deploy": "now && now alias"
   },
   "dependencies": {
-    "@nestjs/common": "^5.0.0",
-    "@nestjs/core": "^5.0.0",
+    "@nestjs/common": "^5.4.0",
+    "@nestjs/core": "^5.4.0",
     "@nestjs/mongoose": "^4.0.0",
     "@nestjs/passport": "^1.1.0",
-    "@nestjs/testing": "^5.0.0",
-    "@nestjs/websockets": "^5.0.0",
+    "@nestjs/testing": "^5.4.0",
+    "@nestjs/websockets": "^5.4.0",
     "@sentry/node": "^4.1.1",
     "@types/socket.io": "^1.4.33",
     "cors": "^2.8.4",

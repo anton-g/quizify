@@ -12,11 +12,8 @@ import { GameDto } from '../dtos/game.dto';
 import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 import { JoinedGameDto } from '../dtos/joined-game.dto';
 import { Player } from '../interfaces/player.interface';
-import { UsePipes } from '../../../node_modules/@nestjs/common';
-import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
 import { SpotifyService } from '../../spotify/spotify.service';
 
-@UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
 export class PlayerGateway {
   @WebSocketServer() server: Server;
@@ -28,10 +25,9 @@ export class PlayerGateway {
   ) {}
 
   @SubscribeMessage(GameEvents.Join)
-  async onJoin(client: Socket, { data: userId, ack }) {
+  async onJoin(client: Socket, userId) {
     const game = await this.playerService.connect(userId, client.id)
     client.join(game.key)
-    ack(new PlayerGameInfoDto(game))
 
     const gameUpdate: Partial<Game> = {
       players: game.players
@@ -39,10 +35,11 @@ export class PlayerGateway {
     this.server.to(game.key).emit(GameEvents.Update, gameUpdate)
 
     console.log(`[${game.key}] User ${userId} joined`)
+    return new PlayerGameInfoDto(game)
   }
 
   @SubscribeMessage(GameEvents.Buzz)
-  async onBuzz(client: Socket, { data: userId, ack }) {
+  async onBuzz(client: Socket, userId) {
     const game: Game = await this.gameService.getByPlayerId(userId)
     if (game.state !== GameState.Playing) return
 
@@ -52,13 +49,11 @@ export class PlayerGateway {
 
     this.spotify.pausePlayback(game.host.user)
 
-    ack()
-
     console.log(`[${game.key}] User ${userId} buzzed`)
   }
 
   @SubscribeMessage(GameEvents.Leave)
-  async onLeave(client: Socket, { data: userId, ack }) {
+  async onLeave(client: Socket) {
     const game = await this.playerService.disconnect(client.id)
 
     const gameUpdate: Partial<Game> = {
@@ -70,7 +65,7 @@ export class PlayerGateway {
   }
 
   @SubscribeMessage(GameEvents.ReconnectPlayer)
-  async onReconnect(client: Socket, { data: oldSocketId, ack }) {
+  async onReconnect(client: Socket, oldSocketId) {
     const game: Game = await this.playerService.reconnect(oldSocketId, client.id)
 
     if (!game) return // could not find game to reconnect to
@@ -82,11 +77,10 @@ export class PlayerGateway {
     const player: Player = game.players.find(p => p.socketId === client.id)
     if (!player) {
       // something went wrong, should throw error?
-      ack(false)
+      return false
     }
 
-    ack(new JoinedGameDto(player, game))
-
     console.log(`[${game.key}] User with socket ${client.id} reconnected. Replaced old socket ${oldSocketId}`)
+    return new JoinedGameDto(player, game)
   }
 }

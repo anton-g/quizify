@@ -15,12 +15,9 @@ import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 import { GameEndedDto } from '../dtos/game-ended.dto';
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { EventAuthGuard } from '../../common/EventAuth.guard';
-import { ParseSocketDataPipe } from '../../common/parse-socket-data.pipe';
 import { SocketAuthPipe } from '../../common/socket-auth.pipe';
 import { SpotifyService } from '../../spotify/spotify.service';
-import { User } from '../../user/interfaces/user.interface';
 
-@UsePipes(ParseSocketDataPipe)
 @WebSocketGateway()
 export class HostGateway {
   @WebSocketServer() server: Server;
@@ -33,29 +30,30 @@ export class HostGateway {
 
   @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Host)
-  async onHost(client: Socket, { data: keys, ack }) {
+  async onHost(client: Socket, keys) {
+    console.log('host')
     await this.gameService.setHost(keys.key, keys.secret, client.id)
     const game = await this.gameService.setState(keys.key, GameState.Lobby)
 
-    ack(new GameDto(game))
-
     console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
+    return new GameDto(game)
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.ChangePlaylist)
-  async onChangePlaylist(client: Socket, { data, user, ack }) {
+  async onChangePlaylist(client: Socket, { data, user }) {
     const game = await this.gameService.setPlaylist(user, data.playlist, data.lang)
-    ack(new GameDto(game))
 
     this.server.to(game.key).emit(GameEvents.ChangePlaylist, new PlayerGameInfoDto(game))
+
+    return new GameDto(game)
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Start)
-  async onStart(client: Socket, { data, user, ack }) {
+  async onStart(client: Socket, { data, user }) {
     const key = data.key
     let game = await this.gameService.get(key)
     game = await this.gameService.setState(game.key, GameState.Paused)
@@ -67,15 +65,14 @@ export class HostGateway {
     }
     this.server.to(data.key).emit(GameEvents.Start, gameUpdate)
 
-    ack(new GameDto(game))
-
     console.log(`[${key}] Start game`)
+    return new GameDto(game)
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Resume)
-  async onResume(client: Socket, { data, user, ack }) {
+  async onResume(client: Socket, { data, user }) {
     const key = data.key
     this.server.to(key).emit(GameEvents.Resume)
     const game = await this.gameService.setState(key, GameState.Playing)
@@ -93,42 +90,40 @@ export class HostGateway {
       this.spotify.resumePlayback(user)
     }
 
-    ack(new GameDto(game))
-
     console.log(`[${key}] Resume game`)
+    return new GameDto(game)
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.Pause)
-  async onPause(client: Socket, { data, user, ack }) {
+  async onPause(client: Socket, { data, user }) {
     const key = data.key
     this.server.to(key).emit(GameEvents.Pause)
     const game = await this.gameService.setState(key, GameState.Paused)
     this.spotify.pausePlayback(user)
 
-    ack(new GameDto(game))
-
     console.log(`[${key}] Paused game`)
+    return new GameDto(game)
   }
 
   @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Score)
-  async onScore(client: Socket, { data, ack }) {
+  async onScore(client: Socket, data) {
     const userId = data.userId
     const score: number = 1
     const player: Player = await this.playerService.score(userId, score)
     this.server.to(player.socketId).emit(GameEvents.Scored, score)
 
-    ack(new PlayerDto(player))
-
     console.log(`[?] Player ${player.name} (${userId}) scored ${score}`)
+
+    return new PlayerDto(player)
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.NextQuestion)
-  async onNextQuestion(client: Socket, { data, user, ack }) {
+  async onNextQuestion(client: Socket, { data, user }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo === game.playlist.tracks.length) {
@@ -148,15 +143,14 @@ export class HostGateway {
     }
     this.server.to(game.key).emit(GameEvents.NextQuestion, gameUpdate)
 
-    ack(gameUpdate)
-
     console.log(`[${game.key}] Next question (${game.currentQuestionNo}/${game.playlist.tracks.length})`)
+    return gameUpdate
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.PrevQuestion)
-  async onPrevQuestion(client: Socket, { data, user, ack }) {
+  async onPrevQuestion(client: Socket, { data, user }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id || game.currentQuestionNo <= 1) {
@@ -176,15 +170,14 @@ export class HostGateway {
     }
     this.server.to(game.key).emit(GameEvents.PrevQuestion, gameUpdate)
 
-    ack(gameUpdate)
-
     console.log(`[${game.key}] Previous question (${game.currentQuestionNo}/${game.playlist.tracks.length})`)
+    return gameUpdate
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.EndGame)
-  async onEndGame(client: Socket, { data, user, ack }) {
+  async onEndGame(client: Socket, { data, user }) {
     const key = data.key
     let game = await this.gameService.get(key)
     if (!game || game.host.socket !== client.id) {
@@ -198,22 +191,20 @@ export class HostGateway {
     const gameEnded = new GameEndedDto(game)
     this.server.to(game.key).emit(GameEvents.EndGame, gameEnded)
 
-    ack(gameEnded)
-
     console.log(`[${game.key}] Game ended`)
+    return gameEnded
   }
 
   @UseGuards(EventAuthGuard)
   @UsePipes(SocketAuthPipe)
   @SubscribeMessage(GameEvents.ReconnectHost)
-  async onReconnect(client: Socket, { user, ack }) {
+  async onReconnect(client: Socket, { user }) {
     const game: Game = await this.gameService.reconnectHost(user.id, client.id)
 
     if (!game) return // could not find game to reconnect to
     // should probably do some error handling here
 
-    ack(new GameDto(game))
-
     console.log(`[${game.key}] Host with socket ${client.id} reconnected.`)
+    return new GameDto(game)
   }
 }
