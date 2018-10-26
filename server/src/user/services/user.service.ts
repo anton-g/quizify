@@ -25,11 +25,25 @@ export class UserService {
     return this.getById(user._id)
   }
 
+  async updateAccessToken(id: string, accessToken: string): Promise<User> {
+    return await this.userModel.findOneAndUpdate({
+      '_id': id
+    }, {
+      spotifyAccessToken: accessToken
+    }, { new: true }).exec()
+  }
+
   async get(): Promise<User[]> {
     return await this.userModel.find()
   }
 
   async getById(id: string): Promise<User> {
     return await this.userModel.findById(id).exec()
+  }
+
+  async getByAccessToken(token: string): Promise<User> {
+    return await this.userModel.findOne({
+      spotifyAccessToken: token
+    })
   }
 }
