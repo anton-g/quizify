@@ -39,6 +39,16 @@ describe('UserService', () => {
     })
   })
 
+  describe('updateAccessToken', () => {
+    it('should update user with new token', async () => {
+      const user = await userService.create('user-name', 'access-token', 'refresh-token')
+      const actualUser = await userService.updateAccessToken('user-name', 'new-access-token')
+
+      expect(user.spotifyAccessToken).not.toBe(actualUser.spotifyAccessToken)
+      expect(actualUser.spotifyAccessToken).toBe('new-access-token')
+    })
+  })
+
   describe('getById', () => {
     it('should get a single user with correct id', async () => {
       const user = await userService.create('user-name', 'access-token', 'refresh-token')
@@ -46,6 +56,16 @@ describe('UserService', () => {
       const actualUser = await userService.getById(user._id)
 
       expect(actualUser._id).toEqual(user._id)
+    })
+  })
+
+  describe('getByAccessToken', () => {
+    it('should get a single user with correct access token', async () => {
+      const user = await userService.create('user-name', 'access-token', 'refresh-token')
+
+      const actualUser = await userService.getByAccessToken('access-token')
+
+      expect(actualUser.spotifyAccessToken).toBe('access-token')
     })
   })
 

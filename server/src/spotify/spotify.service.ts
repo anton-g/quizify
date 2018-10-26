@@ -2,16 +2,19 @@ import { Injectable, HttpService } from "@nestjs/common";
 import { ConfigService } from "../config/config.service";
 import { User } from "../user/interfaces/user.interface";
 import * as querystring from 'querystring';
+import { UserService } from "../user/services/user.service";
 
 @Injectable()
 export class SpotifyService {
-  private readonly spotify: any;
   private readonly apiUrl: string = 'https://api.spotify.com/v1';
 
   constructor(
     private readonly config: ConfigService,
-    private readonly httpService: HttpService
-  ) { }
+    private readonly httpService: HttpService,
+    private readonly userService: UserService
+  ) {
+    httpService.axiosRef.interceptors.response.use(null, this.handleExpiredAccessToken.bind(this))
+  }
 
   get authorizeUrl(): string {
     const data = {
@@ -54,9 +57,10 @@ export class SpotifyService {
   }
 
   async getUserDevices(user: User): Promise<any> {
+    var tempToken = 'BQDCSiJ0lYQhiePANioGj3G94yz3aNIeNNJDnqvoVj3dehSiWvEv1woHIP5wMZGLYYSIyPfSB2-BgJk1FCM9QJhE7d-Bbh0KBXeGN48UYo4IzEGtOWuHus9fi93jrLe3_PhE2nsP29LG6LLzqwtR-KiH7u47i7SFswBsMQ'
     const result = await this.httpService.get(`${this.apiUrl}/me/player/devices`, {
       headers: {
-        Authorization: `Bearer ${user.spotifyAccessToken}`
+        Authorization: `Bearer ${tempToken}`
       }
     }).toPromise()
 
@@ -126,7 +130,7 @@ export class SpotifyService {
         headers: {
           Authorization: `Bearer ${user.spotifyAccessToken}`
         }
-      })
+      }).toPromise()
     }
     catch (err) {
       console.log(err)
@@ -146,5 +150,43 @@ export class SpotifyService {
     catch (err) {
       console.log(err)
     }
+  }
+
+  async handleExpiredAccessToken(reqError) {
+    if (reqError.config && reqError.response && reqError.response.status === 401) {
+      const authHeader = reqError.config.headers.Authorization.split(' ')
+      if (authHeader.length < 2) return Promise.reject(reqError)
+      const accessToken = authHeader[1]
+
+      const user = await this.userService.getByAccessToken(accessToken)
+      if (!user) return Promise.reject(reqError)
+
+      const data = await this.loginWithRefreshToken(user)
+      console.log(data)
+      await this.userService.updateAccessToken(user.id, data.access_token)
+
+      const conf = reqError.config
+      conf.headers.Authorization = `Bearer ${data.access_token}`
+      return this.httpService.request(conf).toPromise()
+    }
+
+    return Promise.reject(reqError)
+  }
+
+  async loginWithRefreshToken(user: User) {
+    const { data } = await this.httpService.request({
+      url: `https://accounts.spotify.com/api/token`,
+      method: 'POST',
+      data: querystring.stringify({
+        grant_type: 'refresh_token',
+        refresh_token: user.spotifyRefreshToken
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${Buffer.from(`${this.config.spotifyClientId}:${this.config.spotifyClientSecret}`).toString('base64')}`
+      }
+    }).toPromise()
+
+    return data
   }
 }
