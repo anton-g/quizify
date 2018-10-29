@@ -57,10 +57,9 @@ export class SpotifyService {
   }
 
   async getUserDevices(user: User): Promise<any> {
-    var tempToken = 'BQDCSiJ0lYQhiePANioGj3G94yz3aNIeNNJDnqvoVj3dehSiWvEv1woHIP5wMZGLYYSIyPfSB2-BgJk1FCM9QJhE7d-Bbh0KBXeGN48UYo4IzEGtOWuHus9fi93jrLe3_PhE2nsP29LG6LLzqwtR-KiH7u47i7SFswBsMQ'
     const result = await this.httpService.get(`${this.apiUrl}/me/player/devices`, {
       headers: {
-        Authorization: `Bearer ${tempToken}`
+        Authorization: `Bearer ${user.spotifyAccessToken}`
       }
     }).toPromise()
 
