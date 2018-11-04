@@ -31,10 +31,10 @@ export class HostGateway {
   @UseGuards(EventAuthGuard)
   @SubscribeMessage(GameEvents.Host)
   async onHost(client: Socket, keys) {
-    console.log('host')
     await this.gameService.setHost(keys.key, keys.secret, client.id)
     const game = await this.gameService.setState(keys.key, GameState.Lobby)
 
+    client.join(game.key, (err) => console.log('err?', err))
     console.log(`[${keys.key}] Set host socket to '${client.id}' using secret '${keys.secret}'`)
     return new GameDto(game)
   }
@@ -203,6 +203,8 @@ export class HostGateway {
 
     if (!game) return // could not find game to reconnect to
     // should probably do some error handling here
+
+    client.join(game.key)
 
     console.log(`[${game.key}] Host with socket ${client.id} reconnected.`)
     return new GameDto(game)

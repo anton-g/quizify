@@ -72,7 +72,11 @@ export class PlayerGateway {
     // TODO: ack to user
 
     client.join(game.key)
-    this.server.to(game.host.socket).emit(GameEvents.Update, new GameDto(game))
+
+    const gameUpdate: Partial<Game> = {
+      players: game.players
+    }
+    this.server.to(game.key).emit(GameEvents.Update, gameUpdate)
 
     const player: Player = game.players.find(p => p.socketId === client.id)
     if (!player) {
