@@ -70,6 +70,10 @@ npm run deploy
 
 ### Deploying
 
+> You should be aware that according to Spotifys Developer Terms of Service, you are not allowed to create "[Games and trivia quizzes. Unless you receive Spotify’s written approval, you shall not use the Spotify Platform to incorporate Spotify Content into any game functionality (including trivia quizzes).](https://developer.spotify.com/terms/#iv)"
+
+> Zeit has recently released [Now 2.0](https://zeit.co/blog/now-2). This is using the old, sort of deprecated, version of Now but will be updated in the future.
+
 The current solution has built in deployment support to the [zeit](zeit.co) `now` cloud for the client and server, but not for the database. There are a lot of different MongoDb-as-a-Service providers out there however, and Quizify should work with whatever you choose.
 
 Before deploying to production there are also a couple of preparation steps:
