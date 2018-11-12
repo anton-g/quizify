@@ -247,6 +247,31 @@ describe('PlayerService', () => {
     })
   })
 
+  describe('leave', () => {
+    let game: Game;
+    let player: Player;
+
+    beforeEach(async () => {
+      game = await gameService.create(userMock, { playlist: playlistMock.id, deviceId: '', language: '' })
+      await gameService.setState(game.key, GameState.Lobby)
+      player = await gameService.join(game.key, { name: 'Nisse' })
+      game = await playerService.connect(player._id, 'socketid')
+      player = await playerService.find(player._id)
+    })
+
+    it('should remove player from game', async () => {
+      const actualGame = await playerService.leave(player.socketId)
+      expect(actualGame.players.findIndex(p => p.id === player.id)).toBe(-1)
+    })
+
+    it('should not remove other players', async () => {
+      const otherPlayer = await gameService.join(game.key, { name: 'Pelle' })
+      const actualGame = await playerService.leave(player.socketId)
+      expect(actualGame.players.length).toBe(1)
+      expect(actualGame.players.findIndex(p => p.id === otherPlayer.id)).not.toBe(-1)
+    })
+  })
+
   afterAll(async () => {
     await mockgoose.helper.reset();
     await mongoose.disconnect();

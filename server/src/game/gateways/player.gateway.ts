@@ -54,7 +54,7 @@ export class PlayerGateway {
 
   @SubscribeMessage(GameEvents.Leave)
   async onLeave(client: Socket) {
-    const game = await this.playerService.disconnect(client.id)
+    const game = await this.playerService.leave(client.id)
 
     const gameUpdate: Partial<Game> = {
       players: game.players

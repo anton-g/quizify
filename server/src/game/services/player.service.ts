@@ -78,6 +78,21 @@ export class PlayerService {
     return result
   }
 
+  async leave(playerSocketId: string): Promise<Game> {
+    if (!playerSocketId) return Promise.reject(new UserException('Invalid socket id'))
+
+    const result: Game = await this._findOneGameAndUpdate(
+      { "players.socketId": playerSocketId },
+      { $pull: {
+        "players": {
+          "socketId": playerSocketId
+        }
+      }}
+    )
+
+    return result
+  }
+
   async _findOneGameAndUpdate(conditions, update) {
     return await this.gameModel
                     .findOneAndUpdate(
