@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 import * as fs from 'fs';
+import { JoinGameDto } from '../game/dtos/join-game.dto';
 
 export interface EnvConfig {
   [prop: string]: string;
@@ -27,7 +28,9 @@ export class ConfigService {
       SPOTIFY_SCOPE: Joi.string().required(),
       JWT_SECRET: Joi.string().required(),
       JWT_EXPIRES_IN: Joi.number().default(3600),
-      SENTRY_DSN: Joi.string()
+      SENTRY_DSN: Joi.string(),
+      HUE_CLIENT_ID: Joi.string(),
+      HUE_CLIENT_SECRET: Joi.string()
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(
@@ -78,5 +81,13 @@ export class ConfigService {
 
   get sentryDsn(): string {
     return String(this.envConfig.SENTRY_DSN)
+  }
+
+  get hueClientId(): string {
+    return String(this.envConfig.HUE_CLIENT_ID)
+  }
+
+  get hueClientSecret(): string {
+    return String(this.envConfig.HUE_CLIENT_SECRET)
   }
 }

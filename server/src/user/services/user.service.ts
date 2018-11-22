@@ -18,7 +18,10 @@ export class UserService {
     const user = new this.userModel({
       _id: id,
       spotifyAccessToken: accessToken,
-      spotifyRefreshToken: refreshToken
+      spotifyRefreshToken: refreshToken,
+      hueAccessToken: null,
+      hueRefreshToken: null,
+      hueUsername: null
     })
     await user.save()
 
@@ -30,6 +33,16 @@ export class UserService {
       '_id': id
     }, {
       spotifyAccessToken: accessToken
+    }, { new: true }).exec()
+  }
+
+  async setHueInfo(id: string, accessToken: string, refreshToken: string, username: string): Promise<User> {
+    return await this.userModel.findOneAndUpdate({
+      '_id': id
+    }, {
+      hueAccessToken: accessToken,
+      hueRefreshToken: refreshToken,
+      hueUsername: username
     }, { new: true }).exec()
   }
 

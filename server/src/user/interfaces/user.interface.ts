@@ -4,4 +4,7 @@ export interface User extends Document {
   readonly _id: string;
   readonly spotifyAccessToken: string;
   readonly spotifyRefreshToken: string;
+  readonly hueAccessToken: string;
+  readonly hueRefreshToken: string;
+  readonly hueUsername: string;
 }
