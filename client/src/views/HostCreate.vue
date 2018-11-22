@@ -22,6 +22,9 @@
         button.button.is-danger.is-outlined(@click="cancel") {{ $t('button:cancel') }}
       .control
         button.button.is-dark.is-fullwidth(@click="create") {{ $t('button:create') }}
+    .field
+      accordion(title="Experimental settings")
+        small These settings are very experimental and not guaranteed to work in any way.
     playlist-picker(
       :active="showPlaylistSelection",
       :featuredPlaylists="featuredPlaylists",
@@ -33,6 +36,7 @@
 <script>
 import Card from '../components/Card.vue'
 import PlaylistPicker from '../components/PlaylistPicker.vue'
+import Accordion from '../components/Accordion.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
@@ -42,6 +46,7 @@ export default {
   components: {
     Card,
     PlaylistPicker,
+    Accordion,
     FontAwesomeIcon
   },
   data () {
