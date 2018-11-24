@@ -21,6 +21,11 @@ export default {
     if (lang) {
       this.$store.dispatch('changeLocale', lang)
     }
+
+    const jwt = sessionStorage.getItem('jwt')
+    if (jwt) {
+      this.$store.dispatch('successfulLogin', jwt)
+    }
   }
 }
 </script>

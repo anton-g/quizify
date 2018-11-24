@@ -58,13 +58,11 @@ export default {
     }
   },
   created () {
-    const [key, jwt] = this.$route.hash.slice(1).split('=')
-    if (key === 'jwt') {
-      this.$store.dispatch('successfulLogin', jwt)
+    const jwt = this.getJwt()
+    if (jwt) {
       this.$store.dispatch('loadFeaturedPlaylists')
       this.$store.dispatch('loadUserPlaylists')
       this.$store.dispatch('loadUserDevices')
-      this.$router.replace({ name: 'host-create' })
     } else {
       this.$router.push({ name: 'home' })
     }
@@ -84,6 +82,18 @@ export default {
     }
   },
   methods: {
+    getJwt () {
+      if (this.$store.state.host.jwt) return this.$store.state.host.jwt
+
+      const [key, jwt] = this.$route.hash.slice(1).split('=')
+      if (key === 'jwt') {
+        this.$store.dispatch('successfulLogin', jwt)
+        this.$router.replace({ name: 'host-create' })
+        return this.$store.state.host.jwt
+      }
+
+      return undefined
+    },
     select (playlist) {
       this.selectedPlaylist = playlist
       this.showPlaylistSelection = false
