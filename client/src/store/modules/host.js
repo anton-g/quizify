@@ -22,6 +22,9 @@ const state = {
 }
 
 const getters = {
+  isLoggedIn (state) {
+    return !!state.jwt
+  },
   hasActiveQuiz (state, getters, rootState) {
     return rootState.common.connected && !!state.quiz
   },
@@ -87,11 +90,16 @@ const mutations = {
 }
 
 const actions = {
-  login () {
+  login ({ state }) {
+    if (state.jwt) {
+      router.push({ name: 'host-create' })
+    } else {
     window.location = `${API_URL}/auth/login`
+    }
   },
   successfulLogin ({ commit }, jwt) {
     commit(types.SET_JWT, jwt)
+    sessionStorage.setItem('jwt', jwt)
   },
   async create ({ commit, state, rootState }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {

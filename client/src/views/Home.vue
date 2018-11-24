@@ -32,7 +32,7 @@
       h2.title {{ $t('create:title') }}
       p.subtitle {{ $t('create:subtitle' )}}
       button.button.is-fullwidth(@click="create")
-        | {{ $t('create:button:login') }}
+        | {{ $t(isLoggedIn ? 'create:button:create' : 'create:button:login') }}
         FontAwesomeIcon(:icon="spotifyIcon", size="lg")
       p
         strong {{ $t('create:title:login') }}
@@ -82,6 +82,9 @@ export default {
     },
     githubIcon () {
       return faGithub
+    },
+    isLoggedIn () {
+      return this.$store.getters.isLoggedIn
     }
   },
   methods: {
@@ -201,6 +204,7 @@ export default {
     "create:title": "Create Quiz",
     "create:subtitle": "Get started by logging in with Spotify",
     "create:button:login": "Log in with Spotify",
+    "create:button:create": "Create new quiz",
     "create:title:login": "Why do I have to log in?",
     "create:text:login": "By logging in with Spotify we can access your playlists and help you control the music from Quizify.",
     "settings:title": "Settings",
@@ -216,6 +220,7 @@ export default {
     "create:title": "Skapa Quiz",
     "create:subtitle": "Kom igång genom att logga in med Spotify",
     "create:button:login": "Logga in med Spotify",
+    "create:button:create": "Skapa nytt quiz",
     "create:title:login": "Varför måste jag logga in?",
     "create:text:login": "Genom att logga in med Spotify så kan du hämta dina spellistor och styra musiken direkt från Quizify.",
     "settings:title": "Inställningar",
