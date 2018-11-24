@@ -1,5 +1,3 @@
-- [BUG] Fix issue where same socket ID player tries to join quiz again
-  - Leaving a quiz should probably remove the player instead of disconnecting it
 - [FEAT] Get new jwt when expired
 - [FEAT] a11y
   - Interactivity

@@ -11,6 +11,7 @@ import { HostGateway } from "./gateways/host.gateway";
 import { SpotifyModule } from "../spotify/spotify.module";
 import { UserModule } from "../user/user.module";
 import { PlaylistModule } from "../playlist/playlist.module";
+import { HueModule } from "../hue/hue.module";
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { PlaylistModule } from "../playlist/playlist.module";
         { name: 'Player', schema: PlayerSchema }
       ]),
       SpotifyModule,
+      HueModule,
       UserModule,
       PlaylistModule
     ],

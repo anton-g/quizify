@@ -11,6 +11,7 @@
 
 <script>
 import CookieConsent from '@/components/CookieConsent.vue'
+import jscookie from 'js-cookie'
 
 export default {
   components: {
@@ -22,7 +23,7 @@ export default {
       this.$store.dispatch('changeLocale', lang)
     }
 
-    const jwt = sessionStorage.getItem('jwt')
+    const jwt = jscookie.get('jwt')
     if (jwt) {
       this.$store.dispatch('successfulLogin', jwt)
     }

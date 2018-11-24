@@ -24,7 +24,16 @@
         button.button.is-dark.is-fullwidth(@click="create") {{ $t('button:create') }}
     .field
       accordion(title="Experimental settings")
-        small These settings are very experimental and not guaranteed to work in any way.
+        p.experimental-instructions
+          small These settings are very experimental and not guaranteed to work in any way.
+        h3.title.is-4 Philips Hue
+        p If you have Philips Hue color lights and a {{ ' ' }}
+          a(href="https://account.meethue.com/") MyHue account
+          | {{ ' ' }} you can enable some fancy colors when quizzing.
+        a.button.hue-button(@click="hueLogin")
+          span Log in with MyHue
+          span.icon
+            FontAwesomeIcon(:icon="hueIcon")
     playlist-picker(
       :active="showPlaylistSelection",
       :featuredPlaylists="featuredPlaylists",
@@ -39,7 +48,7 @@ import PlaylistPicker from '../components/PlaylistPicker.vue'
 import Accordion from '../components/Accordion.vue'
 import { reconnectOnCreation } from '../mixins/reconnect.js'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSyncAlt, faLightbulb } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   mixins: [reconnectOnCreation],
@@ -79,6 +88,9 @@ export default {
     },
     loadDevicesIcon () {
       return faSyncAlt
+    },
+    hueIcon () {
+      return faLightbulb
     }
   },
   methods: {
@@ -117,6 +129,9 @@ export default {
         // Spin for atleast 500 ms
         this.isLoadingDevices = false
       }, 500)
+    },
+    hueLogin () {
+      this.$store.dispatch('hueLogin')
     }
   }
 }
@@ -133,6 +148,14 @@ export default {
 
 .intro {
   margin-bottom: $size-1;
+}
+
+.experimental-instructions {
+  padding-bottom: $size-2;
+
+}
+.hue-button {
+  margin-top: $size-2;
 }
 </style>
 

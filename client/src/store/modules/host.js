@@ -3,6 +3,7 @@ import axios from 'axios'
 import izitoast from 'izitoast'
 import router from '@/router'
 import i18n from '../../i18n'
+import jscookie from 'js-cookie'
 
 import * as types from '../mutation-types'
 
@@ -99,7 +100,10 @@ const actions = {
   },
   successfulLogin ({ commit }, jwt) {
     commit(types.SET_JWT, jwt)
-    sessionStorage.setItem('jwt', jwt)
+    jscookie.set('jwt', jwt)
+  },
+  hueLogin () {
+    window.location = `${API_URL}/hue/login`
   },
   async create ({ commit, state, rootState }, options) {
     const { status, data } = await axios.post(`${API_URL}/game`, {

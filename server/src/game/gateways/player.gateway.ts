@@ -13,6 +13,7 @@ import { PlayerGameInfoDto } from '../dtos/player-game-info.dto';
 import { JoinedGameDto } from '../dtos/joined-game.dto';
 import { Player } from '../interfaces/player.interface';
 import { SpotifyService } from '../../spotify/spotify.service';
+import { HueService } from '../../hue/hue.service';
 
 @WebSocketGateway()
 export class PlayerGateway {
@@ -21,7 +22,8 @@ export class PlayerGateway {
   constructor (
     private readonly playerService: PlayerService,
     private readonly gameService: GameService,
-    private readonly spotify: SpotifyService
+    private readonly spotify: SpotifyService,
+    private readonly hue: HueService
   ) {}
 
   @SubscribeMessage(GameEvents.Join)

@@ -76,19 +76,17 @@ export class HueService {
     return lights
   }
 
-  async blink(accessToken: string, username: string): Promise<any> {
+  async blink(user: User): Promise<any> {
     const result = await this.httpService.request({
-      url: `https://api.meethue.com/bridge/${username}/lights/2/state`,
+      url: `https://api.meethue.com/bridge/${user.hueUsername}/lights/2/state`,
       method: 'PUT',
       data: {
         'alert': 'select'
       },
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${user.hueAccessToken}`
       }
     }).toPromise()
-
-    console.log(result)
 
     return result
   }
