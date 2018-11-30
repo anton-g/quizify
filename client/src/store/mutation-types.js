@@ -16,6 +16,7 @@ export const SET_USER_DEVICES = 'SET_USER_DEVICES'
 
 export const DISCONNECT = 'DISCONNECT'
 export const SET_LOCALE = 'SET_LOCALE'
+export const SET_CHARITIES = 'SET_CHARITIES'
 
 export const SOCKET_PAUSE = 'SOCKET_PAUSE'
 export const SOCKET_RESUME = 'SOCKET_RESUME'
