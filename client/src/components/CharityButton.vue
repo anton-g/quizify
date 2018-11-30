@@ -1,7 +1,7 @@
 <template lang="pug">
   a.charity-button(:href="link", target="_blank")
-    img(:alt="imgAlt", :src="img", style="max-height: 100px;")
-    span.name Donate to {{ this.name }}
+    img(:alt="imgAlt", :src="logo", style="max-height: 100px;")
+    span.name {{ $t('text') }} {{ this.name }}
 </template>
 
 <script>
@@ -12,9 +12,6 @@ export default {
     'logo'
   ],
   computed: {
-    img () {
-      return require(`../assets/${this.logo}`)
-    },
     imgAlt () {
       return `${this.name} logotype`
     }
@@ -42,3 +39,14 @@ export default {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "text": "Donate to"
+  },
+  "sv": {
+    "text": "Donera till"
+  }
+}
+</i18n>

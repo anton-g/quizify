@@ -7,7 +7,7 @@
       .charities
         h2.title.is-4 {{ $t('charity:title') }}
         p {{ $t('charity:text') }}
-        charity-button.charity(name="UNICEF", link="https://support.unicef.org/donate/now", logo="unicef.svg")
+        charity-button.charity(v-for="charity in charities", :key="charity.name", :name="charity.name", :link="charity.link", :logo="charity.img")
       .field
         .control
           button.button.is-dark.is-pulled-right(@click="home") {{ $t('button:home') }}
@@ -26,6 +26,14 @@ export default {
     PlayerResultList,
     Confetti,
     CharityButton
+  },
+  data () {
+    return {
+      charities: []
+    }
+  },
+  async created () {
+    this.charities = await this.$store.dispatch('getCharities')
   },
   computed: {
     results () {

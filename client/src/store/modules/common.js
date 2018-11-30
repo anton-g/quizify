@@ -1,12 +1,16 @@
 import * as types from '../mutation-types'
 import i18n from '../../i18n'
 import izitoast from 'izitoast'
+import axios from 'axios'
 import { HOST_RECONNECT_ID, PLAYER_SOCKET_STORAGE_ITEM } from '../../common/constants'
+
+const API_URL = process.env.VUE_APP_API_URL
 
 const state = {
   connected: false,
   currentLocale: 'en',
-  enableFeaturedPlaylists: false
+  enableFeaturedPlaylists: false,
+  charities: []
 }
 
 const mutations = {
@@ -21,6 +25,9 @@ const mutations = {
   [types.DISCONNECT] (state) {
     state.connected = false
   },
+  [types.SET_CHARITIES] (state, charities) {
+
+  },
   [types.SOCKET_PONG] (state, ms) {
   }
 }
@@ -28,6 +35,18 @@ const mutations = {
 const actions = {
   changeLocale ({ commit }, locale) {
     commit(types.SET_LOCALE, locale)
+  },
+  getCharities ({ commit, state }) {
+    return new Promise(async (resolve, reject) => {
+      if (state.charities.length > 0) {
+        resolve(state.charities)
+        return
+      }
+
+      const { data } = await axios.get(`${API_URL}/charity`)
+      commit(types.SET_CHARITIES, data)
+      resolve(data)
+    })
   },
   socket_disconnect ({ commit }) {
     commit(types.DISCONNECT)
