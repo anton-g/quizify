@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production node dist/main.js",
     "test": "jest",
     "test:cov": "jest --coverage",
-    "deploy": "now && now alias"
+    "deploy": "heroku container:push web -a quizify-server && heroku container:release web -a quizify-server"
   },
   "dependencies": {
     "@nestjs/common": "^5.4.0",

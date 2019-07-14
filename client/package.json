@@ -6,8 +6,8 @@
     "dev": "vue-cli-service serve --open",
     "build": "vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
-    "deploy": "now && now alias",
-    "now-start": "serve --single ./dist"
+    "start": "serve -s ./dist",
+    "deploy": "heroku container:push web -a play-quizify && heroku container:release web -a play-quizify"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
