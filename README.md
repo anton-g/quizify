@@ -20,7 +20,7 @@ The next step is to run an `npm install` (in the `server` directory) and then st
 
 All available npm scripts:
 
-``` bash
+```bash
 # serve with nodemon at localhost:3000
 npm run dev
 
@@ -51,7 +51,7 @@ When the server is up and running we can also start the client. The setup proces
 
 All available npm scripts:
 
-``` bash
+```bash
 # serve with hot reload at localhost:8080
 npm run dev
 
@@ -72,23 +72,13 @@ npm run deploy
 
 > You should be aware that according to Spotifys Developer Terms of Service, you are not allowed to create "[Games and trivia quizzes. Unless you receive Spotify’s written approval, you shall not use the Spotify Platform to incorporate Spotify Content into any game functionality (including trivia quizzes).](https://developer.spotify.com/terms/#iv)"
 
-> Zeit has recently released [Now 2.0](https://zeit.co/blog/now-2). This is using the old, sort of deprecated, version of Now but will be updated in the future.
+The client and server both come with a Dockerfile for easy deployment. There is a npm script (`npm run deploy`) for deploying to Heroku via their CLI, but you need to update it with names of your own projects. You'll also need to set up a database. There are a lot of different MongoDb-as-a-Service providers out there however, and Quizify should work with whatever you choose.
 
-The current solution has built in deployment support to the [zeit](zeit.co) `now` cloud for the client and server, but not for the database. There are a lot of different MongoDb-as-a-Service providers out there however, and Quizify should work with whatever you choose.
-
-Before deploying to production there are also a couple of preparation steps:
-
-For the server:
+Before deploying to production you should set up the environement variables:
 
 - Create a `server/production.env` file with appropriate values
-- Update the `server/now.json` with your domain (or a [`now.sh` subdomain](https://zeit.co/docs/features/aliases))
-
-For the client:
-
 - Create a `client/.env.production` file with appropriate values
-- Update the `client/now.json` with your domain (or a [`now.sh` subdomain](https://zeit.co/docs/features/aliases))
-
-When that's done you are ready to run `npm run deploy` in the `server` and `client` directories respectively 🚀
 
 ## License
+
 See the [LICENSE file](https://github.com/anton-g/quizify/blob/master/LICENSE)
