@@ -2,6 +2,9 @@
 
 💃 Quizify is a real time multiplayer music quiz, using Spotify for music and any browser as a buzzer 🕺
 
+![Screenshot 2](assets/screenshot2.png)
+![Screenshot 1](assets/screenshot1.png)
+
 ## Developing
 
 Quizify consists of three parts. A client written in [Vue](https://github.com/vuejs/vue), a server in [Nest](https://github.com/nestjs/nest) and a [MongoDB](https://www.mongodb.com) database.
