@@ -16,7 +16,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "@sentry/browser": "^4.1.1",
     "accessible-nprogress": "^2.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bulma": "^0.7.1",
     "focus-trap": "^3.0.0",
     "izitoast": "^1.3.0",
