@@ -24,7 +24,7 @@
     "dotenv": "^6.0.0",
     "i18n": "^0.8.3",
     "joi": "^13.5.2",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.5",
     "nanoid": "^1.0.2",
     "passport": "^0.4.0",
